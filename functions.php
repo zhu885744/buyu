@@ -9,10 +9,10 @@ function themeInit($archive){
   Helper::options()->commentsPageDisplay = 'first'; //强制评论第一页
   Helper::options()->commentsOrder = 'DESC'; //将最新的评论展示在前面    
   if ($archive->is('author')) {
-    $archive->parameter->pageSize = 50; // 作者页面每50篇文章分页一次
+    $archive->parameter->pageSize = 6; // 作者页面每6篇文章分页一次
   }
   if ($archive->is('category','av')) {
-  $archive->parameter->pageSize = 9; // 分类缩略名为av的分类列表每9篇文章分页一次
+  $archive->parameter->pageSize = 6; // 分类缩略名为av的分类列表每6篇文章分页一次
   }
   $archive->content = a_class_replace($archive->content);//文章内容，让a_class_replace函数处理
   
@@ -27,25 +27,25 @@ function themeInit($archive){
 
 function themeConfig($form)
 {
-    $JCommentStatus = new Typecho_Widget_Helper_Form_Element_Select('JCommentStatus', array('on' => '开启（默认）', 'off' => '关闭'), '3', '开启或关闭全站评论', '介绍：用于一键开启关闭所有页面的评论 <br>注意：此处的权重优先级最高 <br>若关闭此项而文章内开启评论，评论依旧为关闭状态');
-    $form->addInput($JCommentStatus->multiMode());
-    /* --------------------------------------- */
-    $ICPbeian = new Typecho_Widget_Helper_Form_Element_Text('ICPbeian', NULL, NULL, _t('ICP备案号'), _t('在这里输入ICP备案号,留空则不显示'));
+  $JCommentStatus = new Typecho_Widget_Helper_Form_Element_Select('JCommentStatus', array('on' => '开启（默认）', 'off' => '关闭'), '3', '开启或关闭全站评论', '介绍：用于一键开启关闭所有页面的评论 <br>注意：此处的权重优先级最高 <br>若关闭此项而文章内开启评论，评论依旧为关闭状态');
+  $form->addInput($JCommentStatus->multiMode());
+  /* --------------------------------------- */
+  $ICPbeian = new Typecho_Widget_Helper_Form_Element_Text('ICPbeian', NULL, NULL, _t('ICP备案号'), _t('在这里输入ICP备案号,留空则不显示'));
 	$form->addInput($ICPbeian);
-    /* --------------------------------------- */
+  /* --------------------------------------- */
 	$gonganbeian = new Typecho_Widget_Helper_Form_Element_Text('gonganbeian', NULL, NULL, _t('公安联网备案号'), _t('在这里输入公安联网备案号,留空则不显示'));
 	$form->addInput($gonganbeian);
-    /* --------------------------------------- */
-    $CustomCSS = new Typecho_Widget_Helper_Form_Element_Textarea('CustomCSS', NULL, NULL, _t('自定义css'), _t('在这里填入你的自定义css（直接填入css，无需&lt;style&gt;标签）'));
+  /* --------------------------------------- */
+  $CustomCSS = new Typecho_Widget_Helper_Form_Element_Textarea('CustomCSS', NULL, NULL, _t('自定义css'), _t('在这里填入你的自定义css（直接填入css，无需&lt;style&gt;标签）'));
 	$form->addInput($CustomCSS);
-    /* --------------------------------------- */
-    $JCustomScript = new Typecho_Widget_Helper_Form_Element_Textarea('JCustomScript',NULL,NULL,'自定义JS','请填写自定义JS内容，例如网站统计等，填写时无需填写script标签。');
-    $form->addInput($JCustomScript);
-    /* --------------------------------------- */
-    $JFooter_Left = new Typecho_Widget_Helper_Form_Element_Textarea('JFooter_Left',NULL,'','自定义底部栏内容','介绍：用于增加底部栏内容<br>例如：&lt;a href="/"&gt;首页&lt;/a&gt; &lt;a href="/"&gt;关于&lt;/a&gt;');
-    $form->addInput($JFooter_Left);
-    /* --------------------------------------- */
-    $CustomContent = new Typecho_Widget_Helper_Form_Element_Textarea('CustomContent', NULL, NULL, _t('底部自定义内容'), _t('位于底部，footer之后body之前，适合放置一些JS内容，如网站统计代码等（若开启全站Pjax，目前支持Google和百度统计的回调，其余统计代码可能会不准确）'));
+  /* --------------------------------------- */
+  $JCustomScript = new Typecho_Widget_Helper_Form_Element_Textarea('JCustomScript',NULL,NULL,'自定义JS','请填写自定义JS内容，例如网站统计等，填写时无需填写script标签。');
+  $form->addInput($JCustomScript);
+  /* --------------------------------------- */
+  $JFooter_Left = new Typecho_Widget_Helper_Form_Element_Textarea('JFooter_Left',NULL,'','自定义底部栏内容','介绍：用于增加底部栏内容<br>例如：&lt;a href="/"&gt;首页&lt;/a&gt; &lt;a href="/"&gt;关于&lt;/a&gt;');
+  $form->addInput($JFooter_Left);
+  /* --------------------------------------- */
+  $CustomContent = new Typecho_Widget_Helper_Form_Element_Textarea('CustomContent', NULL, NULL, _t('底部自定义内容'), _t('位于底部，footer之后body之前，适合放置一些JS内容，如网站统计代码等（若开启全站Pjax，目前支持Google和百度统计的回调，其余统计代码可能会不准确）'));
 	$form->addInput($CustomContent);
 }
 
@@ -196,13 +196,14 @@ function get_post_view($archive)
     }
     echo $row['views'];
 }
+
 /** 获取评论者ip属地 */
 function convertip($ip){  
   $ip1num = 0; 
   $ip2num = 0; 
   $ipAddr1 =""; 
   $ipAddr2 =""; 
-  $dat_path = './qqwry.dat';         
+  $dat_path = './qqwry.dat';  // qqwry.dat 文件需放置在typecho根目录  
   if(!preg_match("/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/", $ip)) {  
     return '可能来自火星';  
   }   

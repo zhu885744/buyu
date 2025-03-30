@@ -26,7 +26,6 @@
 <script src="<?php $this->options->themeUrl('js/buyu.style.js'); ?>"></script>
 <script type="text/javascript">
   <?php $this->options->JCustomScript() ?>
-  console.log("%c%s","color: blue; font-size: 16px;","欢迎来到我的小站！\n我的邮箱：xz@zhuxu.asia");
 </script>
 <?php $this->footer(); ?>
 <?php if ($this->options->CustomContent): $this->options->CustomContent(); ?>

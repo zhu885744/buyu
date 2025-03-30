@@ -10,19 +10,23 @@ a {
   color: #3354AA;
   font-weight: bold;
 }
+
 a:hover, a:active {
   color: #444;
 }
+
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px
 }
+
 ::-webkit-scrollbar-track {
   background-color: transparent;
   -webkit-border-radius: 2em;
   -moz-border-radius: 2em;
   border-radius: 2em
 }
+
 ::-webkit-scrollbar-thumb {
   background-color: #818181;
   background-image: -webkit-linear-gradient(45deg,rgba(255,255,255,.4) 100%,transparent 100%,transparent 50%,rgba(255,255,255,.4) 50%,rgba(255,255,255,.4) 75%,transparent 75%,transparent);
@@ -86,6 +90,7 @@ textarea {
   border-radius: 5px;
   cursor: pointer;
 }
+
 /* 当按钮应该显示时，通过 JavaScript添加这个类 */
 #backToTop.visible {
   opacity: 1;
@@ -159,6 +164,7 @@ textarea {
   margin: 25px 0 0;
   padding: 0;
 }
+
 #nav-menu a {
   display: block;
   margin-right: 2px;
@@ -170,6 +176,7 @@ textarea {
   color: #444;
   float: left;
 }
+
 #nav-menu a:hover,
 #nav-menu .current {
   background: #008dff;
@@ -179,35 +186,40 @@ textarea {
 /* ------------------
  * Main
  * --------------- */
-
 .post {
   padding: 15px 0 20px;
   border-bottom: 1px solid #3384C6;
 }
+
 .post-title {
   margin: .83em 0;
   font-size: 1.4em;
 }
+
 .post-meta {
   margin-top: -0.5em;
   padding: 0;
   color: #414141;
   font-size: .92857em;
 }
+
 .post-meta li {
   display: inline-block;
   margin: 0 8px 0 0;
   padding-left: 12px;
   border-left: 1px solid #EEE;
 }
+
 .post-meta li:first-child {
   margin-left: 0;
   padding-left: 0;
   border: none;
 }
+
 .post-content {
   line-height: 1.5;
 }
+
 .post .tags {
   clear: both;
 }
@@ -218,6 +230,7 @@ textarea {
   padding: 0;
   color: #000000;
 }
+
 .post-near li {
   margin: 10px 0;
 }
@@ -228,18 +241,20 @@ textarea {
   color: #999;
   font-size: 1em;
 }
+
 .more {
   text-align: center;
 }
+
 .more a {
   border: none;
 }
+
 .protected .text {
   width: 50%;
 }
 
 /* Page nav */
-
 .page-navigator {
   list-style: none;
   margin: 1rem 0 0 0;
@@ -288,44 +303,54 @@ textarea {
 #comments {
   padding-top: 15px;
 }
+
 .comment-list, .comment-list ol {
   list-style: none;
   margin: 0;
   padding: 0;
 }
+
 .comment-list li {
   padding: 14px;
   margin-top: 10px;
   border: 1px solid #3384C6;
 }
+
 .comment-list li.comment-level-odd {
   background: #F6F6F3;
 }
+
 .comment-list li.comment-level-even {
   background: #FFF;
 }
+
 .comment-list li.comment-by-author {
   background: #FFF9E8;
 }
+
 .comment-list li .comment-reply {
   text-align: right;
   font-size: .92857em;
 }
+
 .comment-meta a {
   color: #000000;
   font-size: .92857em;
 }
+
 .comment-author {
   display: block;
   margin-bottom: 3px;
   color: #000000;
 }
+
 .comment-author .avatar {
   float: left;
   margin-right: 10px;
   border-radius: 5px;
   border: 1px solid #3384C6;
 }
+
 .comment-author cite {
   font-weight: bold;
   font-style: normal;
@@ -336,17 +361,20 @@ textarea {
   margin-top: 15px;
   border-top: 1px solid #EEE;
 }
+
 .respond .cancel-comment-reply {
   float: right;
   margin-top: 15px;
   font-size: .92857em;
 }
+
 #comment-form label {
   display: block;
   margin-top: .5em;
   margin-bottom: .5em;
   font-weight: bold;
 }
+
 #comment-form .required:after {
   content: " *";
   color: #C00;
@@ -359,13 +387,16 @@ textarea {
   padding-top: 15px;
   word-wrap: break-word;
 }
+
 .widget {
   margin-bottom: 30px;
 }
+
 .widget-list {
   list-style: none;
   padding: 0;
 }
+
 .widget-list li {
   margin: 5px 0;
   line-height: 1.6;
@@ -374,7 +405,6 @@ textarea {
 .widget-list li ul {
   margin-left: 15px;
 }
-
 
 /* ------------------
  * Footer 
@@ -392,7 +422,6 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
 .index-img{width: 100%;height:210px;margin-top:100px;}
 /*object-fit: cover;解决图片指定大小被压缩问题*/
 .index-img>img{width: 100%;height: 100%;object-fit: cover;}
-
 
 /* -----------------
  * Error page
@@ -602,25 +631,27 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
 }
 
 .post-content b,
-.post-content strong {
-  /* color: #916dd5; */
-  /* font-weight: 600; */ /* 减小字体粗细 */
-}
-
+.post-content strong,
 .post-content i,
 .post-content em {
-  /* color: #916dd5; */
+    color: #916dd5;
 }
 
+.post-content b,
+.post-content strong {
+    font-weight: 600;
+}   
 .post-content mark {
   background-color: #ffd9b3;
   padding: 2px 4px;
   border-radius: 3px;
 }
+
 .post-content del {
   color: #999;
   text-decoration: line-through;
 }
+
 .post-content kbd {
   display: inline-block;
   padding: 2px 4px;
@@ -629,21 +660,26 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   border-radius: 3px;
   font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', -apple-system, system-ui, monospace;
 }
+
 .post-content sub, .post-content sup {
   font-size: 10px;
 }
+
 .post-content sub {
   vertical-align: sub;
 }
+
 .post-content sup {
   vertical-align: super;
 }
+
 .post-content details {
   background-color: #f9f9f9;
   padding: 8px 12px;
   border: 1px solid #d89cf6;
   border-radius: 4px;
 }
+
 .post-content details summary {
   cursor: pointer;
   font-weight: 600;
@@ -652,6 +688,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
 .post-content figure {
   margin: 6px 0;
 }
+
 .post-content figcaption {
   font-size: 12px;
   color: #555;
@@ -671,8 +708,6 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
     font-size: 14px;
   }
 }
-
-
 
 /* -----------------
  * Misc
@@ -694,7 +729,6 @@ img.alignleft {
 img.alignright {
   margin: 0 0 0 15px;
 }
-
 
 /* -----------------
  * Responsive
@@ -728,13 +762,13 @@ img.alignright {
   }
 }
 
-
 /*
 * Hide from both screenreaders and browsers: h5bp.com/u
 */
 .hidden {
   display: none !important;
-  visibility: hidden; }
+  visibility: hidden; 
+}
 
 /*
 * Hide only visually, but have it available for screenreaders: h5bp.com/v
@@ -746,7 +780,8 @@ img.alignright {
   overflow: hidden;
   padding: 0;
   position: absolute;
-  width: 1px; }
+  width: 1px; 
+}
 
 /*
 * Extends the .sr-only class to allow the element to be focusable
@@ -759,15 +794,15 @@ img.alignright {
   margin: 0;
   overflow: visible;
   position: static;
-  width: auto; }
+  width: auto; 
+}
 
 /*
 * Hide visually and from screenreaders, but maintain layout
 */
 .invisible {
-  visibility: hidden; }
-
-
+  visibility: hidden; 
+}
 
 .friend-container {
   isolation: isolate;
