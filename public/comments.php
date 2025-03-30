@@ -1,0 +1,117 @@
+<?php
+$this->comments()->to($comments);
+?>
+
+<div id="comments">
+    <?php if ($this->hidden) :?>
+        <span>当前文章受密码保护，无法评论</span>
+    <?php else :?>
+        <?php if ($this->allow('comment') && $this->options->JCommentStatus!== "off") :?>
+            <link rel="stylesheet" href="<?php $this->options->themeUrl('css/OwO.min.css'); ?>">
+            <h2>发表评论（<?php $this->commentsNum(_t('暂无评论'), _t('仅有 1 条评论'), _t('已有 %d 条评论'));?>）</h2>
+            <h4> 本站使用cookie技术保留您的个人信息以便您下次快速评论。</h4>
+            <div id="<?php $this->respondId();?>">
+                <?php $comments->cancelReply();?>
+
+                <form method="post" action="<?php $this->commentUrl()?>" id="comment-form" role="form" >
+                    <div class="inputgrap">
+                        <div class="form-group">
+                          <label for="author" class="required"><?php _e('昵称');?></label>
+                          <input class="form-control" type="text" name="author" id="author" class="text" placeholder="必填" value="<?php $this->user->hasLogin()? $this->user->screenName() : $this->remember('author')?>" autocomplete="off" maxlength="16" required/>
+                        </div>
+                        <div class="form-group">
+                            <label for="mail1"<?php if ($this->options->commentsRequireMail):?> class="required"<?php endif;?>><?php _e('邮箱');?></label>
+                            <input class="form-control text" type="email" name="mail" id="mail1" placeholder="必填" value="<?php echo $this->user->hasLogin()? $this->user->mail() : $this->remember('mail');?>"<?php if ($this->options->commentsRequireMail):?> autocomplete="off" required<?php endif;?> />
+                        </div>
+                        <div class="form-group">
+                            <label for="url"<?php if ($this->options->commentsRequireURL):?> class="required"<?php endif;?>><?php _e('网址');?></label>
+                            <input class="form-control" type="url" name="url" id="url" autocomplete="off" class="text" placeholder="<?php _e('https://');?>" value="<?php $this->remember('url');?>"<?php if ($this->options->commentsRequireURL):?> required<?php endif;?> />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="textarea" class="required"><?php _e('内容');?></label>
+                        <textarea class="form-control OwO-textarea" rows="8" cols="50" name="text" id="textarea" class="textarea" placeholder="善语结善缘，恶语伤人心..." required><?php $this->remember('text');?></textarea>
+                        <div class="OwO"></div>
+                    </div>
+                    <div class="d-grid"style="margin-top: .5em;">
+                      <button type="submit" id="comment-submit-button" style="float: right;width: 100%;border: 1px solid #3384C6;background: #ffffff;height: 30px;border-radius: 3px;color: #000000;font-size: .96em;line-height: 30px;transition: all 0.2s;">发送评论</button>
+                    </div>
+                </form>
+            </div>
+            <br><br>
+            <div class="listComments">
+              <?php if ($comments->have()) :?>
+                <?php $comments->listComments();?>
+              <?php endif;?>
+            </div>
+            <script src="<?php $this->options->themeUrl('js/OwO.min.js'); ?>"></script>
+            <script type="text/javascript">
+              var OwO_demo = new OwO({
+                logo: 'OωO',
+                container: document.getElementsByClassName('OwO')[0],
+                target: document.getElementsByClassName('OwO-textarea')[0],
+                api: '/usr/themes/buyu/OwO.json',
+                position: 'down',
+                width: '100%',
+                maxHeight: '250px'
+              });
+            </script>
+            <style>
+                #comment-submit-button:active {
+                    transform: scale(0.95);
+                    background-color: #e0e0e0;
+                }
+            </style>
+        <?php else :?>
+            <?php if ($this->options->JCommentStatus === "off") :?>
+                <span>博主关闭了所有页面的评论</span>
+            <?php else :?>
+                <span>博主关闭了当前页面的评论</span>
+            <?php endif;?>
+        <?php endif;?>
+    <?php endif;?>
+</div>
+
+<?php function threadedComments($comments, $options) {
+    $commentClass = '';
+    if ($comments->authorId) {
+        if ($comments->authorId == $comments->ownerId) {
+            $commentClass .= ' comment-by-author';
+        } else {
+            $commentClass .= ' comment-by-user';
+        }
+    }
+
+    $commentLevelClass = $comments->levels > 0 ? ' comment-child' : ' comment-parent';
+?>
+
+<li id="li-<?php $comments->theId(); ?>" class="comment-body<?php 
+if ($comments->levels > 0) {
+    echo ' comment-child';
+    $comments->levelsAlt(' comment-level-odd', ' comment-level-even');
+} else {
+    echo ' comment-parent';
+}
+$comments->alt(' comment-odd', ' comment-even');
+echo $commentClass;
+?>">
+    <div id="<?php $comments->theId(); ?>">
+        <div class="comment-author">
+            <?php $comments->gravatar('30', ''); ?>
+            <cite class="fn"><?php $comments->author();?></cite>
+        </div>
+        <div class="comment-meta">
+            <cite class="fn"><?php $comments->date('Y-m-d H:i'); ?></cite>
+            <span class="comment-reply"><?php $comments->reply(); ?></span>
+        </div>
+        <?php $comments->content(); ?>
+        <?php if ('waiting' == $comments->status) { ?><span class="badge">待审核</span><?php } ?>
+        <span class="badge"style="color: #3354AA;"><?php echo convertip($comments->ip); ?></span>
+    </div>
+    <?php if ($comments->children) { ?>
+    <div class="comment-children">
+        <?php $comments->threadedComments($options); ?>
+    </div>
+<?php } ?>
+</li>
+<?php } ?>    

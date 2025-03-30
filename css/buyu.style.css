@@ -1,0 +1,815 @@
+body {
+  background-color: #FFF;
+  color: #000000;
+  font-size: 87.5%;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: #3354AA;
+  font-weight: bold;
+}
+a:hover, a:active {
+  color: #444;
+}
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px
+}
+::-webkit-scrollbar-track {
+  background-color: transparent;
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius: 2em
+}
+::-webkit-scrollbar-thumb {
+  background-color: #818181;
+  background-image: -webkit-linear-gradient(45deg,rgba(255,255,255,.4) 100%,transparent 100%,transparent 50%,rgba(255,255,255,.4) 50%,rgba(255,255,255,.4) 75%,transparent 75%,transparent);
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius: 2em
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "WenQuanYi Micro Hei","Microsoft Yahei", sans-serif;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+textarea {
+  padding: 5px;
+  border: 1px solid #3384C6;
+  width: 100%;
+
+  border-radius: 2px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+textarea {
+  resize: vertical;
+}
+
+/* Special link style */
+.post-meta a,
+.post-content a,
+.widget a,
+.comment-content a {
+  text-decoration: none;
+}
+
+.post-meta a:hover,
+.post-content a:hover,
+.widget a:hover,
+.comment-content a:hover {
+  border-bottom-color: transparent;
+}
+
+/* ------------------
+ * Header
+ * --------------- */
+#backToTop {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  /* 初始隐藏，但使用 opacity 和 visibility 而不是 display */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease; /*添加过渡效果 */
+  padding: 10px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+/* 当按钮应该显示时，通过 JavaScript添加这个类 */
+#backToTop.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 新添加的顶部栏样式 */
+#header {
+  padding-top: 25px;
+  /* border-bottom: 1px solid #008dff; */
+  background: #ffffff; /* 渐变背景 */
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */ /* 阴影效果 */
+}
+
+#logo {
+  color: #333;
+  font-size: 2.0em;
+  display: inline-block;
+  text-decoration: none;
+  transition: color 0.3s ease; /* 颜色过渡效果 */
+}
+
+#logo:hover {
+  color: #007BFF; /* 鼠标悬停时的颜色 */
+}
+
+#search {
+  position: relative;
+}
+
+#search input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+#search label {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #999;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+#search input[type="text"]:focus + label,
+#search input[type="text"]:not(:placeholder-shown) + label {
+  top: 0;
+  font-size: 12px;
+  color: #007BFF;
+}
+
+#nav-menu a {
+  display: inline-block;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+#nav-menu a.current,
+#nav-menu a:hover {
+  color: #ffffff;
+}
+    
+/* Navigation menu */
+#nav-menu {
+  margin: 25px 0 0;
+  padding: 0;
+}
+#nav-menu a {
+  display: block;
+  margin-right: 2px;
+  padding: 0 20px;
+  border: 1px solid #3384C6;
+  /* border-bottom: none; */
+  height: 32px;
+  line-height: 32px;
+  color: #444;
+  float: left;
+}
+#nav-menu a:hover,
+#nav-menu .current {
+  background: #008dff;
+  color:#FFF;
+}
+
+/* ------------------
+ * Main
+ * --------------- */
+
+.post {
+  padding: 15px 0 20px;
+  border-bottom: 1px solid #3384C6;
+}
+.post-title {
+  margin: .83em 0;
+  font-size: 1.4em;
+}
+.post-meta {
+  margin-top: -0.5em;
+  padding: 0;
+  color: #414141;
+  font-size: .92857em;
+}
+.post-meta li {
+  display: inline-block;
+  margin: 0 8px 0 0;
+  padding-left: 12px;
+  border-left: 1px solid #EEE;
+}
+.post-meta li:first-child {
+  margin-left: 0;
+  padding-left: 0;
+  border: none;
+}
+.post-content {
+  line-height: 1.5;
+}
+.post .tags {
+  clear: both;
+}
+
+.post-near {
+  list-style: none;
+  margin: 30px 0;
+  padding: 0;
+  color: #000000;
+}
+.post-near li {
+  margin: 10px 0;
+}
+
+.archive-title {
+  margin: 1em 0 -1em;
+  padding-top: 20px;
+  color: #999;
+  font-size: 1em;
+}
+.more {
+  text-align: center;
+}
+.more a {
+  border: none;
+}
+.protected .text {
+  width: 50%;
+}
+
+/* Page nav */
+
+.page-navigator {
+  list-style: none;
+  margin: 1rem 0 0 0;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center !important;
+}
+
+.page-navigator li a {
+  display: block;
+  text-decoration: none;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  color: #000000;
+  border-radius: 4px;
+  background-color: #fff;
+  text-align: center;
+  box-shadow: 0 0 4px rgb(0 0 0 / 49%);
+  transition: all 0.3s ease-in-out;
+}
+
+.page-navigator li.current a,
+.page-navigator li a:hover {
+  background-color: #212529;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* 添加三个点的样式 */
+.page-navigator li span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  color: #000000;
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 0 0 4px rgb(0 0 0 / 49%);
+}
+
+/* ------------------
+ * Comment list
+ * --------------- */
+#comments {
+  padding-top: 15px;
+}
+.comment-list, .comment-list ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.comment-list li {
+  padding: 14px;
+  margin-top: 10px;
+  border: 1px solid #3384C6;
+}
+.comment-list li.comment-level-odd {
+  background: #F6F6F3;
+}
+.comment-list li.comment-level-even {
+  background: #FFF;
+}
+.comment-list li.comment-by-author {
+  background: #FFF9E8;
+}
+.comment-list li .comment-reply {
+  text-align: right;
+  font-size: .92857em;
+}
+.comment-meta a {
+  color: #000000;
+  font-size: .92857em;
+}
+.comment-author {
+  display: block;
+  margin-bottom: 3px;
+  color: #000000;
+}
+.comment-author .avatar {
+  float: left;
+  margin-right: 10px;
+  border-radius: 5px;
+  border: 1px solid #3384C6;
+}
+.comment-author cite {
+  font-weight: bold;
+  font-style: normal;
+}
+
+/* Comment reply */
+.comment-list .respond {
+  margin-top: 15px;
+  border-top: 1px solid #EEE;
+}
+.respond .cancel-comment-reply {
+  float: right;
+  margin-top: 15px;
+  font-size: .92857em;
+}
+#comment-form label {
+  display: block;
+  margin-top: .5em;
+  margin-bottom: .5em;
+  font-weight: bold;
+}
+#comment-form .required:after {
+  content: " *";
+  color: #C00;
+}
+
+/* ------------------
+ * secondary
+ * --------------- */
+#secondary {
+  padding-top: 15px;
+  word-wrap: break-word;
+}
+.widget {
+  margin-bottom: 30px;
+}
+.widget-list {
+  list-style: none;
+  padding: 0;
+}
+.widget-list li {
+  margin: 5px 0;
+  line-height: 1.6;
+}
+
+.widget-list li ul {
+  margin-left: 15px;
+}
+
+
+/* ------------------
+ * Footer 
+ * --------------- */
+#footer {
+  padding: 3em 0;
+  line-height: 1.5;
+  text-align: center;
+  color: #000000;
+}
+
+/*给图片过渡效果*/
+img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-transition: all 0.5s;	/* Safari 和 Chrome */-o-transition: all 0.5s;	/* Opera */;}
+.index{width: 400px;margin: 0 auto;padding-bottom: 100px;}
+.index-img{width: 100%;height:210px;margin-top:100px;}
+/*object-fit: cover;解决图片指定大小被压缩问题*/
+.index-img>img{width: 100%;height: 100%;object-fit: cover;}
+
+
+/* -----------------
+ * Error page
+ * -------------- */
+.error-page {
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+.post-content {
+  line-height: 1.7; /* 微调行高 */
+  font-family: -apple-system-font, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", Arial, sans-serif;
+  letter-spacing: 0.8px; /* 减小字母间距 */
+  background-size: 16px 16px; /* 减小背景尺寸 */
+  background-position: center center;
+  word-break: break-word;
+  font-weight: 400;
+  font-size: 13px; /* 减小字体大小 */
+  overflow-x: hidden;
+}
+
+.post-content h1 {
+  font-size: 22px; /* 减小字号 */
+  margin-bottom: 6px; /* 减小底部边距 */
+  font-weight: 700;
+  padding-left: 10px; /* 减小左边距 */
+  border-left: 3px solid #b9b9b9; /* 设置左边框样式 */
+}
+
+.post-content h2 {
+  font-size: 18px;
+  font-weight: 700;
+  padding-left: 10px;
+  border-left: 3px solid #b9b9b9; /* 设置左边框样式 */
+}
+
+.post-content h3 {
+  font-size: 16px;
+  font-weight: 700;
+  padding-left: 10px;
+  border-left: 3px solid #b9b9b9; /* 设置左边框样式 */
+}
+
+.post-content h4 {
+  font-size: 14px;
+  font-weight: 700;
+  padding-left: 10px;
+  border-left: 3px solid #b9b9b9; /* 设置左边框样式 */
+}
+
+.post-content h5 {
+  font-size: 13px;
+  font-weight: 700;
+  padding-left: 10px;
+  border-left: 3px solid #b9b9b9; /* 设置左边框样式 */
+}
+
+.post-content h6 {
+  font-size: 12px;
+  margin-top: 4px; /* 减小顶部边距 */
+  font-weight: 700;
+  padding-left: 10px;
+  border-left: 3px solid #b9b9b9; /* 设置左边框样式 */
+}
+
+.post-content p {
+  line-height: inherit;
+  margin-bottom: 6px; /* 减小底部边距 */
+}
+
+.post-content img {
+  border-radius: 3px; /* 减小圆角半径 */
+  margin: 6px 0; /* 减小边距 */
+  max-width: 100%;
+  height: auto;
+}
+
+.post-content img:hover  {
+  filter: blur(0) brightness(0.75);
+  -webkit-filter: blur(0) brightness(0.75);
+}
+
+.post-content hr {
+  background-color: #eee; /* 调整背景颜色更淡 */
+  border-top: 1.5px dashed #333; /* 减小边框宽度，调整颜色 */
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+  margin-top: 25px; /* 减小顶部边距 */
+  margin-bottom: 25px;
+}
+
+.post-content code {
+  padding: 1.5px 3px; /* 减小内边距 */
+  background: #eee; /* 调整背景颜色更淡 */
+  font-size: 13px; /* 减小字号 */
+  font-weight: 600; /* 减小字体粗细 */
+  font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', -apple-system, system-ui, monospace;
+  color: #c13;
+  word-break: break-word;
+  overflow-x: auto;
+  background-color: transparent; /* 修改为透明背景 */
+  border-radius: 1.5px; /* 减小圆角半径 */
+}
+
+.post-content pre {
+  overflow: auto;
+  position: relative;
+  line-height: 1.6; /* 微调行高 */
+}
+
+.post-content pre>code {
+  display: block;
+  font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', -apple-system, system-ui, monospace;
+  font-weight: normal;
+  font-size: 1em; /* 减小字号 */
+  padding: 14px 10px; /* 减小内边距 */
+  margin: 0;
+  color: #333;
+  word-break: normal;
+  overflow-x: auto;
+  background: #eee; /* 调整背景颜色更淡 */
+  scroll-behavior: smooth;
+}
+
+.post-content a {
+  text-decoration: none;
+  color: rgb(100, 135, 173); /* 调整链接颜色 */
+  font-weight: 600; /* 减小字体粗细 */
+}
+
+.post-content a:hover,
+.post-content a:active {
+  color: #773098;
+}
+
+.post-content table {
+  border: 1px solid #999; /* 调整边框颜色稍淡 */
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 6px; /* 减小底部边距 */
+}
+
+.post-content thead {
+  background-color: #ccc; /* 调整背景颜色稍淡 */
+  color: #333;
+  text-align: left;
+}
+
+.post-content th,
+.post-content td {
+  border: 1px solid #999; /* 调整边框颜色稍淡 */
+  padding: 6px; /* 减小内边距 */
+  text-align: left;
+}
+
+.post-content blockquote {
+  color: #555; /* 调整颜色稍淡 */
+  padding: 8px 18px; /* 减小内边距 */
+  margin: 18px 0;
+  border-left: 3px solid #b9b9b9;
+  background-color: #f9f9f9; /* 调整背景颜色更淡 */
+}
+
+.post-content blockquote::after {
+  display: block;
+  content: "";
+}
+
+.post-content blockquote>p {
+  margin: 8px 0;
+  line-height: 22px; /* 减小行高 */
+}
+
+.post-content ol,
+.post-content ul {
+  padding-left: 20px; /* 减小左侧内边距 */
+}
+
+.post-content ol li,
+.post-content ul li {
+  margin-bottom: 0;
+  list-style: inherit;
+}
+
+.post-content ol li.task-list-item,
+.post-content ul li.task-list-item {
+  list-style: none;
+}
+
+.post-content ol li.task-list-item ul,
+.post-content ol li.task-list-item ol,
+.post-content ul li.task-list-item ul,
+.post-content ul li.task-list-item ol {
+  margin-top: 0;
+}
+
+.post-content ol ul,
+.post-content ol ol,
+.post-content ul ul,
+.post-content ul ol {
+  margin-top: 2px; /* 减小顶部边距 */
+}
+
+.post-content ol li {
+  padding-left: 4px; /* 减小左侧内边距 */
+}
+
+.post-content b,
+.post-content strong {
+  /* color: #916dd5; */
+  /* font-weight: 600; */ /* 减小字体粗细 */
+}
+
+.post-content i,
+.post-content em {
+  /* color: #916dd5; */
+}
+
+.post-content mark {
+  background-color: #ffd9b3;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+.post-content del {
+  color: #999;
+  text-decoration: line-through;
+}
+.post-content kbd {
+  display: inline-block;
+  padding: 2px 4px;
+  background-color: #eee;
+  border: 1px solid #999;
+  border-radius: 3px;
+  font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', -apple-system, system-ui, monospace;
+}
+.post-content sub, .post-content sup {
+  font-size: 10px;
+}
+.post-content sub {
+  vertical-align: sub;
+}
+.post-content sup {
+  vertical-align: super;
+}
+.post-content details {
+  background-color: #f9f9f9;
+  padding: 8px 12px;
+  border: 1px solid #d89cf6;
+  border-radius: 4px;
+}
+.post-content details summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+    
+.post-content figure {
+  margin: 6px 0;
+}
+.post-content figcaption {
+  font-size: 12px;
+  color: #555;
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  .post-content h1 {
+    font-size: 20px;
+  }
+
+  .post-content h2 {
+    font-size: 16px;
+  }
+
+  .post-content h3 {
+    font-size: 14px;
+  }
+}
+
+
+
+/* -----------------
+ * Misc
+ *--------------- */
+.aligncenter, div.aligncenter {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.alignleft {
+  float: left;
+}
+.alignright {
+  float: right;
+}
+img.alignleft {
+  margin: 0 15px 0 0;
+}
+img.alignright {
+  margin: 0 0 0 15px;
+}
+
+
+/* -----------------
+ * Responsive
+ *--------------- */
+@media (max-width: 767px) {
+  body {
+    font-size: 81.25%;
+  }
+  #nav-menu a {
+    float: none;
+    display: inline-block;
+    margin: 0 -2px;
+  }
+}
+
+@media (max-width: 768px) {
+  #header,
+  .post-title,
+  .post-meta {
+    text-align: center;
+  }
+}
+
+@media (min-width: 992px) {
+
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 952px;
+  }
+}
+
+
+/*
+* Hide from both screenreaders and browsers: h5bp.com/u
+*/
+.hidden {
+  display: none !important;
+  visibility: hidden; }
+
+/*
+* Hide only visually, but have it available for screenreaders: h5bp.com/v
+*/
+.sr-only {
+  border: 0;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px; }
+
+/*
+* Extends the .sr-only class to allow the element to be focusable
+* when navigated to via the keyboard: h5bp.com/p
+*/
+.sr-only.focusable:active,
+.sr-only.focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto; }
+
+/*
+* Hide visually and from screenreaders, but maintain layout
+*/
+.invisible {
+  visibility: hidden; }
+
+
+
+.friend-container {
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 10px; /* 卡片间距 */
+}
+
+.friend-container .friend-card {
+  display: flex;
+  align-items: center;
+  border: 1px solid #3384C6;
+  padding: 0.8em;
+  text-decoration: none;
+  color: inherit;
+}
+
+.friend-container .friend-card:hover {
+  border-bottom-color: #EEE;
+}
+
+.friend-container .friend-card .friend-avatar {
+  width: 3.2em;
+  height: 3.2em;
+  bottom: 0;
+  margin: 0 0.6em 0 0;
+  box-shadow: none;
+}
+
+.friend-container .friend-card .friend-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.friend-container .friend-card .friend-name {
+  font-size: 1em;
+  font-weight: bold;
+  margin: 0;
+}
+
+.friend-container .friend-card .friend-description {
+  font-size: 0.9em;
+  color: #999;
+  margin: 1px 0 0 0;
+}
