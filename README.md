@@ -1,12 +1,12 @@
 ## Typecho **buyu** 单栏主题
 
-这是一款基于 typecho 默认模版二次开发的 Typecho 主题。
-用户交流群：[点击加入](https://qm.qq.com/q/PVln74J0UU)
+这是一款基于 typecho 默认模版二次开发的 Typecho 主题。<br>
+用户交流群：[点击加入](https://qm.qq.com/q/PVln74J0UU)<br>
 主题宗旨：简洁、简洁、还是简洁！
 
 ## 如何使用
 
-下载 "主题压缩文件" 将压缩包上传至`/usr/themes/`目录，然后解压。
+下载 "主题压缩文件" 将压缩包上传至`/usr/themes/`目录，然后解压。<br>
 然后进入Typecho后台，选择控制台>外观>启用
 
 ## 目录结构
