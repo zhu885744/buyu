@@ -1,6 +1,6 @@
 <?php
 /**
- * 基于 typecho 默认主题二开
+ * 一款基于 typecho 默认模版二次开发的 Typecho 主题
  *
  * @package buyu
  * @author 不语
