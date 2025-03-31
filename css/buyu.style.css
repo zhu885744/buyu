@@ -851,10 +851,10 @@ img.alignright {
 }
 
 /*404页面开始*/
-.col-mb-12.col-8#main {
-  background-color: #fff;
-  padding: 40px;
-  text-align: center;
+.error-page-404 {
+    background-color: #fff;
+    padding: 40px;
+    text-align: center;
 }
 
 .error-page h2 {
