@@ -13,7 +13,6 @@
         ), '', ' - ');?><?php if($this->getCurrentPage()>1) _e("第 %d 页-", $this->getCurrentPage());?><?php $this->options->title();?></title>
     <link rel="stylesheet" href="<?php $this->options->themeUrl('css/buyu.grid.css');?>">
     <link rel="stylesheet" href="<?php $this->options->themeUrl('css/buyu.style.css');?>">
-    <?php output_custom_styles(); ?>
     <style type="text/css">
         <?php $this->options->CustomCSS();?>
     </style>

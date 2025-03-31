@@ -399,34 +399,3 @@ Typecho_Plugin::factory('Widget_Abstract_Contents')->contentEx = function($conte
     $content = empty($lastResult) ? $content : $lastResult;
     return parse_shortcodes($content);
 };
-
-// 输出美化样式
-function output_custom_styles() {
-    echo '<style>
-        .custom-video-container {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .custom-video-container video {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        .custom-audio-container {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-        }
-        .custom-audio-container audio {
-            width: 80%;
-            max-width: 600px;
-        }
-    </style>';
-}
-
-// 在主题的合适位置调用 output_custom_styles 函数，例如在 header.php 文件中
-// output_custom_styles();

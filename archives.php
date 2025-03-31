@@ -10,7 +10,7 @@ $this->need('public/header.php');
 
 <div class="col-mb-12 col-8" id="main" role="main">
     <article class="post">
-        <h1 class="post-title" itemprop="name headline" style="color: #3354AA;">
+        <h1 class="post-title" itemprop="name headline">
             <?php $this->title() ?>
         </h1>
         <ul class="post-meta">
@@ -88,20 +88,5 @@ $this->need('public/header.php');
     </article>
     <?php $this->need('public/comments.php'); ?>
 </div>
-
-<script>
-    const detailsElements = document.querySelectorAll('details');
-    detailsElements.forEach(detail => {
-        detail.addEventListener('toggle', function () {
-            if (this.open) {
-                detailsElements.forEach(otherDetail => {
-                    if (otherDetail!== this) {
-                        otherDetail.open = false;
-                    }
-                });
-            }
-        });
-    });
-</script>
 
 <?php $this->need('public/footer.php'); ?>    

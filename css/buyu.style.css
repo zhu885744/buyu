@@ -194,6 +194,7 @@ textarea {
 .post-title {
   margin: .83em 0;
   font-size: 1.4em;
+  color: #3354AA;
 }
 
 .post-meta {
@@ -848,3 +849,78 @@ img.alignright {
   color: #999;
   margin: 1px 0 0 0;
 }
+
+/*404页面开始*/
+.col-mb-12.col-8#main {
+  background-color: #fff;
+  padding: 40px;
+  text-align: center;
+}
+
+.error-page h2 {
+  font-size: 36px;
+  color: #e74c3c;
+  margin-bottom: 20px;
+  animation: fadeIn 1s ease;
+}
+
+.error-page p {
+  font-size: 18px;
+  margin-bottom: 30px;
+  animation: fadeIn 1s ease;
+}
+
+.error-page form#search {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.error-page form#search input[type="text"] {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.error-page form#search label {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+  }
+
+  to {
+      opacity: 1;
+  }
+}
+/*404页面结束*/
+
+/*短代码解析样式开始*/
+.custom-video-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.custom-video-container video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.custom-audio-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+.custom-audio-container audio {
+  width: 80%;
+  max-width: 600px;
+}
+/*短代码解析样式结束*/
