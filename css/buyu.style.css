@@ -635,7 +635,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
 .post-content strong,
 .post-content i,
 .post-content em {
-    color: #916dd5;
+    color: #000000;
 }
 
 .post-content b,
