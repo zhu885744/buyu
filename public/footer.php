@@ -23,7 +23,7 @@
   </div>
 </footer>
 <button id="backToTop">返回顶部</button>
-<script src="<?php $this->options->themeUrl('js/buyu.style.js'); ?>"></script>
+<script src="<?php $this->options->themeUrl('assets/js/buyu.style.js'); ?>"></script>
 <script type="text/javascript">
   <?php $this->options->JCustomScript() ?>
 </script>
