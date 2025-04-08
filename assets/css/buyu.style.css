@@ -36,7 +36,7 @@ a:hover, a:active {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "WenQuanYi Micro Hei","Microsoft Yahei", sans-serif;
+  font-family: '华文中宋', 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
 }
 
 input[type="text"],
@@ -107,7 +107,8 @@ textarea {
   font-size: 2.0em;
   display: inline-block;
   text-decoration: none;
-  transition: color 0.3s ease; /* 颜色过渡效果 */
+  transition: color 0.3s ease;
+  font-family: '华文中宋', 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
 }
 
 #logo:hover {
@@ -429,7 +430,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
 
 .post-content {
   line-height: 1.7; /* 微调行高 */
-  font-family: -apple-system-font, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", Arial, sans-serif;
+  font-family: '华文中宋', 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
   letter-spacing: 0.8px; /* 减小字母间距 */
   background-size: 16px 16px; /* 减小背景尺寸 */
   background-position: center center;
