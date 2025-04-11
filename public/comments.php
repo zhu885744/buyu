@@ -7,7 +7,7 @@ $this->comments()->to($comments);
         <span>当前文章受密码保护，无法评论</span>
     <?php else :?>
         <?php if ($this->allow('comment') && $this->options->JCommentStatus!== "off") :?>
-            <link rel="stylesheet" href="<?php $this->options->themeUrl('css/OwO.min.css'); ?>">
+            <link rel="stylesheet" href="<?php $this->options->themeUrl('assets/css/OwO.min.css'); ?>">
             <h2>发表评论（<?php $this->commentsNum(_t('暂无评论'), _t('仅有 1 条评论'), _t('已有 %d 条评论'));?>）</h2>
             <h4> 本站使用cookie技术保留您的个人信息以便您下次快速评论。</h4>
             <div id="<?php $this->respondId();?>">
@@ -44,7 +44,7 @@ $this->comments()->to($comments);
                 <?php $comments->listComments();?>
               <?php endif;?>
             </div>
-            <script src="<?php $this->options->themeUrl('js/OwO.min.js'); ?>"></script>
+            <script src="<?php $this->options->themeUrl('assets/js/OwO.min.js'); ?>"></script>
             <script type="text/javascript">
               var OwO_demo = new OwO({
                 logo: 'OωO',

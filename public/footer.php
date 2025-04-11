@@ -10,16 +10,16 @@
   </div>   
   <?php if ($this->options->ICPbeian): ?>
     <div class="item">
-      <a href="http://beian.miit.gov.cn" class="icpnum" target="_blank" rel="noreferrer">「<?php echo $this->options->ICPbeian(); ?>」</a>
+      <a href="http://beian.miit.gov.cn" class="icpnum" target="_blank" rel="noreferrer"><?php echo $this->options->ICPbeian(); ?></a>
     </div>    
   <?php endif; ?>
   <?php if ($this->options->gonganbeian): ?>
     <div class="item">
-      <a href="https://beian.mps.gov.cn/#/query/webSearch" class="icpnum" target="_blank" rel="noreferrer">「<?php echo $this->options->gonganbeian(); ?>」</a>
+      <a href="https://beian.mps.gov.cn/#/query/webSearch" class="icpnum" target="_blank" rel="noreferrer"><?php echo $this->options->gonganbeian(); ?></a>
     </div>
   <?php endif; ?> 
   <div class="item">
-    &copy; <?php echo date('Y'); ?><a href="<?php $this->options->siteUrl(); ?>">「<?php $this->options->title(); ?>」</a>由<a href="https://typecho.org">「Typecho」</a>强力驱动
+    &copy; <?php echo date('Y'); ?><a href="<?php $this->options->siteUrl(); ?>"><?php $this->options->title(); ?></a>由<a href="https://typecho.org">Typecho</a>强力驱动
   </div>
 </footer>
 <button id="backToTop">返回顶部</button>

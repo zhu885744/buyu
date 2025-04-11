@@ -1,6 +1,6 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
 <?php $this->need('public/header.php'); ?>
-<link href="<?php $this->options->themeUrl('css/buyu.Lightbox.css'); ?>" rel="stylesheet">
+<link href="<?php $this->options->themeUrl('assets/css/buyu.Lightbox.css'); ?>" rel="stylesheet">
 <div class="col-mb-12 col-8" id="main" role="main">
     <article class="post">
         <h1 class="post-title" itemprop="name headline">
@@ -22,7 +22,7 @@
     </article>
     <?php $this->need('public/comments.php'); ?>
 </div>
-<script src="<?php $this->options->themeUrl('js/buyu.Lightbox.js'); ?>"></script>
+<script src="<?php $this->options->themeUrl('assets/js/buyu.Lightbox.js'); ?>"></script>
 <script type="text/javascript">
   document.addEventListener('DOMContentLoaded', function() {
     // 图片灯箱初始化
