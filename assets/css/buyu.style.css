@@ -678,6 +678,12 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   border: 1px solid #ccc;
   border-radius: 4px;
   overflow: hidden;
+  transition: max-height 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+  max-height: 40px; /* 初始最大高度，可根据 summary 的高度调整 */
+}
+
+.post-content details[open] {
+  max-height: 1000px; /* 展开时的最大高度，可根据内容调整 */
 }
 
 .post-content details summary {
@@ -740,8 +746,8 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
     opacity: 0;
     transform: translateY(-10px);
   }
-}
-    
+}   
+
 .post-content figure {
   margin: 6px 0;
 }
