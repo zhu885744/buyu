@@ -1,6 +1,6 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="renderer" content="webkit">
@@ -13,6 +13,7 @@
         ), '', ' - ');?><?php if($this->getCurrentPage()>1) _e("第 %d 页-", $this->getCurrentPage());?><?php $this->options->title();?></title>
     <link rel="stylesheet" href="<?php $this->options->themeUrl('assets/css/buyu.grid.css');?>">
     <link rel="stylesheet" href="<?php $this->options->themeUrl('assets/css/buyu.style.css');?>">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <style type="text/css">
         <?php $this->options->CustomCSS();?>
     </style>
@@ -26,7 +27,7 @@
             <div class="site-name col-mb-12 col-9">
                 <?php if ($this->options->logoUrl): ?>
                     <a id="logo" href="<?php $this->options->siteUrl(); ?>">
-                        <img src="<?php $this->options->logoUrl() ?>" alt="<?php $this->options->title() ?>"/>
+                        <img src="<?php $this->options->logoUrl() ?>" width="60px" height="40%" alt="<?php $this->options->title() ?>"/>
                     </a>
                 <?php else: ?>
                     <a id="logo" href="<?php $this->options->siteUrl(); ?>"><?php $this->options->title() ?></a>

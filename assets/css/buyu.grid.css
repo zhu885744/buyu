@@ -4,7 +4,7 @@
  * Version: 1.2.8
  * Update: 2013.11.25
  */
-.container, .row > [class*="col-"] {
+ .container, .row > [class*="col-"] {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
@@ -755,12 +755,14 @@ select { /* 1 */
  * Correct the inability to style clickable types in iOS and Safari.
  */
 
-button,
-[type="button"],
-[type="reset"],
-[type="submit"] {
-  -webkit-appearance: button;
-}
+ button,
+ [type="button"],
+ [type="reset"],
+ [type="submit"] {
+   -webkit-appearance: button; /* WebKit 内核浏览器 */
+   -moz-appearance: button;    /* Firefox 浏览器 */
+   appearance: button;         /* 标准属性 */
+ }
 
 /**
  * Remove the inner border and padding in Firefox.
@@ -850,9 +852,11 @@ textarea {
  * 2. Correct the outline style in Safari.
  */
 
-[type="search"] {
-  -webkit-appearance: textfield; /* 1 */
-  outline-offset: -2px; /* 2 */
+ [type="search"] {
+  -webkit-appearance: textfield; /* WebKit 内核浏览器 */
+  -moz-appearance: textfield;    /* Firefox 浏览器 */
+  appearance: textfield;         /* 标准属性 */
+  outline-offset: -2px;          /* 标准属性 */
 }
 
 /**

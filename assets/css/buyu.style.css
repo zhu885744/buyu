@@ -47,11 +47,10 @@ textarea {
   padding: 5px;
   border: 1px solid #3384C6;
   width: 100%;
-
-  border-radius: 2px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  border-radius: 4px;
 }
 textarea {
   resize: vertical;
@@ -87,7 +86,7 @@ textarea {
   background-color: #007BFF;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
 }
 
@@ -123,7 +122,7 @@ textarea {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 4px;
   box-sizing: border-box;
 }
 
@@ -168,11 +167,11 @@ textarea {
   margin-right: 2px;
   padding: 0 20px;
   border: 1px solid #3384C6;
-  /* border-bottom: none; */
   height: 32px;
   line-height: 32px;
   color: #444;
   float: left;
+  border-radius: 4px;
 }
 
 #nav-menu a:hover,
@@ -344,7 +343,7 @@ textarea {
 .comment-author .avatar {
   float: left;
   margin-right: 10px;
-  border-radius: 5px;
+  border-radius: 4px;
   border: 1px solid #3384C6;
 }
 
@@ -490,7 +489,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
 }
 
 .post-content img {
-  border-radius: 3px; /* 减小圆角半径 */
+  border-radius: 4px; /* 减小圆角半径 */
   margin: 6px 0; /* 减小边距 */
   max-width: 100%;
   height: auto;
@@ -521,7 +520,8 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   word-break: break-word;
   overflow-x: auto;
   background-color: transparent; /* 修改为透明背景 */
-  border-radius: 1.5px; /* 减小圆角半径 */
+  border: 1px solid #dedede;
+  border-radius: 4px;
 }
 
 .post-content pre {
@@ -542,6 +542,8 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   overflow-x: auto;
   background: #eee; /* 调整背景颜色更淡 */
   scroll-behavior: smooth;
+  border: 1px solid #dedede;
+  border-radius: 4px;
 }
 
 .post-content a {
@@ -641,7 +643,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
 .post-content mark {
   background-color: #ffd9b3;
   padding: 2px 4px;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 .post-content del {
@@ -654,7 +656,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   padding: 2px 4px;
   background-color: #eee;
   border: 1px solid #999;
-  border-radius: 3px;
+  border-radius: 4px;
   font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', -apple-system, system-ui, monospace;
 }
 
@@ -673,14 +675,36 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
 .post-content details {
   background-color: #f9f9f9;
   padding: 8px 12px;
-  border: 1px solid #d89cf6;
+  border: 1px solid #ccc;
   border-radius: 4px;
+  overflow: hidden;
 }
 
 .post-content details summary {
+  padding: 4px;
   cursor: pointer;
+  list-style: none;
+  position: relative;
   font-weight: 600;
-  transition: background-color 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.post-content summary::-webkit-details-marker {
+  display: none;
+}
+
+.post-content summary::after {
+  content: '\f078';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: transform 0.3s ease;
+}
+
+.post-content details[open] summary::after {
+  transform: translateY(-50%) rotate(180deg);
 }
 
 .post-content details .year-content {
@@ -717,7 +741,6 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
     transform: translateY(-10px);
   }
 }
-    
     
 .post-content figure {
   margin: 6px 0;
@@ -895,7 +918,7 @@ img.alignright {
   width: 100%;
   padding: 15px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 4px;
   font-size: 16px;
 }
 
@@ -920,7 +943,7 @@ img.alignright {
   justify-content: center;
   margin: 20px 0;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  border-radius: 4px;
   overflow: hidden;
 }
 .custom-video-container video {

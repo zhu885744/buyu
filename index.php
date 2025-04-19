@@ -1,11 +1,11 @@
 <?php
 /**
- * 一款基于 typecho 默认模版二次开发的 Typecho 主题
+ * 这是一款基于 typecho 默认模版二次开发的 Typecho 单栏主题。
  *
  * @package buyu
  * @author 不语
  * @version 1.2.4
- * @link https://zhuxu.asia/
+ * @link https://zhuxu.asia/archives/118/
  */
 
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;

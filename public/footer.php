@@ -19,9 +19,10 @@
     </div>
   <?php endif; ?> 
   <div class="item">
-    &copy; <?php echo date('Y'); ?><a href="<?php $this->options->siteUrl(); ?>"><?php $this->options->title(); ?></a>由<a href="https://typecho.org">Typecho</a>强力驱动
+    &copy; <?php echo date('Y'); ?>&nbsp;<a href="<?php $this->options->siteUrl(); ?>"><?php $this->options->title(); ?></a>&nbsp;由&nbsp;<a href="https://typecho.org">Typecho</a>&nbsp;强力驱动
   </div>
 </footer>
+
 <button id="backToTop">返回顶部</button>
 <script src="<?php $this->options->themeUrl('assets/js/buyu.style.js'); ?>"></script>
 <script type="text/javascript">
