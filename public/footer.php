@@ -5,9 +5,11 @@
 </div>
 
 <footer id="footer" role="contentinfo">
-  <div class="item">
-    <?php $this->options->JFooter_Left() ?>
-  </div>   
+  <?php if ($this->options->JFooter_Left()): ?>
+    <div class="item">
+      <?php $this->options->JFooter_Left() ?>
+    </div>   
+  <?php endif; ?>  
   <?php if ($this->options->ICPbeian): ?>
     <div class="item">
       <a href="http://beian.miit.gov.cn" class="icpnum" target="_blank" rel="noreferrer"><?php echo $this->options->ICPbeian(); ?></a>
@@ -25,9 +27,11 @@
 
 <button id="backToTop">返回顶部</button>
 <script src="<?php $this->options->themeUrl('assets/js/buyu.style.js'); ?>"></script>
-<script type="text/javascript">
-  <?php $this->options->JCustomScript() ?>
-</script>
+<?php if ($this->options->JCustomScript()): ?>
+  <script type="text/javascript">
+    <?php $this->options->JCustomScript() ?>
+  </script>
+<?php endif; ?>
 <?php $this->footer(); ?>
 <?php if ($this->options->CustomContent): $this->options->CustomContent(); ?>
 <?php endif; ?>

@@ -14,9 +14,11 @@
     <link rel="stylesheet" href="<?php $this->options->themeUrl('assets/css/buyu.grid.css');?>">
     <link rel="stylesheet" href="<?php $this->options->themeUrl('assets/css/buyu.style.css');?>">
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <style type="text/css">
-        <?php $this->options->CustomCSS();?>
-    </style>
+    <?php if ($this->options->CustomCSS()): ?>
+      <style type="text/css">
+        <?php $this->options->CustomCSS(); ?>
+      </style>
+    <?php endif; ?>
     <?php $this->header('generator=&template=&pingback=&xmlrpc=&wlw=');?>
 </head>
 <body>

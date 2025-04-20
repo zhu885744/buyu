@@ -36,6 +36,13 @@ function a_class_replace($content){
   return $content;
 }
 
+// 文章图片逻辑
+function processContent($content, $title) {
+    $pattern = '/\<img.*?src\=\"(.*?)\"[^>]*>/i';
+    $replacement = '<a href="$1" class="index-img" data-fancybox><img data-src="$1" loading="lazy" alt="' . $title . '" title="点击查看大图"></a>';
+    return preg_replace($pattern, $replacement, $content);
+}
+
 /* 文章编辑器添加字符统计 */
 Typecho_Plugin::factory('admin/write-post.php')->bottom = array('myyodu', 'one');
 Typecho_Plugin::factory('admin/write-page.php')->bottom = array('myyodu', 'one');

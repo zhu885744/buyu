@@ -352,6 +352,26 @@ textarea {
   font-style: normal;
 }
 
+.comment-submit-button {
+  float: right;
+  width: 100%;
+  border: 1px solid #3384C6;
+  background: #ffffff;
+  height: 30px;
+  border-radius: 3px;
+  color: #000000;
+  font-size: .96em;
+  line-height: 30px;
+  transition: all 0.2s;
+}
+.comment-submit-button:active {
+  transform: scale(0.95);
+  background-color: #e0e0e0;
+}
+.comment-submit-button-container {
+  margin-top: .5em;
+}
+
 /* Comment reply */
 .comment-list .respond {
   margin-top: 15px;
