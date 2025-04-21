@@ -318,38 +318,66 @@ function convertip($ip){
 
 // 视频短代码处理函数
 function video_shortcode($atts) {
+    // 默认参数
     $default_atts = array(
-        'src' => '',
-        'width' => '640',
-        'height' => '360'
+        'src' => '',          // 视频地址
+        'width' => '640',     // 视频宽度
+        'height' => '360',    // 视频高度
+        'poster' => '',       // 视频封面
+        'preload' => 'none',  // 视频预加载方式（none, metadata, auto）
+        'controls' => 'true'  // 是否显示控制栏
     );
     $atts = array_merge($default_atts, $atts);
 
-    if ($atts['src']) {
-        return '<div class="custom-video-container">
-            <video width="'.$atts['width'].'" height="'.$atts['height'].'" controls>
-                <source src="'.$atts['src'].'" type="video/mp4">
-                你的浏览器不支持视频播放。
-            </video>
-        </div>';
+    // 如果未提供视频地址，返回空字符串
+    if (empty($atts['src'])) {
+        return '';
     }
-    return '';
+
+    // 构建视频标签
+    $video_html = '<div class="custom-video-container">';
+    $video_html .= '<video width="' . htmlspecialchars($atts['width'], ENT_QUOTES) . '"';
+    $video_html .= ' height="' . htmlspecialchars($atts['height'], ENT_QUOTES) . '"';
+    $video_html .= ' preload="' . htmlspecialchars($atts['preload'], ENT_QUOTES) . '"';
+    $video_html .= !empty($atts['poster']) ? ' poster="' . htmlspecialchars($atts['poster'], ENT_QUOTES) . '"' : '';
+    $video_html .= $atts['controls'] === 'true' ? ' controls' : '';
+    $video_html .= '>';
+    $video_html .= '<source src="' . htmlspecialchars($atts['src'], ENT_QUOTES) . '" type="video/mp4">';
+    $video_html .= '你的浏览器不支持视频播放。';
+    $video_html .= '</video>';
+    $video_html .= '</div>';
+
+    return $video_html;
 }
 
 // 音频短代码处理函数
 function audio_shortcode($atts) {
     $default_atts = array(
-        'src' => ''
+        'name' => '未知音频',
+        'artist' => '未知艺术家',
+        'url' => '',
+        'cover' => ''
     );
     $atts = array_merge($default_atts, $atts);
 
-    if ($atts['src']) {
-        return '<div class="custom-audio-container">
-            <audio controls>
-                <source src="'.$atts['src'].'" type="audio/mpeg">
-                你的浏览器不支持音频播放。
-            </audio>
-        </div>';
+    if ($atts['url']) {
+        // 生成唯一的容器 ID 和变量名
+        $containerId = 'aplayer-' . uniqid();
+        $variableName = 'ap_' . uniqid();
+        return '<div id="' . $containerId . '"></div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const ' . $variableName . ' = new APlayer({
+                    container: document.getElementById("' . $containerId . '"),
+                    audio: [{
+                        name: "' . htmlspecialchars($atts['name'], ENT_QUOTES) . '",
+                        artist: "' . htmlspecialchars($atts['artist'], ENT_QUOTES) . '",
+                        url: "' . htmlspecialchars($atts['url'], ENT_QUOTES) . '",
+                        cover: "' . htmlspecialchars($atts['cover'], ENT_QUOTES) . '"
+                    }]
+                });
+            });
+        </script>';
     }
     return '';
 }

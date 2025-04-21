@@ -30,6 +30,8 @@
 
 <?php if ($this->is('page') || $this->is('post')) : ?>
   <link href="<?php $this->options->themeUrl('assets/css/buyu.Lightbox.css'); ?>" rel="stylesheet">
+  <link rel="stylesheet" href="<?php $this->options->themeUrl('assets/css/APlayer.min.css'); ?>">
+  <script src="<?php $this->options->themeUrl('assets/js/APlayer.min.js'); ?>"></script>
   <div class="col-mb-12 col-8" id="main" role="main">
     <article class="post">
         <h1 class="post-title" itemprop="name headline">
