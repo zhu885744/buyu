@@ -9,17 +9,20 @@
 下载 "主题压缩文件" 将压缩包上传至`/usr/themes/`目录，然后解压。<br>
 然后进入Typecho后台，选择控制台>外观>启用
 
-下载主题：https://github.com/zhu885744/buyu/releases/tag/
+下载主题：https://github.com/zhu885744/buyu/releases/tag/<br>
 下载友链插件：https://gitee.com/Mejituu/Links/releases
 
 所有源代码应该放在 `/usr/themes/buyu` 目录下。
 
 ## 更新日志
 [1.2.5] 更新内容如下
-- 新增：文章编辑器
 - 新增：深色浅色模式
 - 新增：文章字段自定义文章摘要
 - 新增：Pjax网站无刷新加载
+- 优化：略调全局ui样式
+- 修复：友链卡片文字溢出
+- 修复：自定义css代码失效的问题
+- 修复：自定义js代码失效的问题
 
 [1.2.4] 更新内容如下
 - 新增：视频/音频/折叠面板短代码

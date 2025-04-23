@@ -1,5 +1,5 @@
 body {
-  background-color: #FFF;
+  background-color: #e8e8e8;
   color: #000000;
   font-size: 87.5%;
   font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
@@ -45,7 +45,7 @@ input[type="url"],
 input[type="password"],
 textarea {
   padding: 5px;
-  border: 1px solid #3384C6;
+  border: 1px solid #ccc;
   width: 100%;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -166,7 +166,7 @@ textarea {
   display: block;
   margin-right: 2px;
   padding: 0 20px;
-  border: 1px solid #3384C6;
+  border: 1px solid #ccc;
   height: 32px;
   line-height: 32px;
   color: #444;
@@ -185,7 +185,7 @@ textarea {
  * --------------- */
 .post {
   padding: 15px 0 20px;
-  border-bottom: 1px solid #3384C6;
+  border-bottom: 1px solid #ccc;
 }
 
 .post-title {
@@ -205,7 +205,7 @@ textarea {
   display: inline-block;
   margin: 0 8px 0 0;
   padding-left: 12px;
-  border-left: 1px solid #EEE;
+  border-left: 1px solid #b4b4b4;
 }
 
 .post-meta li:first-child {
@@ -220,17 +220,6 @@ textarea {
 
 .post .tags {
   clear: both;
-}
-
-.post-near {
-  list-style: none;
-  margin: 30px 0;
-  padding: 0;
-  color: #000000;
-}
-
-.post-near li {
-  margin: 10px 0;
 }
 
 .archive-title {
@@ -269,6 +258,7 @@ textarea {
   line-height: 32px;
   color: #000000;
   border-radius: 4px;
+  border: 1px solid #ccc;
   background-color: #e5e5e5;
   text-align: center;
   transition: all 0.3s ease-in-out;
@@ -290,6 +280,7 @@ textarea {
   height: 32px;
   color: #000000;
   border-radius: 4px;
+  border: 1px solid #ccc;
   background-color: #e5e5e5;
 }
 
@@ -309,7 +300,9 @@ textarea {
 .comment-list li {
   padding: 14px;
   margin-top: 10px;
-  border: 1px solid #3384C6;
+  border: 1px solid #ccc;
+  background-color: #ffffff;
+  border-radius: 4px;
 }
 
 .comment-list li.comment-level-odd {
@@ -321,7 +314,7 @@ textarea {
 }
 
 .comment-list li.comment-by-author {
-  background: #FFF9E8;
+  background: #fff3d1;
 }
 
 .comment-list li .comment-reply {
@@ -344,7 +337,7 @@ textarea {
   float: left;
   margin-right: 10px;
   border-radius: 4px;
-  border: 1px solid #3384C6;
+  border: 1px solid #ccc;
 }
 
 .comment-author cite {
@@ -355,10 +348,10 @@ textarea {
 .comment-submit-button {
   float: right;
   width: 100%;
-  border: 1px solid #3384C6;
+  border: 1px solid #ccc;
   background: #ffffff;
   height: 30px;
-  border-radius: 3px;
+  border-radius: 4px;
   color: #000000;
   font-size: .96em;
   line-height: 30px;
@@ -464,6 +457,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   margin-bottom: 6px; /* 减小底部边距 */
   font-weight: 700;
   padding-left: 10px; /* 减小左边距 */
+  border-radius: 4px;
   border-left: 3px solid #b9b9b9; /* 设置左边框样式 */
 }
 
@@ -471,6 +465,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   font-size: 18px;
   font-weight: 700;
   padding-left: 10px;
+  border-radius: 4px;
   border-left: 3px solid #b9b9b9; /* 设置左边框样式 */
 }
 
@@ -478,6 +473,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   font-size: 16px;
   font-weight: 700;
   padding-left: 10px;
+  border-radius: 4px;
   border-left: 3px solid #b9b9b9; /* 设置左边框样式 */
 }
 
@@ -485,6 +481,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   font-size: 14px;
   font-weight: 700;
   padding-left: 10px;
+  border-radius: 4px;
   border-left: 3px solid #b9b9b9; /* 设置左边框样式 */
 }
 
@@ -492,6 +489,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   font-size: 13px;
   font-weight: 700;
   padding-left: 10px;
+  border-radius: 4px;
   border-left: 3px solid #b9b9b9; /* 设置左边框样式 */
 }
 
@@ -500,6 +498,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   margin-top: 4px; /* 减小顶部边距 */
   font-weight: 700;
   padding-left: 10px;
+  border-radius: 4px;
   border-left: 3px solid #b9b9b9; /* 设置左边框样式 */
 }
 
@@ -582,6 +581,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   border-collapse: collapse;
   width: 100%;
   margin-bottom: 6px; /* 减小底部边距 */
+  border-radius: 4px;
 }
 
 .post-content thead {
@@ -601,6 +601,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   color: #555; /* 调整颜色稍淡 */
   padding: 8px 18px; /* 减小内边距 */
   margin: 18px 0;
+  border-radius: 4px;
   border-left: 3px solid #b9b9b9;
   background-color: #f9f9f9; /* 调整背景颜色更淡 */
 }
@@ -817,7 +818,7 @@ img.alignright {
   #nav-menu a {
     float: none;
     display: inline-block;
-    margin: 0 -2px;
+    /*margin: 0 -2px;*/
   }
 }
 
@@ -878,10 +879,23 @@ img.alignright {
 .friend-container .friend-card {
   display: flex;
   align-items: center;
-  border: 1px solid #3384C6;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
   padding: 0.8em;
   text-decoration: none;
+  border-radius: 4px;
   color: inherit;
+}
+
+.friend-description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  -webkit-line-clamp: 1; /* 限制为 1 行 */
+  line-clamp: 1; /* 标准属性，增加兼容性 */
+  max-height: 1.4em; /* 根据字体大小调整 */
 }
 
 .friend-container .friend-card:hover {

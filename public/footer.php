@@ -36,11 +36,9 @@
 
 <button id="backToTop">返回顶部</button>
 <script src="<?php $this->options->themeUrl('assets/js/buyu.style.js'); ?>"></script>
-<?php if ($this->options->JCustomScript()): ?>
-  <script type="text/javascript">
-    <?php echo $this->options->JCustomScript(); ?>
-  </script>
-<?php endif; ?>
+<script type="text/javascript">
+  <?php echo $this->options->JCustomScript(); ?>
+</script>
 
 <?php $this->footer(); ?>
 

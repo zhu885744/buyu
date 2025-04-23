@@ -41,7 +41,7 @@
     display: inline-block;
     color: #888;
     background: #fff;
-    border: 1px solid #3384C6;
+    border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 13px;
     padding: 2px 5px;
@@ -63,7 +63,7 @@
     position: absolute;
     width: 400px;
     background: #fff;
-    border: 1px solid #3384C6;
+    border: 1px solid #ccc;
     z-index: 1;
     top: 21px;
     border-radius: 0 4px 4px 4px
@@ -84,7 +84,7 @@
 .OwO .OwO-body .OwO-items .OwO-item {
     list-style-type: none;
     background: #f7f7f7;
-    border: 1px solid #3384C6;
+    border: 1px solid #ccc;
     padding: 5px 10px;
     border-radius: 5px;
     display: inline-block;

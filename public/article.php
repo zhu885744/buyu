@@ -47,10 +47,6 @@
         </div>
         <?php if ($this->is('post')) : ?>
           <p itemprop="keywords" class="tags"><?php _e('标签: '); ?><?php $this->tags(', ', true, 'none'); ?></p>
-          <ul class="post-near">
-              <li>上一篇: <?php $this->thePrev('%s', '没有了'); ?></li>
-              <li>下一篇: <?php $this->theNext('%s', '没有了'); ?></li>
-          </ul>
         <?php endif; ?>
     </article>
     
