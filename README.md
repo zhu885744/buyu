@@ -9,14 +9,19 @@
 下载 "主题压缩文件" 将压缩包上传至`/usr/themes/`目录，然后解压。<br>
 然后进入Typecho后台，选择控制台>外观>启用
 
-下载主题：https://github.com/zhu885744/buyu/releases/tag/<br>
+下载主题：https://github.com/zhu885744/buyu/releases<br>
 下载友链插件：https://gitee.com/Mejituu/Links/releases
 
 所有源代码应该放在 `/usr/themes/buyu` 目录下。
 
 ## 更新日志
 [1.2.5] 更新内容如下
+- 新增：视频播放器更改为 DPlayer 插件实现
+- 优化：全局圆角数值
 - 优化：略调全局ui样式
+- 优化：回到顶部按钮样式
+- 优化：评论样式
+- 优化：关闭全局评论时，不显示文章/页面的评论统计项
 - 修复：友链卡片文字溢出
 - 修复：自定义css代码失效的问题
 - 修复：自定义js代码失效的问题

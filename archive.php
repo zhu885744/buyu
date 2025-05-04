@@ -16,7 +16,9 @@
                 </h2>
                 <ul class="post-meta">
                     <li><time datetime="<?php $this->date('c'); ?>" itemprop="datePublished"><?php $this->date(); ?></time></li>
-                    <li><?php $this->commentsNum('无评论', '1 条评论', '%d 条评论'); ?></li>
+                    <?php if ($this->options->JCommentStatus !== "off"): // 判断全局评论是否关闭 ?>
+                      <li><?php $this->commentsNum('无评论', '1 条评论', '%d 条评论'); ?></li>
+                    <?php endif; ?>
                     <li><?php get_post_view($this) ?>次阅读</li>
                 </ul>
                 <p class="card-text"><?php $this->excerpt(150, '...'); ?></p>

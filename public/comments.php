@@ -45,7 +45,9 @@ $userHasLogin = $this->user->hasLogin();
             <br><br>
             <div class="listComments">
                 <?php if ($comments->have()) : ?>
-                    <?php $comments->listComments(); ?>
+                    <ol class="comment-list">
+                        <?php $comments->listComments(); ?>
+                    </ol>
                 <?php endif; ?>
             </div>
             <!-- 异步加载 JS -->
@@ -90,7 +92,9 @@ function threadedComments($comments, $options)
             <cite class="fn"><?php $comments->date('Y-m-d H:i'); ?></cite>
             <span class="comment-reply"><?php $comments->reply(); ?></span>
         </div>
-        <?php $comments->content(); ?>
+        <div class="comment-content">
+            <?php $comments->content(); ?>
+        </div>
         <?php if ('waiting' == $comments->status) : ?><span class="badge">待审核</span><?php endif; ?>
         <span class="badge" style="color: #3354AA;"><?php echo convertip($comments->ip); ?></span>
     </div>

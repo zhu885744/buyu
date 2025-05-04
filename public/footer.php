@@ -34,7 +34,7 @@
   </div>
 </footer>
 
-<button id="backToTop">返回顶部</button>
+<i class="fa-solid fa-arrow-up" id="backToTop"></i>
 <script src="<?php $this->options->themeUrl('assets/js/buyu.style.js'); ?>"></script>
 <script type="text/javascript">
   <?php echo $this->options->JCustomScript(); ?>

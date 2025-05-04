@@ -9,7 +9,9 @@
             </h2>
             <ul class="post-meta">
                 <li><time datetime="<?php $this->date('c'); ?>" itemprop="datePublished"><?php $this->date(); ?></time></li>
-                <li><?php $this->commentsNum('无评论', '1 条评论', '%d 条评论'); ?></li>
+                <?php if ($this->options->JCommentStatus !== "off"): // 判断全局评论是否关闭 ?>
+                  <li><?php $this->commentsNum('无评论', '1 条评论', '%d 条评论'); ?></li>
+                <?php endif; ?>
                 <li><?php get_post_view($this) ?>次阅读</li>
             </ul>
             <p class="card-text"><?php $this->excerpt(150, '...'); ?></p>
@@ -30,8 +32,9 @@
 
 <?php if ($this->is('page') || $this->is('post')) : ?>
   <link href="<?php $this->options->themeUrl('assets/css/buyu.Lightbox.css'); ?>" rel="stylesheet">
-  <link rel="stylesheet" href="<?php $this->options->themeUrl('assets/css/APlayer.min.css'); ?>">
+  <link href="<?php $this->options->themeUrl('assets/css/APlayer.min.css'); ?>" rel="stylesheet" >
   <script src="<?php $this->options->themeUrl('assets/js/APlayer.min.js'); ?>"></script>
+  <script src="<?php $this->options->themeUrl('assets/js/DPlayer.min.js'); ?>"></script>
   <div class="col-mb-12 col-8" id="main" role="main">
     <article class="post">
         <h1 class="post-title" itemprop="name headline">
@@ -39,7 +42,9 @@
         </h1>
         <ul class="post-meta">
             <li><time datetime="<?php $this->date('c'); ?>" itemprop="datePublished"><?php $this->date(); ?></time></li>
-            <li><?php $this->commentsNum('无评论', '1 条评论', '%d 条评论'); ?></li>
+            <?php if ($this->options->JCommentStatus !== "off"): // 判断全局评论是否关闭 ?>
+              <li><?php $this->commentsNum('无评论', '1 条评论', '%d 条评论'); ?></li>
+            <?php endif; ?>
             <li><?php get_post_view($this) ?>次阅读</li>
         </ul>
         <div class="post-content" itemprop="articleBody">

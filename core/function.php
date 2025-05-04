@@ -30,9 +30,10 @@ function themeInit($archive){
   }
 }
 
+//给文章每个超链接点击后新窗口打开，原理就是用正则替换文章内容
 function a_class_replace($content){
   $content = preg_replace('#<a(.*?) href="([^"]*/)?(([^"/]*)\.[^"]*)"(.*?)>#',
-    '<a$1 href="$2$3"$5 target="_blank">', $content);//给文章每个超链接点击后新窗口打开，原理就是用正则替换文章内容
+    '<a$1 href="$2$3"$5 target="_blank">', $content);
   return $content;
 }
 
@@ -321,33 +322,35 @@ function video_shortcode($atts) {
     // 默认参数
     $default_atts = array(
         'src' => '',          // 视频地址
-        'width' => '640',     // 视频宽度
-        'height' => '360',    // 视频高度
         'poster' => '',       // 视频封面
-        'preload' => 'none',  // 视频预加载方式（none, metadata, auto）
-        'controls' => 'true'  // 是否显示控制栏
+        'width' => '100%',    // 视频宽度
+        'height' => '100%',  // 视频高度
+        'autoplay' => 'false' // 是否自动播放
     );
     $atts = array_merge($default_atts, $atts);
 
     // 如果未提供视频地址，返回空字符串
     if (empty($atts['src'])) {
-        return '';
+        return '<p>视频地址未提供。</p>';
     }
 
-    // 构建视频标签
-    $video_html = '<div class="custom-video-container">';
-    $video_html .= '<video width="' . htmlspecialchars($atts['width'], ENT_QUOTES) . '"';
-    $video_html .= ' height="' . htmlspecialchars($atts['height'], ENT_QUOTES) . '"';
-    $video_html .= ' preload="' . htmlspecialchars($atts['preload'], ENT_QUOTES) . '"';
-    $video_html .= !empty($atts['poster']) ? ' poster="' . htmlspecialchars($atts['poster'], ENT_QUOTES) . '"' : '';
-    $video_html .= $atts['controls'] === 'true' ? ' controls' : '';
-    $video_html .= '>';
-    $video_html .= '<source src="' . htmlspecialchars($atts['src'], ENT_QUOTES) . '" type="video/mp4">';
-    $video_html .= '你的浏览器不支持视频播放。';
-    $video_html .= '</video>';
-    $video_html .= '</div>';
+    // 生成唯一的容器 ID
+    $containerId = 'dplayer-' . uniqid();
 
-    return $video_html;
+    // 构建 DPlayer 播放器的 HTML 和 JavaScript
+    return '<div id="' . $containerId . '" style="width: ' . htmlspecialchars($atts['width'], ENT_QUOTES) . '; height: ' . htmlspecialchars($atts['height'], ENT_QUOTES) . ';"></div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const dp = new DPlayer({
+                container: document.getElementById("' . $containerId . '"),
+                autoplay: ' . ($atts['autoplay'] === 'true' ? 'true' : 'false') . ',
+                video: {
+                    url: "' . htmlspecialchars($atts['src'], ENT_QUOTES) . '",
+                    pic: "' . htmlspecialchars($atts['poster'], ENT_QUOTES) . '"
+                }
+            });
+        });
+    </script>';
 }
 
 // 音频短代码处理函数
@@ -355,8 +358,8 @@ function audio_shortcode($atts) {
     $default_atts = array(
         'name' => '未知音频',
         'artist' => '未知艺术家',
-        'url' => '',
-        'cover' => ''
+        'url' => '',// 音频链接
+        'cover' => ''// // 音频封面
     );
     $atts = array_merge($default_atts, $atts);
 

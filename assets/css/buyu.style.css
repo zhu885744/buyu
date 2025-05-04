@@ -929,9 +929,8 @@ img.alignright {
 
 /*404页面开始*/
 .error-page-404 {
-    background-color: #fff;
-    padding: 40px;
-    text-align: center;
+  padding: 40px;
+  text-align: center;
 }
 
 .error-page h2 {
