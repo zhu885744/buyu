@@ -1,9 +1,8 @@
 <?php
-
 /* 获取主题当前版本号 */
 function _getVersion()
 {
-  return "v1.2.5";
+  return "v1.2.6";
 };
 
 /* 主题初始化 */

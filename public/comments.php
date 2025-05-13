@@ -11,7 +11,7 @@ $userHasLogin = $this->user->hasLogin();
         <span>当前文章受密码保护，无法评论</span>
     <?php else : ?>
         <?php if ($allowComment && $commentStatus !== "off") : ?>
-            <link rel="stylesheet" href="<?php $this->options->themeUrl('assets/css/OwO.min.css'); ?>">
+            <link rel="stylesheet" href="<?php $this->options->themeUrl('assets/css/buyu.OwO.css'); ?>">
             <h2>发表评论（<?php $this->commentsNum(_t('暂无评论'), _t('仅有 1 条评论'), _t('已有 %d 条评论')); ?>）</h2>
             <h4>本站使用 Cookie 技术保留您的个人信息以便您下次快速评论。</h4>
             <div id="<?php $this->respondId(); ?>">
@@ -37,12 +37,12 @@ $userHasLogin = $this->user->hasLogin();
                         <textarea class="form-control OwO-textarea" rows="8" name="text" id="textarea" placeholder="善语结善缘，恶语伤人心..." required><?php $this->remember('text'); ?></textarea>
                         <div class="OwO"></div>
                     </div>
-                    <div class="d-grid comment-submit-button-container">
+                    <div class="d-grid comment-submit-button-container" style="margin-bottom: 3.5em;">
                         <button type="submit" id="comment-submit-button" class="comment-submit-button">发送评论</button>
                     </div>
                 </form>
             </div>
-            <br><br>
+            
             <div class="listComments">
                 <?php if ($comments->have()) : ?>
                     <ol class="comment-list">
@@ -50,8 +50,8 @@ $userHasLogin = $this->user->hasLogin();
                     </ol>
                 <?php endif; ?>
             </div>
-            <!-- 异步加载 JS -->
-            <script src="<?php $this->options->themeUrl('assets/js/OwO.min.js'); ?>"></script>
+            
+            <script src="<?php $this->options->themeUrl('assets/js/buyu.OwO.js'); ?>"></script>
             <script type="text/javascript">
                 document.addEventListener("DOMContentLoaded", function () {
                     new OwO({

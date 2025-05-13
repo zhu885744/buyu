@@ -82,9 +82,9 @@ textarea {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease; /*添加过渡效果 */
-  padding: 10px;
+  padding: 15px;
   background-color: #007BFF;
-  color: white;
+  color: #ffffff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -287,64 +287,85 @@ textarea {
 /* ------------------
  * Comment list
  * --------------- */
+/* 整体评论容器 */
 #comments {
   padding-top: 15px;
 }
 
-.comment-list, .comment-list ol {
+/* 评论列表和有序列表样式 */
+.comment-list,
+.comment-list ol {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
+/* 单个评论项样式 */
 .comment-list li {
   padding: 14px;
   margin-top: 10px;
   border: 1px solid #ccc;
   background-color: #ffffff;
   border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* 添加轻微阴影 */
+  transition: all 0.3s ease; /* 过渡效果 */
 }
 
+/* 奇数层级评论的背景色 */
 .comment-list li.comment-level-odd {
   background: #F6F6F3;
 }
 
+/* 偶数层级评论的背景色 */
 .comment-list li.comment-level-even {
   background: #FFF;
 }
 
+/* 作者评论的背景色 */
 .comment-list li.comment-by-author {
   background: #fff3d1;
 }
 
+/* 评论回复按钮样式 */
 .comment-list li .comment-reply {
   text-align: right;
-  font-size: .92857em;
+  font-size: 0.92857em;
+  margin-top: 5px;
 }
 
+/* 评论元信息链接样式 */
 .comment-meta a {
   color: #000000;
-  font-size: .92857em;
+  font-size: 0.92857em;
+  text-decoration: none; /* 去除下划线 */
+  transition: color 0.3s ease; /* 链接颜色过渡效果 */
 }
 
+/* 评论作者信息样式 */
 .comment-author {
   display: block;
   margin-bottom: 3px;
   color: #000000;
 }
 
+/* 作者头像样式 */
 .comment-author .avatar {
   float: left;
   margin-right: 10px;
   border-radius: 4px;
   border: 1px solid #ccc;
+  width: 30px;
+  height: 30px;
+  object-fit: cover; /* 使头像图片保持比例填充 */
 }
 
-.comment-author cite {
-  font-weight: bold;
-  font-style: normal;
+/* 评论内容样式 */
+.comment-content {
+  margin-top: 10px;
+  line-height: 1.6; /* 调整行高 */
 }
 
+/* 评论提交按钮样式 */
 .comment-submit-button {
   float: right;
   width: 100%;
@@ -353,37 +374,49 @@ textarea {
   height: 30px;
   border-radius: 4px;
   color: #000000;
-  font-size: .96em;
+  font-size: 0.96em;
   line-height: 30px;
   transition: all 0.2s;
+  cursor: pointer; /* 鼠标悬停显示指针 */
 }
+
+/* 评论提交按钮激活时的样式 */
 .comment-submit-button:active {
   transform: scale(0.95);
   background-color: #e0e0e0;
 }
+
+/* 评论提交按钮容器样式 */
 .comment-submit-button-container {
-  margin-top: .5em;
+  margin-top: 0.5em;
 }
 
-/* Comment reply */
+/* 评论回复部分样式 */
 .comment-list .respond {
   margin-top: 15px;
   border-top: 1px solid #EEE;
+  padding-top: 15px;
 }
 
+/* 取消评论回复按钮样式 */
 .respond .cancel-comment-reply {
   float: right;
   margin-top: 15px;
-  font-size: .92857em;
+  font-size: 0.92857em;
+  cursor: pointer; /* 鼠标悬停显示指针 */
+  color: #666; /* 调整颜色 */
+  transition: color 0.3s ease; /* 颜色过渡效果 */
 }
 
+/* 评论表单标签样式 */
 #comment-form label {
   display: block;
-  margin-top: .5em;
-  margin-bottom: .5em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
   font-weight: bold;
 }
 
+/* 表单必填项后的星号样式 */
 #comment-form .required:after {
   content: " *";
   color: #C00;

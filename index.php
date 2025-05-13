@@ -1,10 +1,10 @@
 <?php
 /**
- * 这是一款基于 typecho 默认模版二次开发的 Typecho 单栏主题。
+ * 这是一款基于 typecho 默认模版二次开发的 Typecho 单栏主题
  *
  * @package buyu
  * @author 不语
- * @version 1.2.5
+ * @version 1.2.6
  * @link https://zhuxu.asia/archives/118/
  */
 

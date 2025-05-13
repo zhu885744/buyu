@@ -5,15 +5,17 @@
     <meta charset="UTF-8">
     <meta name="renderer" content="webkit">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="<?php $this->options->favicon(); ?>">
     <title><?php $this->archiveTitle(array(
             'category'  =>  _t('分类 %s 下的文章'),
             'search'    =>  _t('搜索到包含关键字 %s 的文章'),
             'tag'       =>  _t('标签 %s 下的文章'),
             'author'    =>  _t('%s 发布的文章')
         ), '', ' - ');?><?php if($this->getCurrentPage()>1) _e("第 %d 页-", $this->getCurrentPage());?><?php $this->options->title();?></title>
+    <link rel="stylesheet" href="<?php $this->options->themeUrl('assets/css/buyu.mode.css');?>">
     <link rel="stylesheet" href="<?php $this->options->themeUrl('assets/css/buyu.grid.css');?>">
     <link rel="stylesheet" href="<?php $this->options->themeUrl('assets/css/buyu.style.css');?>">
-    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://img1.zhuxu.asia/lib/font-awesome/css/all.min.css">
     <style type="text/css">
       <?php $this->options->CustomCSS(); ?>
     </style>
@@ -27,7 +29,7 @@
             <div class="site-name col-mb-12 col-9">
                 <?php if ($this->options->logoUrl): ?>
                     <a id="logo" href="<?php $this->options->siteUrl(); ?>">
-                        <img src="<?php $this->options->logoUrl() ?>" width="60px" height="40%" alt="<?php $this->options->title() ?>"/>
+                        <img src="<?php $this->options->logoUrl() ?>" width="40%" height="40%" alt="<?php $this->options->title() ?>"/>
                     </a>
                 <?php else: ?>
                     <a id="logo" href="<?php $this->options->siteUrl(); ?>"><?php $this->options->title() ?></a>

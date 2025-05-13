@@ -26,12 +26,13 @@
       </a>
     </div>
   <?php endif; ?> 
-
+  <!-- 此处版权建议保留，谢谢 -->
   <div class="item">
     &copy; <?php echo date('Y'); ?>&nbsp;
     <a href="<?php $this->options->siteUrl(); ?>"><?php $this->options->title(); ?></a>&nbsp;由&nbsp;
-    <a href="https://typecho.org" target="_blank" rel="noopener noreferrer">Typecho</a>&nbsp;强力驱动
+    <a href="https://github.com/zhu885744/buyu/" target="_blank" rel="noopener noreferrer">buyu</a>&nbsp;主题强力驱动
   </div>
+  <!-- 此处版权建议保留，谢谢 -->
 </footer>
 
 <i class="fa-solid fa-arrow-up" id="backToTop"></i>

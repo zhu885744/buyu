@@ -1,6 +1,6 @@
 ## Typecho **buyu** 单栏主题
 
-这是一款基于 typecho 默认模版二次开发的 Typecho 单栏主题。<br>
+这是一款基于 typecho 默认模版二次开发的 Typecho 单栏主题<br>
 用户交流群：[点击加入](https://qm.qq.com/q/PVln74J0UU)<br>
 主题宗旨：简洁、简洁、还是简洁！
 

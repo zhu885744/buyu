@@ -32,9 +32,9 @@
 
 <?php if ($this->is('page') || $this->is('post')) : ?>
   <link href="<?php $this->options->themeUrl('assets/css/buyu.Lightbox.css'); ?>" rel="stylesheet">
-  <link href="<?php $this->options->themeUrl('assets/css/APlayer.min.css'); ?>" rel="stylesheet" >
-  <script src="<?php $this->options->themeUrl('assets/js/APlayer.min.js'); ?>"></script>
-  <script src="<?php $this->options->themeUrl('assets/js/DPlayer.min.js'); ?>"></script>
+  <link href="<?php $this->options->themeUrl('assets/css/buyu.APlayer.css'); ?>" rel="stylesheet" >
+  <script src="<?php $this->options->themeUrl('assets/js/buyu.APlayer.js'); ?>"></script>
+  <script src="<?php $this->options->themeUrl('assets/js/buyu.DPlayer.js'); ?>"></script>
   <div class="col-mb-12 col-8" id="main" role="main">
     <article class="post">
         <h1 class="post-title" itemprop="name headline">
