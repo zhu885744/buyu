@@ -348,6 +348,17 @@ textarea {
   color: #000000;
 }
 
+/* 评论作者标志 */
+.comment-badge {
+  background-color: #3354AA;
+  color: white;
+  font-size: 12px;
+  padding: 2px 5px;
+  border-radius: 4px;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
 /* 作者头像样式 */
 .comment-author .avatar {
   float: left;

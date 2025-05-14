@@ -86,7 +86,12 @@ function threadedComments($comments, $options)
     <div id="<?php $comments->theId(); ?>">
         <div class="comment-author">
             <?php $comments->gravatar('30', ''); ?>
-            <cite class="fn"><?php $comments->author(); ?></cite>
+            <cite class="fn">
+                <?php $comments->author(); ?>
+                <?php if ($comments->authorId == $comments->ownerId) : ?>
+                    <span class="comment-badge">博主</span>
+                <?php endif; ?>
+            </cite>
         </div>
         <div class="comment-meta">
             <cite class="fn"><?php $comments->date('Y-m-d H:i'); ?></cite>
