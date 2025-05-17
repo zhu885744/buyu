@@ -13,7 +13,7 @@ $userHasLogin = $this->user->hasLogin();
         <?php if ($allowComment && $commentStatus !== "off") : ?>
             <link rel="stylesheet" href="<?php $this->options->themeUrl('assets/css/buyu.OwO.css'); ?>">
             <h2>发表评论（<?php $this->commentsNum(_t('暂无评论'), _t('仅有 1 条评论'), _t('已有 %d 条评论')); ?>）</h2>
-            <h4>本站使用 Cookie 技术保留您的个人信息以便您下次快速评论。</h4>
+            <h4>本站使用 Cookie 技术保留您的个人信息以便您下次快速评论</h4>
             <div id="<?php $this->respondId(); ?>">
                 <?php $comments->cancelReply(); ?>
 

@@ -1,15 +1,23 @@
 @charset "UTF-8";
 
-/* 后台设置的样式 */
-.col-mb-12.col-tb-8.col-tb-offset-2 {
-  margin-left: 0;
-  width: 100%;
+/* 变量定义 */
+:root {
+  --primary-color: #9400ff;
+  --secondary-color: #4096ff;
+  --success-color: #67C23A;
+  --warning-color: #d9534f;
+  --text-color: #606266;
+  --text-light: #999;
+  --border-color: #e9e9eb;
+  --background-color: #fff;
+  --hover-bg: #c9dfff;
+  --active-bg: #9400ff;
+  --box-shadow: 0px 0px 20px -5px rgba(158, 158, 158, 0.22);
+  --border-radius: 8px;
+  --transition-time: 0.3s;
 }
 
-.buyu_config {
-  display: flex;
-}
-
+/* 基础重置 */
 .buyu_config * {
   margin: 0;
   padding: 0;
@@ -22,16 +30,39 @@
   list-style: none;
 }
 
+/* 布局结构 */
+.col-mb-12.col-tb-8.col-tb-offset-2 {
+  margin-left: 0;
+  width: 100%;
+}
+
+.buyu_config {
+  display: flex;
+}
+
 .buyu_config__aside {
   position: sticky;
   top: 15px;
   width: 200px;
-  background: #fff;
+  background: var(--background-color);
   padding: 10px;
-  box-shadow: 0px 0px 20px -5px rgba(158, 158, 158, 0.22);
-  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius);
 }
 
+.buyu_config>form,
+.buyu_config__notice {
+  position: relative;
+  display: none;
+  background: var(--background-color);
+  min-width: 0;
+  flex: 1;
+  margin-left: 15px;
+  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius);
+}
+
+/* 侧边栏样式 */
 .buyu_config__aside .logo {
   color: #303133;
   font-weight: 500;
@@ -51,20 +82,20 @@
   text-align: center;
   height: 40px;
   line-height: 40px;
-  color: #606266;
+  color: var(--text-color);
   cursor: pointer;
-  transition: background 0.35s;
+  transition: background var(--transition-time);
   user-select: none;
 }
 
 .buyu_config__aside .tabs .item:hover {
-  background: #c9dfff;
+  background: var(--hover-bg);
 }
 
 .buyu_config__aside .tabs .item.active {
   color: #ffffff;
   font-weight: 600;
-  background: #9400ff;
+  background: var(--active-bg);
 }
 
 .buyu_config__aside .backup input {
@@ -75,7 +106,7 @@
   color: #fff;
   font-size: 14px;
   border-radius: 5px;
-  transition: opacity 0.35s;
+  transition: opacity var(--transition-time);
   border: none;
   cursor: pointer;
 }
@@ -94,20 +125,10 @@
 
 .buyu_config__aside .backup input:nth-child(3) {
   margin-bottom: 0;
-  background: #d9534f;
+  background: var(--warning-color);
 }
 
-.buyu_config>form {
-  position: relative;
-  display: none;
-  background: #fff;
-  min-width: 0;
-  flex: 1;
-  margin-left: 15px;
-  box-shadow: 0px 0px 20px -5px rgba(158, 158, 158, 0.22);
-  border-radius: 8px;
-}
-
+/* 表单区域样式 */
 .buyu_config>form .typecho-option {
   position: sticky;
   bottom: 0;
@@ -116,9 +137,9 @@
   justify-content: center;
   margin: 0;
   padding: 15px;
-  background: #fff;
+  background: var(--background-color);
   border-top: 1px solid #ebebeb;
-  border-radius: 0 0 8px 8px;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
 .buyu_config>form .typecho-option button {
@@ -139,18 +160,24 @@
 }
 
 .buyu_config>form .buyu_content li {
-  border: 1px solid #e9e9eb;
+  border: 1px solid var(--border-color);
   padding: 15px;
+  margin-bottom: 15px;
+  border-radius: var(--border-radius);
+}
+
+.buyu_config>form .buyu_content li:last-child {
+  margin-bottom: 0;
 }
 
 .buyu_config>form .buyu_content li .typecho-label {
   display: block;
-  border-left: 4px solid #409eff;
+  border-left: 4px solid var(--secondary-color);
   background: #ecf5ff;
   line-height: 26px;
   margin-bottom: 15px;
   padding: 5px 15px;
-  color: #409eff;
+  color: var(--secondary-color);
   user-select: none;
   border-radius: 0 4px 4px 0;
 }
@@ -159,8 +186,8 @@
   min-width: 200px;
   height: 34px;
   line-height: 34px;
-  border: 1px solid #e9e9eb;
-  color: #666;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
   border-radius: 4px;
   padding-left: 5px;
 }
@@ -168,29 +195,41 @@
 .buyu_config>form .buyu_content li .multiline {
   display: flex;
   align-items: center;
-  color: #666;
+  color: var(--text-color);
 }
 
 .buyu_config>form .buyu_content li .multiline input[type='checkbox'] {
   margin-right: 5px;
 }
 
+/* 表单元素优化 */
 .buyu_config>form .buyu_content li textarea,
 .buyu_config>form .buyu_content li input[type='text'] {
   width: 100%;
-  padding: 10px;
-  color: #666;
-  border: 1px solid #e9e9eb;
+  padding: 0.625rem;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 0.25rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
   -webkit-appearance: none;
+  appearance: none;
+}
+
+.buyu_config>form .buyu_content li textarea:focus,
+.buyu_config>form .buyu_content li input[type='text']:focus {
+  outline: none;
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 2px rgba(64, 150, 255, 0.2);
 }
 
 .buyu_config>form .buyu_content li textarea {
   height: 125px;
+  resize: vertical;
 }
 
 .buyu_config>form .buyu_content li .description {
   background: #f8f8f8;
-  color: #999;
+  color: var(--text-light);
   padding: 10px 15px;
   margin-top: 15px;
   line-height: 26px;
@@ -198,16 +237,10 @@
   word-break: break-all;
 }
 
+/* 通知区域样式 */
 .buyu_config__notice {
-  display: none;
-  margin-left: 15px;
-  background: #fff;
-  padding: 15px;
-  flex: 1;
-  box-shadow: 0px 0px 20px -5px rgba(158, 158, 158, 0.22);
-  border-radius: 8px;
   line-height: 28px;
-  color: #606266;
+  color: var(--text-color);
 }
 
 .buyu_config__notice .title {
@@ -217,7 +250,7 @@
   font-weight: 500;
   font-size: 22px;
   margin-bottom: 15px;
-  color: #67C23A;
+  color: var(--success-color);
 }
 
 .buyu_config__notice ol {
@@ -229,12 +262,14 @@
   list-style: decimal;
 }
 
+/* 动画效果 */
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 #000000;
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.5);
   }
 }
 
+/* 响应式设计 */
 @media (max-width: 768px) {
   .buyu_config {
     display: block;
@@ -278,7 +313,8 @@
     margin: 0 10px;
   }
 
-  .buyu_config>form {
+  .buyu_config>form,
+  .buyu_config__notice {
     margin-left: 0;
   }
 
@@ -290,9 +326,5 @@
     width: 150px;
     height: 38px;
     border-radius: 5px;
-  }
-
-  .buyu_config__notice {
-    margin-left: 0;
   }
 }

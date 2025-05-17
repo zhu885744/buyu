@@ -1,18 +1,47 @@
+:root {
+  /* 全局颜色变量 */
+  --primary-color: #007BFF; /* 主色调 */
+  --secondary-color: #444; /* 次要颜色 */
+  --background-color: #f9f9f9; /* 背景颜色 */
+  --text-color: #000000; /* 文字颜色 */
+  --muted-text-color: #999; /* 次要文字颜色 */
+  --border-color: #ccc; /* 边框颜色 */
+  --hover-color: #3354AA; /* 悬停颜色 */
+  --highlight-color: #e74c3c; /* 高亮颜色 */
+
+  /* 全局间距变量 */
+  --spacing-small: 5px;
+  --spacing-medium: 10px;
+  --spacing-large: 20px;
+
+  /* 全局字体变量 */
+  --font-size-small: 0.9em;
+  --font-size-medium: 1em;
+  --font-size-large: 1.4em;
+
+  /* 全局边框变量 */
+  --border-radius: 4px;
+  --border-width: 1px;
+
+  /* 全局阴影变量 */
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 body {
-  background-color: #e8e8e8;
-  color: #000000;
+  background-color: var(--background-color);
+  color: var(--text-color);
   font-size: 87.5%;
   font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
 }
 
 a {
   text-decoration: none;
-  color: #3354AA;
+  color: var(--hover-color);
   font-weight: bold;
 }
 
 a:hover, a:active {
-  color: #444;
+  color: var(--secondary-color);
 }
 
 ::-webkit-scrollbar {
@@ -39,22 +68,29 @@ h1, h2, h3, h4, h5, h6 {
   font-family: '华文中宋', 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
 }
 
+/* 输入框和文本域样式 */
 input[type="text"],
 input[type="email"],
 input[type="url"],
 input[type="password"],
 textarea {
-  padding: 5px;
-  border: 1px solid #ccc;
+  padding: var(--spacing-small);
+  border: var(--border-width) solid var(--border-color);
   width: 100%;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
+
 textarea {
   resize: vertical;
 }
+
+/*图片懒加载*//*给图片过渡效果*/
+img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-transition: all 0.5s;	/* Safari 和 Chrome */-o-transition: all 0.5s;	/* Opera */;}
+.index{width: 400px;margin: 0 auto;padding-bottom: 100px;}
+.index-img{width: 100%;height:210px;margin-top:100px;}
+/*object-fit: cover;解决图片指定大小被压缩问题*/
+.index-img>img{width: 100%;height: 100%;object-fit: cover;}
 
 /* Special link style */
 .post-meta a,
@@ -71,32 +107,8 @@ textarea {
   border-bottom-color: transparent;
 }
 
-/* ------------------
- * Header
- * --------------- */
-#backToTop {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  /* 初始隐藏，但使用 opacity 和 visibility 而不是 display */
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease; /*添加过渡效果 */
-  padding: 15px;
-  background-color: #007BFF;
-  color: #ffffff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
+/* 导航栏 */
 
-/* 当按钮应该显示时，通过 JavaScript添加这个类 */
-#backToTop.visible {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* 新添加的顶部栏样式 */
 #header {
   padding-top: 25px;
 }
@@ -143,17 +155,23 @@ textarea {
   color: #007BFF;
 }
 
+/* 导航菜单样式 */
 #nav-menu a {
-  display: inline-block;
-  padding: 10px 15px;
-  text-decoration: none;
-  color: #333;
-  transition: color 0.3s ease;
+  display: block;
+  margin-right: var(--spacing-small);
+  padding: 0 var(--spacing-medium);
+  border: var(--border-width) solid var(--border-color);
+  height: 32px;
+  line-height: 32px;
+  color: var(--secondary-color);
+  float: left;
+  border-radius: var(--border-radius);
 }
 
-#nav-menu a.current,
-#nav-menu a:hover {
-  color: #ffffff;
+#nav-menu a:hover,
+#nav-menu .current {
+  background: var(--primary-color);
+  color: #FFF;
 }
     
 /* Navigation menu */
@@ -184,28 +202,28 @@ textarea {
  * Main
  * --------------- */
 .post {
-  padding: 15px 0 20px;
-  border-bottom: 1px solid #ccc;
+  padding: var(--spacing-medium) 0 var(--spacing-large);
+  border-bottom: var(--border-width) solid var(--border-color);
 }
 
 .post-title {
-  margin: .83em 0;
-  font-size: 1.4em;
-  color: #3354AA;
+  margin: 0.83em 0;
+  font-size: var(--font-size-large);
+  color: var(--hover-color);
 }
 
 .post-meta {
   margin-top: -0.5em;
   padding: 0;
-  color: #414141;
-  font-size: .92857em;
+  color: var(--muted-text-color);
+  font-size: var(--font-size-small);
 }
 
 .post-meta li {
   display: inline-block;
-  margin: 0 8px 0 0;
-  padding-left: 12px;
-  border-left: 1px solid #b4b4b4;
+  margin: 0 var(--spacing-small) 0 0;
+  padding-left: var(--spacing-medium);
+  border-left: var(--border-width) solid var(--border-color);
 }
 
 .post-meta li:first-child {
@@ -241,7 +259,7 @@ textarea {
   width: 50%;
 }
 
-/* Page nav */
+/* 底部分页按钮样式 */
 .page-navigator {
   list-style: none;
   margin: 1rem 0 0 0;
@@ -284,10 +302,30 @@ textarea {
   background-color: #e5e5e5;
 }
 
-/* ------------------
- * Comment list
- * --------------- */
+/* 返回顶部按钮样式 */
+#backToTop {
+  position: fixed;
+  bottom: var(--spacing-large);
+  right: var(--spacing-large);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  padding: var(--spacing-medium);
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+#backToTop.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ----------- */
 /* 整体评论容器 */
+/* ----------- */
 #comments {
   padding-top: 15px;
 }
@@ -302,13 +340,13 @@ textarea {
 
 /* 单个评论项样式 */
 .comment-list li {
-  padding: 14px;
-  margin-top: 10px;
-  border: 1px solid #ccc;
+  padding: var(--spacing-medium);
+  margin-top: var(--spacing-small);
+  border: var(--border-width) solid var(--border-color);
   background-color: #ffffff;
-  border-radius: 4px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* 添加轻微阴影 */
-  transition: all 0.3s ease; /* 过渡效果 */
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  transition: all 0.3s ease;
 }
 
 /* 奇数层级评论的背景色 */
@@ -380,15 +418,15 @@ textarea {
 .comment-submit-button {
   float: right;
   width: 100%;
-  border: 1px solid #ccc;
+  border: var(--border-width) solid var(--border-color);
   background: #ffffff;
   height: 30px;
-  border-radius: 4px;
-  color: #000000;
-  font-size: 0.96em;
+  border-radius: var(--border-radius);
+  color: var(--text-color);
+  font-size: var(--font-size-medium);
   line-height: 30px;
   transition: all 0.2s;
-  cursor: pointer; /* 鼠标悬停显示指针 */
+  cursor: pointer;
 }
 
 /* 评论提交按钮激活时的样式 */
@@ -468,13 +506,6 @@ textarea {
   text-align: center;
   color: #000000;
 }
-
-/*给图片过渡效果*/
-img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-transition: all 0.5s;	/* Safari 和 Chrome */-o-transition: all 0.5s;	/* Opera */;}
-.index{width: 400px;margin: 0 auto;padding-bottom: 100px;}
-.index-img{width: 100%;height:210px;margin-top:100px;}
-/*object-fit: cover;解决图片指定大小被压缩问题*/
-.index-img>img{width: 100%;height: 100%;object-fit: cover;}
 
 /* -----------------
  * Error page
@@ -913,6 +944,7 @@ img.alignright {
   visibility: hidden; 
 }
 
+/* 友链卡片样式开始 */
 .friend-container {
   isolation: isolate;
   display: grid;
@@ -924,7 +956,7 @@ img.alignright {
   display: flex;
   align-items: center;
   border: 1px solid #ccc;
-  background-color: #f9f9f9;
+  background-color: var(--background-color);
   padding: 0.8em;
   text-decoration: none;
   border-radius: 4px;
@@ -970,23 +1002,24 @@ img.alignright {
   color: #999;
   margin: 1px 0 0 0;
 }
+/* 友链卡片样式结束 */
 
 /*404页面开始*/
 .error-page-404 {
-  padding: 40px;
+  padding: var(--spacing-large);
   text-align: center;
 }
 
 .error-page h2 {
   font-size: 36px;
-  color: #e74c3c;
-  margin-bottom: 20px;
+  color: var(--highlight-color);
+  margin-bottom: var(--spacing-medium);
   animation: fadeIn 1s ease;
 }
 
 .error-page p {
-  font-size: 18px;
-  margin-bottom: 30px;
+  font-size: var(--font-size-medium);
+  margin-bottom: var(--spacing-large);
   animation: fadeIn 1s ease;
 }
 

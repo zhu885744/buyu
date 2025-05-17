@@ -54,7 +54,6 @@
           <p itemprop="keywords" class="tags"><?php _e('标签: '); ?><?php $this->tags(', ', true, 'none'); ?></p>
         <?php endif; ?>
     </article>
-    
     <?php $this->need('public/comments.php'); ?>
   </div>
   <script src="<?php $this->options->themeUrl('assets/js/buyu.Lightbox.js'); ?>"></script>
