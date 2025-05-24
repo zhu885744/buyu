@@ -48,7 +48,25 @@
             <li><?php get_post_view($this) ?>次阅读</li>
         </ul>
         <div class="post-content" itemprop="articleBody">
+          <!--判断文章是否被密码保护-->
+          <?php if($this->hidden): ?>
+          <!--如果被密码保护，则输出密码输入表单-->
+          <form class="post-pwp" action="<?php echo Typecho_Widget::widget('Widget_Security')->getTokenUrl($this->permalink); ?>" method="post">
+            <label>文章已被加密，请输入密码后查看</label>
+            <div class="post-form">
+              <div class="post-input">
+                <input type="password" class="text" name="protectPassword" class="form-control" placeholder="请输入密码" aria-label="请输入密码">
+                <input type="hidden" name="protectCID" value="<?php $this->cid(); ?>" />
+                <div class="input-group-append">
+                  <button class="btn btn-primary" type="submit">提交</button>
+                </div>
+              </div>
+            </div>
+          </form>
+          <?php else: ?>
+          <!--如果未设置密码，则直接输出文章内容-->
           <?php echo processContent($this->content, $this->title); ?>
+          <?php endif;?>
         </div>
         <?php if ($this->is('post')) : ?>
           <p itemprop="keywords" class="tags"><?php _e('标签: '); ?><?php $this->tags(', ', true, 'none'); ?></p>

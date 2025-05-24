@@ -138,3 +138,4 @@ const detailsElements = document.querySelectorAll('details');
             }
         });
     });
+    

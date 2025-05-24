@@ -45,4 +45,4 @@ $this->need('public/header.php');
     <?php $this->need('public/comments.php'); ?>
 </div><!-- end #main-->
 
-<?php $this->need('public/footer.php'); ?>
+<?php $this->need('public/footer.php'); ?> 

@@ -33,4 +33,4 @@
     <?php $this->pageNav('«', '»', 1, '···', array('wrapTag' => 'div', 'wrapClass' => 'page-navigator', 'itemTag' => 'li', 'textTag' => 'span', 'currentClass' => 'current', 'prevClass' => 'prev', 'nextClass' => 'next',)); ?>
 </div>
 
-<?php $this->need('public/footer.php'); ?>
+<?php $this->need('public/footer.php'); ?> 

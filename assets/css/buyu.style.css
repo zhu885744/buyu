@@ -22,6 +22,7 @@
   /* 全局边框变量 */
   --border-radius: 4px;
   --border-width: 1px;
+  --border: 1px;
 
   /* 全局阴影变量 */
   --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -108,7 +109,6 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
 }
 
 /* 导航栏 */
-
 #header {
   padding-top: 25px;
 }
@@ -156,10 +156,15 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
 }
 
 /* 导航菜单样式 */
+#nav-menu {
+  margin: 10px 0 0;
+  padding: 0;
+}
+
 #nav-menu a {
   display: block;
   margin-right: var(--spacing-small);
-  padding: 0 var(--spacing-medium);
+  padding: 0 var(--spacing-large);
   border: var(--border-width) solid var(--border-color);
   height: 32px;
   line-height: 32px;
@@ -172,30 +177,6 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
 #nav-menu .current {
   background: var(--primary-color);
   color: #FFF;
-}
-    
-/* Navigation menu */
-#nav-menu {
-  margin: 25px 0 0;
-  padding: 0;
-}
-
-#nav-menu a {
-  display: block;
-  margin-right: 2px;
-  padding: 0 20px;
-  border: 1px solid #ccc;
-  height: 32px;
-  line-height: 32px;
-  color: #444;
-  float: left;
-  border-radius: 4px;
-}
-
-#nav-menu a:hover,
-#nav-menu .current {
-  background: #008dff;
-  color:#FFF;
 }
 
 /* ------------------
@@ -240,6 +221,75 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   clear: both;
 }
 
+/* 文章密码保护样式 */
+.post-pwp {
+  margin: 20px 0;
+  padding: 20px;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--background-color);
+}
+
+.post-pwp label {
+  display: block;
+  margin-bottom: var(--spacing-medium);
+  font-size: var(--font-size-medium);
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.post-pwp .post-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-small);
+}
+
+.post-pwp .post-input {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-small);
+}
+
+.post-pwp .post-input input[type="password"] {
+  flex: 1;
+  padding: var(--spacing-small);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-medium);
+  box-sizing: border-box;
+}
+
+.post-pwp .post-input input[type="password"]:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 5px var(--primary-color);
+}
+
+.post-pwp .post-input .btn {
+  padding: var(--spacing-small) var(--spacing-medium);
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-medium);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.post-pwp .post-input .btn:hover {
+  background-color: var(--hover-color);
+}
+
+.post-pwp .post-input .btn:active {
+  transform: scale(0.95);
+}
+
+.post-pwp .post-input .btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 .archive-title {
   margin: 1em 0 -1em;
   padding-top: 20px;
@@ -276,7 +326,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   line-height: 32px;
   color: #000000;
   border-radius: 4px;
-  border: 1px solid #ccc;
+  border: var(--border) solid var(--border-color);
   background-color: #e5e5e5;
   text-align: center;
   transition: all 0.3s ease-in-out;
@@ -298,7 +348,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   height: 32px;
   color: #000000;
   border-radius: 4px;
-  border: 1px solid #ccc;
+  border: var(--border) solid var(--border-color);
   background-color: #e5e5e5;
 }
 
@@ -533,7 +583,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   font-weight: 700;
   padding-left: 10px; /* 减小左边距 */
   border-radius: 4px;
-  border-left: 3px solid #b9b9b9; /* 设置左边框样式 */
+  border-left: 4px solid #5c5c5c; /* 设置左边框样式 */
 }
 
 .post-content h2 {
@@ -541,7 +591,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   font-weight: 700;
   padding-left: 10px;
   border-radius: 4px;
-  border-left: 3px solid #b9b9b9; /* 设置左边框样式 */
+  border-left: 4px solid #5c5c5c; /* 设置左边框样式 */
 }
 
 .post-content h3 {
@@ -549,7 +599,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   font-weight: 700;
   padding-left: 10px;
   border-radius: 4px;
-  border-left: 3px solid #b9b9b9; /* 设置左边框样式 */
+  border-left: 4px solid #5c5c5c; /* 设置左边框样式 */
 }
 
 .post-content h4 {
@@ -557,7 +607,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   font-weight: 700;
   padding-left: 10px;
   border-radius: 4px;
-  border-left: 3px solid #b9b9b9; /* 设置左边框样式 */
+  border-left: 4px solid #5c5c5c; /* 设置左边框样式 */
 }
 
 .post-content h5 {
@@ -565,7 +615,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   font-weight: 700;
   padding-left: 10px;
   border-radius: 4px;
-  border-left: 3px solid #b9b9b9; /* 设置左边框样式 */
+  border-left: 4px solid #5c5c5c; /* 设置左边框样式 */
 }
 
 .post-content h6 {
@@ -574,7 +624,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   font-weight: 700;
   padding-left: 10px;
   border-radius: 4px;
-  border-left: 3px solid #b9b9b9; /* 设置左边框样式 */
+  border-left: 4px solid #5c5c5c; /* 设置左边框样式 */
 }
 
 .post-content p {
@@ -677,8 +727,8 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   padding: 8px 18px; /* 减小内边距 */
   margin: 18px 0;
   border-radius: 4px;
-  border-left: 3px solid #b9b9b9;
-  background-color: #f9f9f9; /* 调整背景颜色更淡 */
+  border-left: 4px solid #5c5c5c;
+  background-color: #e4e4e4; /* 调整背景颜色 */
 }
 
 .post-content blockquote::after {
@@ -729,7 +779,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
 .post-content strong,
 .post-content i,
 .post-content em {
-    color: #000000;
+    color: var(--text-color);
 }
 
 .post-content b,
@@ -751,7 +801,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   display: inline-block;
   padding: 2px 4px;
   background-color: #eee;
-  border: 1px solid #999;
+  border: var(--border) solid var(--muted-text-color);
   border-radius: 4px;
   font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', -apple-system, system-ui, monospace;
 }
@@ -769,9 +819,9 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
 }
 
 .post-content details {
-  background-color: #f9f9f9;
+  background-color: var(--background-color);
   padding: 8px 12px;
-  border: 1px solid #ccc;
+  border: var(--border) solid var(--border-color);
   border-radius: 4px;
   overflow: hidden;
   transition: max-height 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -893,7 +943,6 @@ img.alignright {
   #nav-menu a {
     float: none;
     display: inline-block;
-    /*margin: 0 -2px;*/
   }
 }
 
@@ -955,7 +1004,7 @@ img.alignright {
 .friend-container .friend-card {
   display: flex;
   align-items: center;
-  border: 1px solid #ccc;
+  border: var(--border) solid var(--border-color);
   background-color: var(--background-color);
   padding: 0.8em;
   text-decoration: none;
@@ -999,7 +1048,7 @@ img.alignright {
 
 .friend-container .friend-card .friend-description {
   font-size: 0.9em;
-  color: #999;
+  color: var(--muted-text-color);
   margin: 1px 0 0 0;
 }
 /* 友链卡片样式结束 */
@@ -1033,7 +1082,7 @@ img.alignright {
 .error-page form#search input[type="text"] {
   width: 100%;
   padding: 15px;
-  border: 1px solid #ccc;
+  border: var(--border) solid var(--border-color);
   border-radius: 4px;
   font-size: 16px;
 }

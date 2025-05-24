@@ -4,17 +4,27 @@
 用户交流群：[点击加入](https://qm.qq.com/q/PVln74J0UU)<br>
 主题宗旨：简洁、简洁、还是简洁！
 
+## 特点和功能
+- 响应式设计
+- 良好的 SEO 优化
+- 支持 PJAX 无刷新跳转
+- 自带文章浏览量统计、点赞、打赏等功能
+- 内置任务列表、回复可见、登录可见等短代码
+- 全站变量名、类名统一规范，方便二开与拓展
+
 ## 如何使用
 
-下载 "主题压缩文件" 将压缩包上传至`/usr/themes/`目录，然后解压。<br>
-然后进入Typecho后台，选择控制台>外观>启用
-
-下载主题：https://github.com/zhu885744/buyu/releases<br>
-下载友链插件：https://gitee.com/Mejituu/Links/releases
-
-所有源代码应该放在 `/usr/themes/buyu` 目录下。
+下载 "[主题压缩文件](https://github.com/zhu885744/buyu/releases)" 将压缩包上传至`/usr/themes/`目录，解压<br>
+然后进入Typecho后台，选择控制台>外观>buyu>启用<br>
+友情链接功能依赖"[Links](https://gitee.com/Mejituu/Links/releases)"插件，请使用这个插件的最新版本，将压缩包上传至`/usr/plugins/`目录，解压<br>
+然后进入Typecho后台，选择控制台>插件>Links>启用<br>
+下载ip属地本地数据库："[qqwry.dat](https://chuying.lanzoue.com/iONdb20g22ud)"，下载后解压为"qqwry.dat"放至typecho程序根目录即可
 
 ## 更新日志
+[1.2.7] 更新内容如下
+- 优化：文章密码保护输入框样式
+- 优化：进一步完善 CSS 未完成的变量替换
+
 [1.2.6] 更新内容如下
 - 新增：全新的主题设置样式
 - 新增：评论博主标识
