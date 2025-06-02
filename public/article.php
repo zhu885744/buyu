@@ -14,7 +14,7 @@
                 <?php endif; ?>
                 <li><?php get_post_view($this) ?>次阅读</li>
             </ul>
-            <p class="card-text"><?php $this->excerpt(150, '...'); ?></p>
+            <p class="card-text"><?php $this->excerpt(200, '...'); ?></p>
         </article>
     <?php endwhile; ?>
 

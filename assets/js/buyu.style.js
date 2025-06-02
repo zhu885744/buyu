@@ -2,7 +2,13 @@ document.addEventListener('DOMContentLoaded', function() {
     var backToTopButton = document.getElementById('backToTop');
     var scrollThreshold = 200; // 当滚动超过这个阈值时显示按钮
 
-    // 监听滚动事件
+    // 确保按钮存在
+    if (!backToTopButton) return;
+
+    // 初始隐藏按钮
+    backToTopButton.classList.remove('visible');
+
+    // 监听滚动事件 - 使用 addEventListener 而不是 onscroll
     window.addEventListener('scroll', function() {
         if (window.scrollY > scrollThreshold) {
             backToTopButton.classList.add('visible');
@@ -12,21 +18,57 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // 处理点击事件
-    backToTopButton.addEventListener('click', function() {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth' // 平滑滚动
-        });
+    backToTopButton.addEventListener('click', function(e) {
+        e.preventDefault(); // 防止默认行为
+        
+        // 平滑滚动到顶部
+        if (window.scrollTo && typeof window.scrollTo === 'function') {
+            // 检查浏览器是否支持平滑滚动行为
+            if ('scrollBehavior' in document.documentElement.style) {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            } else {
+                // 兼容不支持平滑滚动的浏览器
+                smoothScrollPolyfill();
+            }
+        } else {
+            // 非常旧的浏览器回退
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
     });
 
-    // 初始隐藏（虽然 CSS 已经设置了，但这里再次确保）
-    backToTopButton.classList.remove('visible');
+    // 平滑滚动的兼容性实现
+    function smoothScrollPolyfill() {
+        var start = window.scrollY;
+        var duration = 500; // 滚动持续时间（毫秒）
+        var startTime = null;
+
+        function animation(currentTime) {
+            if (!startTime) startTime = currentTime;
+            var timeElapsed = currentTime - startTime;
+            var progress = Math.min(timeElapsed / duration, 1);
+            var easeProgress = easeInOutCubic(progress);
+            window.scrollTo(0, start - (start * easeProgress));
+            
+            if (timeElapsed < duration) {
+                requestAnimationFrame(animation);
+            }
+        }
+
+        // 缓动函数
+        function easeInOutCubic(t) {
+            return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        }
+
+        requestAnimationFrame(animation);
+    }
 });
 
-//监听滚动条事件
-window.onscroll = function(){
-	Limg()
-}
+// 确保没有其他 onscroll 事件覆盖我们的滚动处理
+window.onscroll = null;    
 
 //页面加载时调用一次，使图片显示
 window.onload = function() {
@@ -69,6 +111,7 @@ function Limg() {
 	})
 }
 
+//代码框增加复制按钮
 var codeblocks = document.getElementsByTagName("pre")
 //循环每个pre代码块，并添加 复制代码
 for (var i = 0; i < codeblocks.length; i++) {
@@ -138,4 +181,3 @@ const detailsElements = document.querySelectorAll('details');
             }
         });
     });
-    

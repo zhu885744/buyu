@@ -410,15 +410,25 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
 }
 
 /* 作者评论的背景色 */
+/* 评论层级样式 */
+.comment-list li.comment-level-odd {
+  background: #f9fafb;
+}
+
+.comment-list li.comment-level-even {
+  background: #ffffff;
+}
+
 .comment-list li.comment-by-author {
-  background: #fff3d1;
+  background: #fff8e1;
+  border-left: 3px solid #ffb74d;
 }
 
 /* 评论回复按钮样式 */
 .comment-list li .comment-reply {
   text-align: right;
-  font-size: 0.92857em;
-  margin-top: 5px;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
 }
 
 /* 评论元信息链接样式 */
@@ -470,7 +480,6 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   width: 100%;
   border: var(--border-width) solid var(--border-color);
   background: #ffffff;
-  height: 30px;
   border-radius: var(--border-radius);
   color: var(--text-color);
   font-size: var(--font-size-medium);
@@ -952,10 +961,6 @@ img.alignright {
   .post-meta {
     text-align: center;
   }
-}
-
-@media (min-width: 992px) {
-
 }
 
 @media (min-width: 1200px) {

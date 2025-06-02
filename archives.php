@@ -49,7 +49,6 @@ $this->need('public/header.php');
                     </div>
                   </div>
                 </div>
-
                 <div class="clear"></div>
                 <div class="entry">
                     <?php
@@ -88,7 +87,6 @@ $this->need('public/header.php');
             </div>
         </div>
     </article>
-    <?php $this->need('public/comments.php'); ?>
 </div>
 
-<?php $this->need('public/footer.php'); ?>
+<?php $this->need('public/footer.php'); ?>    

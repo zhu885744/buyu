@@ -10,7 +10,6 @@
       <?php echo $this->options->JFooter_Left(); ?>
     </div>   
   <?php endif; ?>  
-
   <?php if ($this->options->ICPbeian): ?>
     <div class="item">
       <a href="http://beian.miit.gov.cn" class="icpnum" target="_blank" rel="noopener noreferrer">
@@ -18,7 +17,6 @@
       </a>
     </div>    
   <?php endif; ?>
-
   <?php if ($this->options->gonganbeian): ?>
     <div class="item">
       <a href="https://beian.mps.gov.cn/#/query/webSearch" class="icpnum" target="_blank" rel="noopener noreferrer">
@@ -26,23 +24,22 @@
       </a>
     </div>
   <?php endif; ?> 
-  <!-- 此处版权建议保留，谢谢 -->
+  <!-- 下方版权建议保留，谢谢 -->
   <div class="item">
-    &copy; <?php echo date('Y'); ?>&nbsp;
-    <a href="<?php $this->options->siteUrl(); ?>"><?php $this->options->title(); ?></a>&nbsp;由&nbsp;
-    <a href="https://github.com/zhu885744/buyu/" target="_blank" rel="noopener noreferrer">buyu</a>&nbsp;主题强力驱动
+    Copyright&nbsp;&copy; <?php echo date('Y'); ?>&nbsp;
+    <a href="<?php $this->options->siteUrl(); ?>"><?php $this->options->title(); ?></a>
   </div>
-  <!-- 此处版权建议保留，谢谢 -->
+  <div class="item">
+    Powered by&nbsp;<a href="https://typecho.org/" target="_blank" rel="noopener noreferrer">typecho</a>&nbsp;|&nbsp;Theme is&nbsp;<a href="https://github.com/zhu885744/buyu" target="_blank" rel="noopener noreferrer">buyu</a>
+  </div>
 </footer>
-
 <i class="fa-solid fa-arrow-up" id="backToTop"></i>
 <script src="<?php $this->options->themeUrl('assets/js/buyu.style.js'); ?>"></script>
 <script type="text/javascript">
+  //自定义js
   <?php echo $this->options->JCustomScript(); ?>
 </script>
-
 <?php $this->footer(); ?>
-
 <?php if ($this->options->CustomContent): ?>
   <?php echo $this->options->CustomContent(); ?>
 <?php endif; ?>

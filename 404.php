@@ -10,4 +10,4 @@
             </form>
         </div>
     </div>
-<?php $this->need('public/footer.php'); ?> 
+<?php $this->need('public/footer.php'); ?>

@@ -2,7 +2,7 @@
 /* 获取主题当前版本号 */
 function _getVersion()
 {
-  return "v1.2.7";
+  return "v1.2.8";
 };
 
 /* 主题初始化 */

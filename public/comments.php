@@ -37,6 +37,8 @@ $userHasLogin = $this->user->hasLogin();
                         <textarea class="form-control OwO-textarea" rows="8" name="text" id="textarea" placeholder="善语结善缘，恶语伤人心..." required><?php $this->remember('text'); ?></textarea>
                         <div class="OwO"></div>
                     </div>
+                    <!-- 隐藏并默认勾选「记住我」 -->
+                    <input type="hidden" name="remember" value="1">
                     <div class="d-grid comment-submit-button-container" style="margin-bottom: 3.5em;">
                         <button type="submit" id="comment-submit-button" class="comment-submit-button">发送评论</button>
                     </div>
@@ -63,6 +65,14 @@ $userHasLogin = $this->user->hasLogin();
                         width: '100%',
                         maxHeight: '250px'
                     });
+                    
+                    // 为头像添加淡入动画效果
+                    const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+                    lazyImages.forEach(img => {
+                        img.addEventListener('load', function() {
+                            this.classList.add('loaded');
+                        });
+                    });
                 });
             </script>
         <?php else : ?>
@@ -85,7 +95,10 @@ function threadedComments($comments, $options)
 <li id="li-<?php $comments->theId(); ?>" class="comment-body<?php echo $commentLevelClass . $commentClass; ?>">
     <div id="<?php $comments->theId(); ?>">
         <div class="comment-author">
-            <?php $comments->gravatar('30', ''); ?>
+            <?php 
+            // 添加 loading="lazy" 属性实现头像懒加载
+            $comments->gravatar('30', '', '', array('loading' => 'lazy', 'class' => 'lazy-avatar')); 
+            ?>
             <cite class="fn">
                 <?php $comments->author(); ?>
                 <?php if ($comments->authorId == $comments->ownerId) : ?>
@@ -109,4 +122,4 @@ function threadedComments($comments, $options)
         </div>
     <?php endif; ?>
 </li>
-<?php } ?>
+<?php } ?>    
