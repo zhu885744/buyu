@@ -16,7 +16,6 @@ $userHasLogin = $this->user->hasLogin();
             <h4>本站使用 Cookie 技术保留您的个人信息以便您下次快速评论</h4>
             <div id="<?php $this->respondId(); ?>">
                 <?php $comments->cancelReply(); ?>
-
                 <form method="post" action="<?php $this->commentUrl(); ?>" id="comment-form" role="form">
                     <div class="input-group">
                         <div class="form-group">
@@ -37,7 +36,6 @@ $userHasLogin = $this->user->hasLogin();
                         <textarea class="form-control OwO-textarea" rows="8" name="text" id="textarea" placeholder="善语结善缘，恶语伤人心..." required><?php $this->remember('text'); ?></textarea>
                         <div class="OwO"></div>
                     </div>
-                    <!-- 隐藏并默认勾选「记住我」 -->
                     <input type="hidden" name="remember" value="1">
                     <div class="d-grid comment-submit-button-container" style="margin-bottom: 3.5em;">
                         <button type="submit" id="comment-submit-button" class="comment-submit-button">发送评论</button>
