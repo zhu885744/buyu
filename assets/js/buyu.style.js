@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 平滑滚动的兼容性实现
     function smoothScrollPolyfill() {
         var start = window.scrollY;
-        var duration = 500; // 滚动持续时间（毫秒）
+        var duration = 5000; // 滚动持续时间（毫秒）
         var startTime = null;
 
         function animation(currentTime) {

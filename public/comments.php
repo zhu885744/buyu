@@ -24,7 +24,7 @@ $userHasLogin = $this->user->hasLogin();
                         </div>
                         <div class="form-group">
                             <label for="mail1" <?php if ($this->options->commentsRequireMail) : ?> class="required" <?php endif; ?>><?php _e('邮箱'); ?></label>
-                            <input class="form-control" type="email" name="mail" id="mail1" placeholder="必填" value="<?php echo $userHasLogin ? $this->user->mail() : $this->remember('mail'); ?>" <?php if ($this->options->commentsRequireMail) : ?> autocomplete="off" required <?php endif; ?> />
+                            <input class="form-control" type="email" name="mail" id="mail1" placeholder="必填" value="<?php $this->user->hasLogin() ? $this->user->mail() : $this->remember('mail') ?>" <?php if ($this->options->commentsRequireMail) : ?> autocomplete="off" required <?php endif; ?> />
                         </div>
                         <div class="form-group">
                             <label for="url" <?php if ($this->options->commentsRequireURL) : ?> class="required" <?php endif; ?>><?php _e('网址'); ?></label>
@@ -87,7 +87,8 @@ function threadedComments($comments, $options)
         $commentClass .= $comments->authorId == $comments->ownerId ? ' comment-by-author' : ' comment-by-user';
     }
 
-    $commentLevelClass = $comments->levels > 0 ? ' comment-child' : ' comment-parent';
+    // 强制所有子评论为第二级
+    $commentLevelClass = 'comment-child';
 ?>
 
 <li id="li-<?php $comments->theId(); ?>" class="comment-body<?php echo $commentLevelClass . $commentClass; ?>">
@@ -95,7 +96,7 @@ function threadedComments($comments, $options)
         <div class="comment-author">
             <?php 
             // 添加 loading="lazy" 属性实现头像懒加载
-            $comments->gravatar('30', '', '', array('loading' => 'lazy', 'class' => 'lazy-avatar')); 
+            $comments->gravatar('30', '', '', array('loading' => 'lazy', 'class' => 'lazy-avatar'));
             ?>
             <cite class="fn">
                 <?php $comments->author(); ?>
@@ -120,4 +121,4 @@ function threadedComments($comments, $options)
         </div>
     <?php endif; ?>
 </li>
-<?php } ?>    
+<?php } ?>

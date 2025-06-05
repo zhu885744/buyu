@@ -5,30 +5,6 @@ function _getVersion()
   return "v1.2.8";
 };
 
-/* 主题初始化 */
-function themeInit($archive){
-  Helper::options()->commentsAntiSpam = false; //关闭反垃圾
-  Helper::options()->commentsCheckReferer = false; //关闭检查评论来源URL与文章链接是否一致判断(否则会无法评论)
-  Helper::options()->commentsMaxNestingLevels = '999'; //最大嵌套层数
-  Helper::options()->commentsPageDisplay = 'first'; //强制评论第一页
-  Helper::options()->commentsOrder = 'DESC'; //将最新的评论展示在前面    
-  if ($archive->is('author')) {
-    $archive->parameter->pageSize = 6; // 作者页面每6篇文章分页一次
-  }
-  if ($archive->is('category','av')) {
-  $archive->parameter->pageSize = 6; // 分类缩略名为av的分类列表每6篇文章分页一次
-  }
-  $archive->content = a_class_replace($archive->content);//文章内容，让a_class_replace函数处理
-  
-  //文章描述中暴露短代码的问题
-  if ($archive->is('single')){
-    //注意：这里就是需要过滤短代码的正则表达，请根据实际情况自行修改。
-    $archiv = preg_replace('/{bl av="(.+?)"}/sm','',$archive->getDescription());
-    //这个方法是typecho提供设置描述的方法
-    $archive->setDescription($archiv);
-  }
-}
-
 //给文章每个超链接点击后新窗口打开，原理就是用正则替换文章内容
 function a_class_replace($content){
   $content = preg_replace('#<a(.*?) href="([^"]*/)?(([^"/]*)\.[^"]*)"(.*?)>#',
@@ -41,6 +17,21 @@ function processContent($content, $title) {
     $pattern = '/\<img.*?src\=\"(.*?)\"[^>]*>/i';
     $replacement = '<a href="$1" class="index-img" data-fancybox><img data-src="$1" loading="lazy" alt="' . $title . '" title="点击查看大图"></a>';
     return preg_replace($pattern, $replacement, $content);
+}
+
+/* 判断敏感词是否在字符串内 */
+function _checkSensitiveWords($words_str, $str)
+{
+  $words = explode("||", $words_str);
+  if (empty($words)) {
+    return false;
+  }
+  foreach ($words as $word) {
+    if (false !== strpos($str, trim($word))) {
+      return true;
+    }
+  }
+  return false;
 }
 
 /* 文章编辑器添加字符统计 */

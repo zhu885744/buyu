@@ -27,7 +27,7 @@
   <!-- 下方版权建议保留，谢谢 -->
   <div class="item">
     Copyright&nbsp;&copy; <?php echo date('Y'); ?>&nbsp;
-    <a href="<?php $this->options->siteUrl(); ?>"><?php $this->options->title(); ?></a>
+    <a href="<?php $this->options->siteUrl(); ?>"><?php $this->options->title(); ?></a>&nbsp;版权所有
   </div>
   <div class="item">
     Powered by&nbsp;<a href="https://typecho.org/" target="_blank" rel="noopener noreferrer">typecho</a>&nbsp;|&nbsp;Theme is&nbsp;<a href="https://github.com/zhu885744/buyu" target="_blank" rel="noopener noreferrer">buyu</a>

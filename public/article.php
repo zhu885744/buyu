@@ -71,6 +71,22 @@
         <?php if ($this->is('post')) : ?>
           <p itemprop="keywords" class="tags"><?php _e('标签: '); ?><?php $this->tags(', ', true, 'none'); ?></p>
         <?php endif; ?>
+        <div class="post-button" style="text-align: center;">
+          <?php if ($this->options->like!== "off") :?>
+            <button type="button" id="like" class="post-bth">
+              <i class="fa fa-thumbs-up mr-1"></i> 点赞 <span id="like-count">1</span>
+            </button>
+          <?php endif;?>
+          <?php if ($this->options->Reward): ?>
+            <button type="button" id="Reward" class="post-bth">
+              <i class="fa fa-heart mr-1"></i> 打赏
+            </button>
+            <!----<?php echo $this->options->Reward(); ?>---->
+          <?php endif;?>
+          <button type="button" id="share" class="post-bth">
+            <i class="fa fa-share-alt mr-1"></i> 分享
+          </button>
+        </div>
     </article>
     <?php $this->need('public/comments.php'); ?>
   </div>
