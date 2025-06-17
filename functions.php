@@ -9,14 +9,14 @@ require_once("core/core.php");
 
 // 自定义函数，用于获取 CSS 文件的 URL
 function get_css_url($file_name) {
-    $options = Typecho_Widget::widget('Widget_Options');
-    return $options->themeUrl('assets/typecho/config/css/' . $file_name);
+  $options = Typecho_Widget::widget('Widget_Options');
+  return $options->themeUrl('assets/typecho/config/css/' . $file_name);
 }
 
 // 自定义函数，用于获取 JS 文件的 URL
 function get_js_url($file_name) {
-    $options = Typecho_Widget::widget('Widget_Options');
-    return $options->themeUrl('assets/typecho/config/js/' . $file_name);
+  $options = Typecho_Widget::widget('Widget_Options');
+  return $options->themeUrl('assets/typecho/config/js/' . $file_name);
 }
 
 /**
@@ -27,13 +27,17 @@ function themeConfig($form)
 $_db = Typecho_Db::get();
   $_prefix = $_db->getPrefix();
   try {
+    // 检查 `views` 字段是否存在，如果不存在则添加
     if (!array_key_exists('views', $_db->fetchRow($_db->select()->from('table.contents')->page(1, 1)))) {
       $_db->query('ALTER TABLE `' . $_prefix . 'contents` ADD `views` INT DEFAULT 0;');
     }
+    // 检查 `agree` 字段是否存在，如果不存在则添加
     if (!array_key_exists('agree', $_db->fetchRow($_db->select()->from('table.contents')->page(1, 1)))) {
       $_db->query('ALTER TABLE `' . $_prefix . 'contents` ADD `agree` INT DEFAULT 0;');
     }
   } catch (Exception $e) {
+    // 记录数据库操作异常到Typecho日志
+    Typecho_Log::write('主题配置错误: ' . $e->getMessage(), Typecho_Log::ERROR);
   }
 ?>
 
@@ -211,10 +215,6 @@ $_db = Typecho_Db::get();
   $like = new Typecho_Widget_Helper_Form_Element_Select('like', array('off' => '关闭（默认）', 'on' => '开启'), '3', '文章点赞', '开启后将在文章底部显示点赞按钮，默认关闭');
   $like->setAttribute('class', 'buyu_content buyu_post');
   $form->addInput($like);
-  /* --------------------------------------- */
-  $Reward = new Typecho_Widget_Helper_Form_Element_Text('Reward', NULL, NULL, _t('文章赞赏'), _t('在这里输入收款码链接,留空则不显示'));
-  $Reward->setAttribute('class', 'buyu_content buyu_post');
-  $form->addInput($Reward);
   /* --------------------------------------- */
 }
 

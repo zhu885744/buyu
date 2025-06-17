@@ -12,9 +12,19 @@
             'tag'       =>  _t('标签 %s 下的文章'),
             'author'    =>  _t('%s的个人主页')
         ), '', ' - ');?><?php if($this->getCurrentPage()>1) _e("第 %d 页-", $this->getCurrentPage());?><?php $this->options->title();?></title>
-    <link rel="stylesheet" href="<?php $this->options->themeUrl('assets/css/buyu.grid.css');?>">
-    <link rel="stylesheet" href="<?php $this->options->themeUrl('assets/css/buyu.style.css');?>">
-    <link rel="stylesheet" href="https://img1.zhuxu.asia/lib/font-awesome/css/all.min.css">
+    <?php
+    $cdnUrl = $this->options->JAssetsURL;
+    $getThemeUrl = function($path) use ($cdnUrl) {
+        if (!empty($cdnUrl)) {
+            return rtrim($cdnUrl, '/') . '/' . ltrim($path, '/');
+        }
+        return Typecho_Common::url($path, $this->options->themeUrl);
+    };
+    ?>
+    <link rel="stylesheet" href="<?php echo $getThemeUrl('assets/css/buyu.grid.css');?>">
+    <link rel="stylesheet" href="<?php echo $getThemeUrl('assets/css/buyu.style.css');?>">
+    <link rel="stylesheet" href="<?php echo $getThemeUrl('assets/font-awesome/font-awesome.min.css');?>">
+    <script src="<?php echo $getThemeUrl('assets/js/buyu.message.js'); ?>"></script>
     <style type="text/css">
       <?php $this->options->CustomCSS(); ?>
     </style>
@@ -26,7 +36,8 @@
     <div class="container">
         <div class="row">
             <div class="site-name col-mb-12 col-9">
-                <?php if ($this->options->logoUrl): ?>
+                <?php
+                if ($this->options->logoUrl): ?>
                     <a id="logo" href="<?php $this->options->siteUrl(); ?>">
                         <img src="<?php $this->options->logoUrl() ?>" width="40%" height="40%" alt="<?php $this->options->title() ?>"/>
                     </a>

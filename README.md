@@ -9,7 +9,7 @@
 - 良好的 SEO 优化
 - 支持 PJAX 无刷新跳转
 - 自带文章浏览量统计、点赞、打赏等功能
-- 内置任务列表、回复可见、登录可见等短代码
+- 内置任务列表、附件下载、视频、音频等短代码
 - 全站变量名、类名统一规范，方便二开与拓展
 
 ## 如何使用
@@ -22,12 +22,12 @@
 
 ## 更新日志
 [1.2.8] 更新内容如下
-- 新增：主题设置评论敏感词过滤、限制用户评论最大字数、评论需包含中文功能[已完成]
-- 新增：文章点赞、打赏、分享[开发中]
-- 新增：任务列表、回复可见短代码[开发中]
-- 新增：全局消息提示[开发中]
-- 新增：评论通知[开发中]
-- 修复：主题设置初始化逻辑错误[已完成]
+- 新增：主题设置评论敏感词过滤、限制用户评论最大字数、评论需包含中文功能
+- 新增：文章点赞、分享
+- 新增：任务列表短代码
+- 新增：全局消息提示
+- 新增：评论通知
+- 修复：主题设置初始化逻辑错误
 
 [1.2.7] 更新内容如下
 - 优化：文章密码保护输入框样式
@@ -88,3 +88,16 @@
 - 新增：文章编辑器字符统计
 - 新增：自定义css、自定义js、自定义底部栏内容、底部自定义内容
 - 优化：MD内容渲染样式
+
+## 鸣谢
+ 
+- [typecho](https://typecho.org/ "typecho" )
+- [fancybox](https://fancyapps.com/fancybox/getting-started/ "fancybox" )
+- [Message.js](https://www.jq22.com/jquery-info23550 "Message.js" )
+- [APlayer](https://aplayer.js.org/ "APlayer" )
+- [DPlayer](https://dplayer.diygod.dev/zh/ "DPlayer" )
+  
+## 开源许可
+
+ - [MIT License](https://github.com/zhu885744/buyu/blob/main/LICENSE) 
+ - Powered by [typecho](https://typecho.org/ "typecho" ) | Theme is [buyu](https://github.com/zhu885744/buyu "buyu" )

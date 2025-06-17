@@ -1,51 +1,55 @@
 <?php if ($this->is('index')) : ?>
   <div class="col-mb-12 col-8" id="main" role="main">
     <?php while ($this->next()): ?>
-        <article class="post">
-            <h2 class="post-title" itemprop="name headline">
-                <a itemprop="url" href="<?php $this->permalink() ?>">
-                  <?php $this->title() ?>
-                </a>
-            </h2>
-            <ul class="post-meta">
-                <li><time datetime="<?php $this->date('c'); ?>" itemprop="datePublished"><?php $this->date(); ?></time></li>
-                <?php if ($this->options->JCommentStatus !== "off"): // 判断全局评论是否关闭 ?>
-                  <li><?php $this->commentsNum('无评论', '1 条评论', '%d 条评论'); ?></li>
-                <?php endif; ?>
-                <li><?php get_post_view($this) ?>次阅读</li>
-            </ul>
-            <p class="card-text"><?php $this->excerpt(200, '...'); ?></p>
-        </article>
+      <article class="post">
+        <h2 class="post-title" itemprop="name headline">
+          <a itemprop="url" href="<?php $this->permalink() ?>">
+            <?php $this->title() ?>
+          </a>
+        </h2>
+        <ul class="post-meta">
+          <li><time datetime="<?php $this->date('c'); ?>" itemprop="datePublished"><?php $this->date(); ?></time></li>
+          <?php if ($this->options->JCommentStatus !== "off"): // 判断全局评论是否关闭 ?>
+            <li><?php $this->commentsNum('无评论', '1 条评论', '%d 条评论'); ?></li>
+          <?php endif; ?>
+          <li><?php get_post_view($this) ?>次阅读</li>
+        </ul>
+        <p class="card-text"><?php $this->excerpt(200, '...'); ?></p>
+      </article>
     <?php endwhile; ?>
-
-    <?php $this->pageNav('«', '»', 1, '···', array(
-        'wrapTag' => 'div',
-        'wrapClass' => 'page-navigator',
-        'itemTag' => 'li',
-        'textTag' => 'span',
-        'currentClass' => 'current',
-        'prevClass' => 'prev',
-        'nextClass' => 'next',
-    )); ?>
+    
+    <div class="pagination-container">
+      <?php $this->pageLink('上一页'); ?>
+      <?php $this->pageLink('下一页','next'); ?>
+    </div>
   </div>
 <?php endif; ?>
 
 <?php if ($this->is('page') || $this->is('post')) : ?>
-  <link href="<?php $this->options->themeUrl('assets/css/buyu.Lightbox.css'); ?>" rel="stylesheet">
-  <link href="<?php $this->options->themeUrl('assets/css/buyu.APlayer.css'); ?>" rel="stylesheet" >
-  <script src="<?php $this->options->themeUrl('assets/js/buyu.APlayer.js'); ?>"></script>
-  <script src="<?php $this->options->themeUrl('assets/js/buyu.DPlayer.js'); ?>"></script>
+  <?php
+    $cdnUrl = $this->options->JAssetsURL;
+    $getThemeUrl = function($path) use ($cdnUrl) {
+      if (!empty($cdnUrl)) {
+        return rtrim($cdnUrl, '/') . '/' . ltrim($path, '/');
+      }
+      return Typecho_Common::url($path, $this->options->themeUrl);
+    };
+  ?>
+  <link href="<?php echo $getThemeUrl('assets/css/buyu.Lightbox.css'); ?>" rel="stylesheet">
+  <link href="<?php echo $getThemeUrl('assets/css/buyu.APlayer.css'); ?>" rel="stylesheet" >
+  <script src="<?php echo $getThemeUrl('assets/js/buyu.APlayer.js'); ?>"></script>
+  <script src="<?php echo $getThemeUrl('assets/js/buyu.DPlayer.js'); ?>"></script>
   <div class="col-mb-12 col-8" id="main" role="main">
     <article class="post">
         <h1 class="post-title" itemprop="name headline">
-            <?php $this->title() ?>
+          <?php $this->title() ?>
         </h1>
         <ul class="post-meta">
-            <li><time datetime="<?php $this->date('c'); ?>" itemprop="datePublished"><?php $this->date(); ?></time></li>
-            <?php if ($this->options->JCommentStatus !== "off"): // 判断全局评论是否关闭 ?>
-              <li><?php $this->commentsNum('无评论', '1 条评论', '%d 条评论'); ?></li>
-            <?php endif; ?>
-            <li><?php get_post_view($this) ?>次阅读</li>
+          <li><time datetime="<?php $this->date('c'); ?>" itemprop="datePublished"><?php $this->date(); ?></time></li>
+          <?php if ($this->options->JCommentStatus !== "off"): // 判断全局评论是否关闭 ?>
+            <li><?php $this->commentsNum('无评论', '1 条评论', '%d 条评论'); ?></li>
+          <?php endif; ?>
+          <li><?php get_post_view($this) ?>次阅读</li>
         </ul>
         <div class="post-content" itemprop="articleBody">
           <!--判断文章是否被密码保护-->
@@ -73,30 +77,22 @@
         <?php endif; ?>
         <div class="post-button" style="text-align: center;">
           <?php if ($this->options->like!== "off") :?>
-            <button type="button" id="like" class="post-bth">
-              <i class="fa fa-thumbs-up mr-1"></i> 点赞 <span id="like-count">1</span>
+            <button class="post-bth" id="like" data-cid="<?php $this->cid(); ?>" data-like-url="<?php echo Helper::options()->index; ?>?action=like" data-get-like-url="<?php echo Helper::options()->index; ?>?action=get_like">
+              <i class="fa fa-thumbs-up mr-1"></i>&nbsp;点赞 <span id="like-count">0</span>
             </button>
-          <?php endif;?>
-          <?php if ($this->options->Reward): ?>
-            <button type="button" id="Reward" class="post-bth">
-              <i class="fa fa-heart mr-1"></i> 打赏
-            </button>
-            <!----<?php echo $this->options->Reward(); ?>---->
-          <?php endif;?>
-          <button type="button" id="share" class="post-bth">
-            <i class="fa fa-share-alt mr-1"></i> 分享
+          <?php endif; ?>
+          <button class="post-bth" id="share" data-title="<?php echo htmlspecialchars($this->title); ?>" data-url="<?php echo htmlspecialchars($this->permalink); ?>">
+           <i class="fa fa-share-alt mr-1"></i>&nbsp;分享
           </button>
         </div>
     </article>
     <?php $this->need('public/comments.php'); ?>
   </div>
-  <script src="<?php $this->options->themeUrl('assets/js/buyu.Lightbox.js'); ?>"></script>
+  <script src="<?php echo $getThemeUrl('assets/js/buyu.Lightbox.js'); ?>"></script>
   <script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function() {
-      // 图片灯箱初始化
-      Fancybox.bind('[data-fancybox]', {
-        // 可以在这里添加自定义选项
-      });
+    // 图片灯箱初始化
+    Fancybox.bind('[data-fancybox]', {
+      // 可以在这里添加自定义选项
     });
   </script>
 <?php endif; ?>

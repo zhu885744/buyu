@@ -33,8 +33,17 @@
     Powered by&nbsp;<a href="https://typecho.org/" target="_blank" rel="noopener noreferrer">typecho</a>&nbsp;|&nbsp;Theme is&nbsp;<a href="https://github.com/zhu885744/buyu" target="_blank" rel="noopener noreferrer">buyu</a>
   </div>
 </footer>
-<i class="fa-solid fa-arrow-up" id="backToTop"></i>
-<script src="<?php $this->options->themeUrl('assets/js/buyu.style.js'); ?>"></script>
+<i class="fa fa-arrow-up" id="backToTop"></i>
+<?php
+$cdnUrl = $this->options->JAssetsURL;
+$getThemeUrl = function($path) use ($cdnUrl) {
+    if (!empty($cdnUrl)) {
+        return rtrim($cdnUrl, '/') . '/' . ltrim($path, '/');
+    }
+    return Typecho_Common::url($path, $this->options->themeUrl);
+};
+?>
+<script src="<?php echo $getThemeUrl('assets/js/buyu.style.js'); ?>"></script>
 <script type="text/javascript">
   //自定义js
   <?php echo $this->options->JCustomScript(); ?>

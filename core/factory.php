@@ -4,7 +4,7 @@ mb_internal_encoding('UTF-8');
 require_once("phpmailer.php");
 require_once("smtp.php");
 
-/* 加强评论拦截功能 */
+/* 评论拦截功能 */
 Typecho_Plugin::factory('Widget_Feedback')->comment = array('Intercept', 'message');
 class Intercept
 {
@@ -33,7 +33,7 @@ class Intercept
     }
 }
 
-/* 邮件通知 */
+/* 评论邮件通知 */
 if (
   Helper::options()->JCommentMail === 'on' &&
   Helper::options()->JCommentMailHost &&
@@ -54,6 +54,7 @@ class Email
     $mail->isSMTP();
     $mail->SMTPAuth = true;
     $mail->CharSet = 'UTF-8';
+    //$mail->SMTPDebug = 3; // 或 3，调试级别更高
     $mail->SMTPSecure = Helper::options()->JCommentSMTPSecure;
     $mail->Host = Helper::options()->JCommentMailHost;
     $mail->Port = Helper::options()->JCommentMailPort;

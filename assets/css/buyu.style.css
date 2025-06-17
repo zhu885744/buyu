@@ -4,7 +4,7 @@
   --secondary-color: #444; /* 次要颜色 */
   --background-color: #f9f9f9; /* 背景颜色 */
   --text-color: #000000; /* 文字颜色 */
-  --muted-text-color: #999; /* 次要文字颜色 */
+  --muted-text-color: #3d3d3d; /* 次要文字颜色 */
   --border-color: #ccc; /* 边框颜色 */
   --hover-color: #3354AA; /* 悬停颜色 */
   --highlight-color: #e74c3c; /* 高亮颜色 */
@@ -293,7 +293,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
 .archive-title {
   margin: 1em 0 -1em;
   padding-top: 20px;
-  color: #999;
+  color: var(--muted-text-color);
   font-size: 1em;
 }
 
@@ -310,46 +310,43 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
 }
 
 /* 底部分页按钮样式 */
-.page-navigator {
-  list-style: none;
-  margin: 1rem 0 0 0;
+/* 分页按钮容器样式 */
+.pagination-container {
   display: flex;
-  gap: 0.5rem;
-  justify-content: center !important;
+  justify-content: space-between;
+  margin: 20px 0;
 }
 
-.page-navigator li a {
-  display: block;
+/* 上一页按钮样式 */
+.prev {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #ffffff;
+  color: #000000;
+  border: var(--border-width) solid var(--border-color);
   text-decoration: none;
-  width: 32px;
-  height: 32px;
-  line-height: 32px;
-  color: #000000;
   border-radius: 4px;
-  border: var(--border) solid var(--border-color);
-  background-color: #e5e5e5;
-  text-align: center;
-  transition: all 0.3s ease-in-out;
+  transition: background-color 0.3s ease;
 }
 
-.page-navigator li.current a,
-.page-navigator li a:hover {
-  background-color: #000000;
-  color: #fff;
-  font-weight: bold;
+.prev:hover {
+  background-color: #d0d0d0;
 }
 
-/* 添加三个点的样式 */
-.page-navigator li span {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 32px;
-  height: 32px;
+/* 下一页按钮样式 */
+.next {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #ffffff;
   color: #000000;
+  border: var(--border-width) solid var(--border-color);
+  text-decoration: none;
   border-radius: 4px;
-  border: var(--border) solid var(--border-color);
-  background-color: #e5e5e5;
+  transition: background-color 0.3s ease;
+}
+
+.next:hover {
+  background-color: #d0d0d0;
 }
 
 /* 返回顶部按钮样式 */
@@ -574,7 +571,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   margin-bottom: 100px;
 }
 
-/*-- 文章按钮 --*/
+/* 文章底部按钮 */
 .post-button {
   text-align: center;
 }
@@ -600,6 +597,26 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   background-color: #3e8e41;
   box-shadow: 0 5px #666;
   transform: translateY(4px);
+}
+
+/* 任务列表样式 */
+.task-list-item {
+  display: flex;
+  align-items: flex-start; /* 与普通段落顶部对齐 */
+  gap: 0.5em;
+  list-style: none;
+  padding-left: 0;
+  margin-left: -1.5em; /* 与普通ul对齐 */
+}
+
+.task-list-item .fa {
+  font-size: 1.1em;
+  margin-top: 0.15em; /* 微调图标与文字对齐 */
+}
+
+.task-done {
+  text-decoration: line-through;
+  color: #888;
 }
 
 .post-content {
@@ -882,9 +899,9 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
 }
 
 .post-content summary::after {
-  content: '\f078';
-  font-family: 'Font Awesome 6 Free';
-  font-weight: 900;
+  content: '\f078';  /* Unicode 不变，但需通过 content 直接引用 */
+  font-family: 'FontAwesome';  /* 4.7.0 版本的字体名称 */
+  font-weight: normal;  /* Font Awesome 4 无需指定 font-weight */
   position: absolute;
   right: 1rem;
   top: 50%;
@@ -1159,3 +1176,223 @@ img.alignright {
   max-width: 600px;
 }
 /*短代码解析样式结束*/
+
+/*全局消息提示开始*/
+.qmsg.qmsg-wrapper{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: rgba(0, 0, 0, .55);
+  font-size: 13px;
+  font-variant: tabular-nums;
+  line-height: 1;
+  list-style: none;
+  font-feature-settings: "tnum";
+  position: fixed;
+  top: 16px;
+  left: 0;
+  z-index: 1010;
+  width: 100%;
+  pointer-events: none;
+}
+.qmsg .qmsg-item{
+  padding: 8px;
+  text-align: center;
+  -webkit-animation-duration: .3s;
+  animation-duration: .3s;
+  position: relative;
+}
+.qmsg .qmsg-item .qmsg-count{
+  text-align: center;
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  background-color: red;
+  color: #fff;
+  font-size: 12px;
+  line-height: 16px;
+  border-radius: 2px;
+  display: inline-block;
+  min-width: 16px;
+  height: 16px;
+  -webkit-animation-duration: .3s;
+  animation-duration: .3s;
+}
+.qmsg .qmsg-item:first-child{
+  margin-top: -8px;
+}
+.qmsg .qmsg-content{
+  text-align: left;
+  position: relative;
+  display: inline-block;
+  padding: 10px 16px;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+  pointer-events: all;
+  /* min-width: 175px; */
+  max-width: 80%;
+  min-width: 80px;
+}
+.qmsg .qmsg-content [class^="qmsg-content-"]{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.qmsg .qmsg-content .qmsg-content-with-close{
+  padding-right: 20px;
+}
+.qmsg .qmsg-icon{
+  display: inline-block;
+  color: inherit;
+  font-style: normal;
+  line-height: 0;
+  text-align: center;
+  text-transform: none;
+  vertical-align: -.125em;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  top: 1px;
+  margin-right: 8px;
+  font-size: 16px;
+}
+.qmsg .qmsg-icon svg{
+  display: inline-block;
+}
+
+.qmsg .qmsg-content-info .qmsg-icon{
+  color: #1890ff;
+  user-select: none;
+}
+.qmsg .qmsg-icon-close{
+  position: absolute;
+  top: 11px;
+  right: 5px;
+  padding: 0;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 22px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: rgba(0, 0, 0, .45);
+  transition: color .3s
+}
+.qmsg .qmsg-icon-close:hover>svg path{
+  stroke: #555;
+}
+.qmsg .animate-turn{
+  animation:MessageTurn 1s linear infinite;  
+  -webkit-animation: MessageTurn 1s linear infinite;
+}
+@keyframes MessageTurn{
+  0%{-webkit-transform:rotate(0deg);}
+  25%{-webkit-transform:rotate(90deg);}
+  50%{-webkit-transform:rotate(180deg);}
+  75%{-webkit-transform:rotate(270deg);}
+  100%{-webkit-transform:rotate(360deg);}
+}
+@-webkit-keyframes MessageTurn{
+  0%{-webkit-transform:rotate(0deg);}
+  25%{-webkit-transform:rotate(90deg);}
+  50%{-webkit-transform:rotate(180deg);}
+  75%{-webkit-transform:rotate(270deg);}
+  100%{-webkit-transform:rotate(360deg);}
+}
+
+@-webkit-keyframes MessageMoveOut {
+  0% {
+    max-height: 150px;
+    padding: 8px;
+    opacity: 1
+  }
+
+  to {
+    max-height: 0;
+    padding: 0;
+    opacity: 0
+  }
+}
+
+@keyframes MessageMoveOut {
+  0% {
+    max-height: 150px;
+    padding: 8px;
+    opacity: 1
+  }
+
+  to {
+    max-height: 0;
+    padding: 0;
+    opacity: 0
+  }
+}
+
+
+@-webkit-keyframes MessageMoveIn {
+    
+  0% {
+    transform: translateY(-100%);
+    transform-origin: 0 0;
+    opacity: 0
+  }
+
+  to {
+    transform: translateY(0);
+    transform-origin: 0 0;
+    opacity: 1
+  }
+}
+
+@keyframes MessageMoveIn {
+  0% {
+    transform: translateY(-100%);
+    transform-origin: 0 0;
+    opacity: 0
+  }
+
+  to {
+    transform: translateY(0);
+    transform-origin: 0 0;
+    opacity: 1
+  }
+}
+@-webkit-keyframes MessageShake {
+  0%,
+  100% {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+  
+  25%,
+  75% {
+    transform: translateX(-4px);
+    opacity: 0.75;
+  }
+  
+  50% {
+    transform: translateX(4px);
+    opacity: 0.25;
+  }
+}
+@keyframes MessageShake {
+  0%,
+  100% {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+  
+  25%,
+  75% {
+    transform: translateX(-4px);
+    opacity: 0.75;
+  }
+  
+  50% {
+    transform: translateX(4px);
+    opacity: 0.25;
+  }
+}

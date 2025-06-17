@@ -29,16 +29,10 @@
             <h2 class="post-title"><?php _e('没有找到内容'); ?></h2>
         </article>
     <?php endif; ?>
-
-    <?php $this->pageNav('«', '»', 1, '···', array(
-        'wrapTag' => 'div',
-        'wrapClass' => 'page-navigator',
-        'itemTag' => 'li',
-        'textTag' => 'span',
-        'currentClass' => 'current',
-        'prevClass' => 'prev',
-        'nextClass' => 'next',
-    )); ?>
+    <div class="pagination-container">
+      <?php $this->pageLink('上一页'); ?>
+      <?php $this->pageLink('下一页','next'); ?>
+    </div>
 </div>
 
 <?php $this->need('public/footer.php'); ?>

@@ -19,7 +19,36 @@ function processContent($content, $title) {
     return preg_replace($pattern, $replacement, $content);
 }
 
-/* 判断敏感词是否在字符串内 */
+// 文章点赞逻辑
+if (isset($_GET['action']) && ($_GET['action'] == 'like' || $_GET['action'] == 'get_like') && isset($_GET['cid'])) {
+    $cid = intval($_GET['cid']);
+    $db = Typecho_Db::get();
+    $prefix = $db->getPrefix();
+
+    // 简单IP限制
+    if ($_GET['action'] == 'like') {
+        session_start();
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $key = 'like_' . $cid . '_' . md5($ip);
+        if (isset($_SESSION[$key])) {
+            header('Content-Type: application/json');
+            echo json_encode(['success'=>false, 'msg'=>'您已经点过赞啦！']);
+            exit;
+        }
+        $db->query("UPDATE `{$prefix}contents` SET `agree` = `agree` + 1 WHERE `cid` = $cid");
+        $_SESSION[$key] = 1;
+    }
+    // 获取最新点赞数
+    $row = $db->fetchRow($db->select('agree')->from('table.contents')->where('cid = ?', $cid));
+    header('Content-Type: application/json');
+    echo json_encode([
+        'success' => true,
+        'count' => intval($row['agree'])
+    ]);
+    exit;
+}
+
+/* 判断评论敏感词是否在字符串内 */
 function _checkSensitiveWords($words_str, $str)
 {
   $words = explode("||", $words_str);
@@ -346,8 +375,8 @@ function video_shortcode($atts) {
 // 音频短代码处理函数
 function audio_shortcode($atts) {
     $default_atts = array(
-        'name' => '未知音频',
-        'artist' => '未知艺术家',
+        'name' => '未知音频',// 音频名称
+        'artist' => '未知艺术家',// 音频作者
         'url' => '',// 音频链接
         'cover' => ''// // 音频封面
     );
@@ -378,8 +407,8 @@ function audio_shortcode($atts) {
 // 短代码解析函数
 function parse_shortcodes($content) {
     $shortcodes = array(
-        'video' => 'video_shortcode',
-        'audio' => 'audio_shortcode'
+        'video' => 'video_shortcode',//音频短代码
+        'audio' => 'audio_shortcode'//视频短代码
     );
 
     foreach ($shortcodes as $tag => $function) {

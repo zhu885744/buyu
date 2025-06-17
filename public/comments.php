@@ -4,14 +4,21 @@ $isHidden = $this->hidden;
 $allowComment = $this->allow('comment');
 $commentStatus = $this->options->JCommentStatus;
 $userHasLogin = $this->user->hasLogin();
+//自定义静态资源
+$cdnUrl = $this->options->JAssetsURL;
+$getThemeUrl = function($path) use ($cdnUrl) {
+  if (!empty($cdnUrl)) {
+    return rtrim($cdnUrl, '/') . '/' . ltrim($path, '/');
+  }
+  return Typecho_Common::url($path, $this->options->themeUrl);
+};
 ?>
-
 <div id="comments">
     <?php if ($isHidden) : ?>
         <span>当前文章受密码保护，无法评论</span>
     <?php else : ?>
         <?php if ($allowComment && $commentStatus !== "off") : ?>
-            <link rel="stylesheet" href="<?php $this->options->themeUrl('assets/css/buyu.OwO.css'); ?>">
+            <link rel="stylesheet" href="<?php echo $getThemeUrl('assets/css/buyu.OwO.css'); ?>">
             <h2>发表评论（<?php $this->commentsNum(_t('暂无评论'), _t('仅有 1 条评论'), _t('已有 %d 条评论')); ?>）</h2>
             <h4>本站使用 Cookie 技术保留您的个人信息以便您下次快速评论</h4>
             <div id="<?php $this->respondId(); ?>">
@@ -51,14 +58,14 @@ $userHasLogin = $this->user->hasLogin();
                 <?php endif; ?>
             </div>
             
-            <script src="<?php $this->options->themeUrl('assets/js/buyu.OwO.js'); ?>"></script>
+            <script src="<?php echo $getThemeUrl('assets/js/buyu.OwO.js'); ?>"></script>
             <script type="text/javascript">
                 document.addEventListener("DOMContentLoaded", function () {
                     new OwO({
                         logo: 'OωO',
                         container: document.getElementsByClassName('OwO')[0],
                         target: document.getElementsByClassName('OwO-textarea')[0],
-                        api: '<?php $this->options->themeUrl('assets/json/OwO.json'); ?>',
+                        api: '<?php echo $getThemeUrl('assets/json/OwO.json'); ?>',
                         position: 'down',
                         width: '100%',
                         maxHeight: '250px'
