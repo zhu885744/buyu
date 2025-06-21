@@ -1152,7 +1152,9 @@ img.alignright {
 }
 /*404页面结束*/
 
-/*短代码解析样式开始*/
+/* ------------------
+ * 短代码解析样式
+ * --------------- */
 .custom-video-container {
   display: flex;
   justify-content: center;
@@ -1177,7 +1179,9 @@ img.alignright {
 }
 /*短代码解析样式结束*/
 
-/*全局消息提示开始*/
+/* ------------------
+ * 全局消息提示开始
+ * --------------- */
 .qmsg.qmsg-wrapper{
   box-sizing: border-box;
   margin: 0;

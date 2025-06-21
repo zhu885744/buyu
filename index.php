@@ -4,7 +4,7 @@
  *
  * @package buyu
  * @author 不语
- * @version 1.2.8
+ * @version 1.2.9
  * @link https://zhuxu.asia/archives/118/
  */
 

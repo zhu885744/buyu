@@ -94,17 +94,13 @@ function threadedComments($comments, $options)
         $commentClass .= $comments->authorId == $comments->ownerId ? ' comment-by-author' : ' comment-by-user';
     }
 
-    // 强制所有子评论为第二级
-    $commentLevelClass = 'comment-child';
+    $commentLevelClass = $comments->_levels > 0 ? ' comment-child' : ' comment-parent';  //评论层数大于0为子级，否则是父级
 ?>
 
 <li id="li-<?php $comments->theId(); ?>" class="comment-body<?php echo $commentLevelClass . $commentClass; ?>">
     <div id="<?php $comments->theId(); ?>">
         <div class="comment-author">
-            <?php 
-            // 添加 loading="lazy" 属性实现头像懒加载
-            $comments->gravatar('30', '', '', array('loading' => 'lazy', 'class' => 'lazy-avatar'));
-            ?>
+            <?php $comments->gravatar('40', ''); ?>
             <cite class="fn">
                 <?php $comments->author(); ?>
                 <?php if ($comments->authorId == $comments->ownerId) : ?>

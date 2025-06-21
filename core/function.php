@@ -2,7 +2,7 @@
 /* 获取主题当前版本号 */
 function _getVersion()
 {
-  return "v1.2.8";
+  return "v1.2.9";
 };
 
 //给文章每个超链接点击后新窗口打开，原理就是用正则替换文章内容
@@ -12,11 +12,21 @@ function a_class_replace($content){
   return $content;
 }
 
-// 文章图片逻辑
+//文章内容渲染
 function processContent($content, $title) {
-    $pattern = '/\<img.*?src\=\"(.*?)\"[^>]*>/i';
-    $replacement = '<a href="$1" class="index-img" data-fancybox><img data-src="$1" loading="lazy" alt="' . $title . '" title="点击查看大图"></a>';
-    return preg_replace($pattern, $replacement, $content);
+    $pattern = '/<img.*?src="(.*?)"[^>]*>/i';
+    return preg_replace_callback($pattern, function ($matches) use ($title) {
+        // 检查匹配结果是否包含有效的图片 src
+        if (isset($matches[1])) {
+            $src = $matches[1];
+            // 简单的 URL 验证
+            if (filter_var($src, FILTER_VALIDATE_URL)) {
+                return '<a data-fancybox data-src="' . htmlspecialchars($src) . '" class="index-img"><img data-src="' . htmlspecialchars($src) . '" loading="lazy" alt="' . htmlspecialchars($title) . '" title="点击查看大图"></a>';
+            }
+        }
+        // 如果匹配失败或 URL 无效，返回原始的 img 标签
+        return $matches[0];
+    }, $content);
 }
 
 // 文章点赞逻辑

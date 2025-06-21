@@ -28,7 +28,7 @@ $this->need('public/header.php');
                 <?php
                   Links_Plugin::output('
                     <a class="friend-card" href="{url}" title="{title}" target="_blank" rel="noopener">
-                      <img class="friend-avatar" src="{image}" alt="{name}" width="{size}" height="{size}">
+                      <img class="friend-avatar" data-src="{image}" alt="{name}" width="{size}" height="{size}">
                       <div class="friend-info">
                         <p class="friend-name">{name}</p>
                         <p class="friend-description">

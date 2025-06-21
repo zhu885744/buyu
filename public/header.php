@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="<?php echo $getThemeUrl('assets/css/buyu.grid.css');?>">
     <link rel="stylesheet" href="<?php echo $getThemeUrl('assets/css/buyu.style.css');?>">
     <link rel="stylesheet" href="<?php echo $getThemeUrl('assets/font-awesome/font-awesome.min.css');?>">
+    <link href="<?php echo $getThemeUrl('assets/css/buyu.fancybox.css'); ?>" rel="stylesheet">
     <script src="<?php echo $getThemeUrl('assets/js/buyu.message.js'); ?>"></script>
     <style type="text/css">
       <?php $this->options->CustomCSS(); ?>

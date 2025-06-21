@@ -35,7 +35,6 @@
       return Typecho_Common::url($path, $this->options->themeUrl);
     };
   ?>
-  <link href="<?php echo $getThemeUrl('assets/css/buyu.Lightbox.css'); ?>" rel="stylesheet">
   <link href="<?php echo $getThemeUrl('assets/css/buyu.APlayer.css'); ?>" rel="stylesheet" >
   <script src="<?php echo $getThemeUrl('assets/js/buyu.APlayer.js'); ?>"></script>
   <script src="<?php echo $getThemeUrl('assets/js/buyu.DPlayer.js'); ?>"></script>
@@ -88,11 +87,4 @@
     </article>
     <?php $this->need('public/comments.php'); ?>
   </div>
-  <script src="<?php echo $getThemeUrl('assets/js/buyu.Lightbox.js'); ?>"></script>
-  <script type="text/javascript">
-    // 图片灯箱初始化
-    Fancybox.bind('[data-fancybox]', {
-      // 可以在这里添加自定义选项
-    });
-  </script>
 <?php endif; ?>
