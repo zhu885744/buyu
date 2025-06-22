@@ -43,8 +43,8 @@ $getThemeUrl = function($path) use ($cdnUrl) {
     return Typecho_Common::url($path, $this->options->themeUrl);
 };
 ?>
-<script src="<?php echo $getThemeUrl('assets/js/buyu.fancybox.js'); ?>"></script>
 <script src="<?php echo $getThemeUrl('assets/js/buyu.style.js'); ?>"></script>
+<script src="<?php echo $getThemeUrl('assets/js/buyu.fancybox.js'); ?>"></script>
 <script type="text/javascript">
   //自定义js
   <?php echo $this->options->JCustomScript(); ?>

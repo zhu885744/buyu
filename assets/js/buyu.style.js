@@ -17,18 +17,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // 初始化图片懒加载
 function initLazyLoad() {
-    const images = document.querySelectorAll("img[data-src]");
-    images.forEach(img => img.style.opacity = "0");
-
-    function loadImages() {
-        const viewHeight = document.documentElement.clientHeight;
-        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-        const lazyImages = document.querySelectorAll("img[data-src]");
-
-        lazyImages.forEach(img => {
-            const rect = img.getBoundingClientRect();
-            if (rect.bottom >= 0 && rect.top < viewHeight) {
-                const src = img.getAttribute("data-src");
+    const lazyImages = document.querySelectorAll('img[data-src]');
+    lazyImages.forEach(img => img.style.opacity = '0');
+    
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                const src = img.getAttribute('data-src');
                 if (src) {
                     const newImg = new Image();
                     newImg.src = src;
@@ -44,21 +40,31 @@ function initLazyLoad() {
                             }
                         }, 100);
                         img.removeAttribute('data-src');
+                        
+                        // 找到包含此图片的灯箱链接
+                        const lightboxLink = img.closest('a[data-fancybox]');
+                        
+                        // 如果找到灯箱链接，重新绑定Fancybox
+                        if (lightboxLink) {
+                            // 先销毁之前的Fancybox实例
+                            Fancybox.destroy();
+                            
+                            // 重新绑定Fancybox
+                            Fancybox.bind('[data-fancybox]', {
+                              // 自定义Fancybox配置
+                            });  
+                        }
                     };
                 }
+                observer.unobserve(img);
             }
         });
-    }
+    });
 
-    // 页面加载时调用一次
-    loadImages();
-    // 监听滚动事件
-    window.addEventListener('scroll', loadImages);
+    lazyImages.forEach(image => {
+        observer.observe(image);
+    });
 }
-
-Fancybox.bind("[data-fancybox]", {
-  // Your custom options
-});
 
 // 初始化任务列表
 function initTaskList() {

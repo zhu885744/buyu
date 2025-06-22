@@ -70,14 +70,6 @@ $getThemeUrl = function($path) use ($cdnUrl) {
                         width: '100%',
                         maxHeight: '250px'
                     });
-                    
-                    // 为头像添加淡入动画效果
-                    const lazyImages = document.querySelectorAll('img[loading="lazy"]');
-                    lazyImages.forEach(img => {
-                        img.addEventListener('load', function() {
-                            this.classList.add('loaded');
-                        });
-                    });
                 });
             </script>
         <?php else : ?>

@@ -21,7 +21,7 @@ function processContent($content, $title) {
             $src = $matches[1];
             // 简单的 URL 验证
             if (filter_var($src, FILTER_VALIDATE_URL)) {
-                return '<a data-fancybox data-src="' . htmlspecialchars($src) . '" class="index-img"><img data-src="' . htmlspecialchars($src) . '" loading="lazy" alt="' . htmlspecialchars($title) . '" title="点击查看大图"></a>';
+                return '<a data-fancybox data-src="' . htmlspecialchars($src) . '" class="index-img"><img data-src="' . htmlspecialchars($src) . '" src="' . htmlspecialchars($src) . '" loading="lazy" alt="' . htmlspecialchars($title) . '" title="点击查看大图"></a>';
             }
         }
         // 如果匹配失败或 URL 无效，返回原始的 img 标签
