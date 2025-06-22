@@ -26,18 +26,9 @@
 <?php endif; ?>
 
 <?php if ($this->is('page') || $this->is('post')) : ?>
-  <?php
-    $cdnUrl = $this->options->JAssetsURL;
-    $getThemeUrl = function($path) use ($cdnUrl) {
-      if (!empty($cdnUrl)) {
-        return rtrim($cdnUrl, '/') . '/' . ltrim($path, '/');
-      }
-      return Typecho_Common::url($path, $this->options->themeUrl);
-    };
-  ?>
-  <link href="<?php echo $getThemeUrl('assets/css/buyu.APlayer.css'); ?>" rel="stylesheet" >
-  <script src="<?php echo $getThemeUrl('assets/js/buyu.APlayer.js'); ?>"></script>
-  <script src="<?php echo $getThemeUrl('assets/js/buyu.DPlayer.js'); ?>"></script>
+  <link href="<?php echo get_theme_url('assets/css/buyu.APlayer.css'); ?>" rel="stylesheet" >
+  <script src="<?php echo get_theme_url('assets/js/buyu.APlayer.js'); ?>"></script>
+  <script src="<?php echo get_theme_url('assets/js/buyu.DPlayer.js'); ?>"></script>
   <div class="col-mb-12 col-8" id="main" role="main">
     <article class="post">
         <h1 class="post-title" itemprop="name headline">

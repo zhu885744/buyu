@@ -12,22 +12,27 @@ class Intercept
     {
         error_log("Intercept::message function is called.");
         // 判断用户评论内容是否超过了最大字数限制
-        if (Helper::options()->JTextLimit && mb_strlen($comment['text'], 'UTF-8') > Helper::options()->JTextLimit) {
-            throw new Typecho_Widget_Exception('评论内容超过了最大字数限制，请缩短评论字数后再提交', 403);
-        } else {
-            // 判断评论内容是否包含敏感词
-            if (Helper::options()->JSensitiveWords) {
-                if (_checkSensitiveWords(Helper::options()->JSensitiveWords, $comment['text'])) {
-                    $comment['status'] = 'waiting';
-                }
-            }
-            // 判断评论是否至少包含一个中文
-            if (Helper::options()->JLimitOneChinese === "on") {
-                if (preg_match("/[\x{4e00}-\x{9fa5}]/u", $comment['text']) == 0) {
-                    $comment['status'] = 'waiting';
-                }
+        if (Helper::options()->JTextLimit) {
+            // 准确计算包含emoji和颜文字的评论内容的长度
+            $contentLength = mb_strlen(preg_replace('/[\x{1F600}-\x{1F64F}\x{1F300}-\x{1F5FF}\x{1F680}-\x{1F6FF}\x{1F1E0}-\x{1F1FF}]/u', 'x', $comment['text']), 'UTF-8');
+            if ($contentLength > Helper::options()->JTextLimit) {
+                throw new Typecho_Widget_Exception('评论内容超过了最大字数限制，请缩短评论字数', 403);
             }
         }
+
+        // 判断评论内容是否包含敏感词
+        if (Helper::options()->JSensitiveWords) {
+            if (_checkSensitiveWords(Helper::options()->JSensitiveWords, $comment['text'])) {
+                $comment['status'] = 'waiting';
+            }
+        }
+        // 判断评论是否至少包含一个中文
+        if (Helper::options()->JLimitOneChinese === "on") {
+            if (preg_match("/[\x{4e00}-\x{9fa5}]/u", $comment['text']) == 0) {
+                $comment['status'] = 'waiting';
+            }
+        }
+
         Typecho_Cookie::delete('__typecho_remember_text');
         return $comment;
     }

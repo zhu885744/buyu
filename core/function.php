@@ -5,6 +5,16 @@ function _getVersion()
   return "v1.2.9";
 };
 
+// 定义全局函数 get_theme_url 用于获取静态资源 URL
+function get_theme_url($path) {
+    $options = Typecho_Widget::widget('Widget_Options');
+    $cdnUrl = $options->JAssetsURL;
+    if (!empty($cdnUrl)) {
+        return rtrim($cdnUrl, '/') . '/' . ltrim($path, '/');
+    }
+    return Typecho_Common::url($path, $options->themeUrl);
+}
+
 //给文章每个超链接点击后新窗口打开，原理就是用正则替换文章内容
 function a_class_replace($content){
   $content = preg_replace('#<a(.*?) href="([^"]*/)?(([^"/]*)\.[^"]*)"(.*?)>#',

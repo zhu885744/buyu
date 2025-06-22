@@ -34,17 +34,8 @@
   </div>
 </footer>
 <i class="fa fa-arrow-up" id="backToTop"></i>
-<?php
-$cdnUrl = $this->options->JAssetsURL;
-$getThemeUrl = function($path) use ($cdnUrl) {
-    if (!empty($cdnUrl)) {
-        return rtrim($cdnUrl, '/') . '/' . ltrim($path, '/');
-    }
-    return Typecho_Common::url($path, $this->options->themeUrl);
-};
-?>
-<script src="<?php echo $getThemeUrl('assets/js/buyu.style.js'); ?>"></script>
-<script src="<?php echo $getThemeUrl('assets/js/buyu.fancybox.js'); ?>"></script>
+<script src="<?php echo get_theme_url('assets/js/buyu.style.js'); ?>"></script>
+<script src="<?php echo get_theme_url('assets/js/buyu.fancybox.js'); ?>"></script>
 <script type="text/javascript">
   //自定义js
   <?php echo $this->options->JCustomScript(); ?>

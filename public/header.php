@@ -12,20 +12,11 @@
             'tag'       =>  _t('标签 %s 下的文章'),
             'author'    =>  _t('%s的个人主页')
         ), '', ' - ');?><?php if($this->getCurrentPage()>1) _e("第 %d 页-", $this->getCurrentPage());?><?php $this->options->title();?></title>
-    <?php
-    $cdnUrl = $this->options->JAssetsURL;
-    $getThemeUrl = function($path) use ($cdnUrl) {
-        if (!empty($cdnUrl)) {
-            return rtrim($cdnUrl, '/') . '/' . ltrim($path, '/');
-        }
-        return Typecho_Common::url($path, $this->options->themeUrl);
-    };
-    ?>
-    <link rel="stylesheet" href="<?php echo $getThemeUrl('assets/css/buyu.grid.css');?>">
-    <link rel="stylesheet" href="<?php echo $getThemeUrl('assets/css/buyu.style.css');?>">
-    <link rel="stylesheet" href="<?php echo $getThemeUrl('assets/font-awesome/font-awesome.min.css');?>">
-    <link href="<?php echo $getThemeUrl('assets/css/buyu.fancybox.css'); ?>" rel="stylesheet">
-    <script src="<?php echo $getThemeUrl('assets/js/buyu.message.js'); ?>"></script>
+    <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.grid.css');?>">
+    <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.style.css');?>">
+    <link rel="stylesheet" href="<?php echo get_theme_url('assets/font-awesome/font-awesome.min.css');?>">
+    <link href="<?php echo get_theme_url('assets/css/buyu.fancybox.css'); ?>" rel="stylesheet">
+    <script src="<?php echo get_theme_url('assets/js/buyu.message.js'); ?>"></script>
     <style type="text/css">
       <?php $this->options->CustomCSS(); ?>
     </style>

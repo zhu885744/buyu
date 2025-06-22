@@ -131,7 +131,7 @@ $_db = Typecho_Db::get();
     NULL,
     NULL,
     '限制用户评论最大字数',
-    '介绍：如果用户评论的内容超出字数限制，则将会把评论置为评论失败状态 <br />
+    '介绍：如果用户评论的内容超出字数限制，则将会把发送评论按钮置为失败禁止点击状态 <br />
          其他：请输入数字格式，不填写则不限制'
   );
   $JTextLimit->setAttribute('class', 'buyu_content buyu_comments');

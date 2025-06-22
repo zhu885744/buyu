@@ -19,9 +19,6 @@ function themeInit($archive){
     if ($archive->is('author')) {
         $archive->parameter->pageSize = 6; // 作者页面每6篇文章分页一次
     }
-    if ($archive->is('category','av')) {
-        $archive->parameter->pageSize = 6; // 分类缩略名为av的分类列表每6篇文章分页一次
-    }
     $archive->content = a_class_replace($archive->content);//文章内容，让a_class_replace函数处理
     
     // 过滤短代码的正则表达式，可根据实际情况修改

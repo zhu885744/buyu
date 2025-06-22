@@ -4,21 +4,15 @@ $isHidden = $this->hidden;
 $allowComment = $this->allow('comment');
 $commentStatus = $this->options->JCommentStatus;
 $userHasLogin = $this->user->hasLogin();
-//自定义静态资源
-$cdnUrl = $this->options->JAssetsURL;
-$getThemeUrl = function($path) use ($cdnUrl) {
-  if (!empty($cdnUrl)) {
-    return rtrim($cdnUrl, '/') . '/' . ltrim($path, '/');
-  }
-  return Typecho_Common::url($path, $this->options->themeUrl);
-};
+// 获取最大评论字数
+$maxCommentLength = Helper::options()->JTextLimit;
 ?>
 <div id="comments">
     <?php if ($isHidden) : ?>
         <span>当前文章受密码保护，无法评论</span>
     <?php else : ?>
         <?php if ($allowComment && $commentStatus !== "off") : ?>
-            <link rel="stylesheet" href="<?php echo $getThemeUrl('assets/css/buyu.OwO.css'); ?>">
+            <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.OwO.css'); ?>">
             <h2>发表评论（<?php $this->commentsNum(_t('暂无评论'), _t('仅有 1 条评论'), _t('已有 %d 条评论')); ?>）</h2>
             <h4>本站使用 Cookie 技术保留您的个人信息以便您下次快速评论</h4>
             <div id="<?php $this->respondId(); ?>">
@@ -41,6 +35,8 @@ $getThemeUrl = function($path) use ($cdnUrl) {
                     <div class="mb-3">
                         <label for="textarea" class="required"><?php _e('内容'); ?></label>
                         <textarea class="form-control OwO-textarea" rows="8" name="text" id="textarea" placeholder="善语结善缘，恶语伤人心..." required><?php $this->remember('text'); ?></textarea>
+                        <!-- 添加字数提示元素 -->
+                        <div id="comment-word-count" style="font-size: 12px; color: #666;"></div>
                         <div class="OwO"></div>
                     </div>
                     <input type="hidden" name="remember" value="1">
@@ -49,7 +45,7 @@ $getThemeUrl = function($path) use ($cdnUrl) {
                     </div>
                 </form>
             </div>
-            
+
             <div class="listComments">
                 <?php if ($comments->have()) : ?>
                     <ol class="comment-list">
@@ -57,18 +53,45 @@ $getThemeUrl = function($path) use ($cdnUrl) {
                     </ol>
                 <?php endif; ?>
             </div>
-            
-            <script src="<?php echo $getThemeUrl('assets/js/buyu.OwO.js'); ?>"></script>
+
+            <script src="<?php echo get_theme_url('assets/js/buyu.OwO.js'); ?>"></script>
             <script type="text/javascript">
                 document.addEventListener("DOMContentLoaded", function () {
+                    const textarea = document.getElementById('textarea');
+                    const wordCountElement = document.getElementById('comment-word-count');
+                    const submitButton = document.getElementById('comment-submit-button');
+                    const maxLength = <?php echo $maxCommentLength ? $maxCommentLength : 'Infinity'; ?>;
+
+                    // 仅在 maxLength 不是 Infinity 时添加 input 事件监听器
+                    if (maxLength!== Infinity) {
+                        textarea.addEventListener('input', function () {
+                            console.log('Input event triggered');
+                            const currentLength = Array.from(textarea.value).length;
+                            if (currentLength > maxLength) {
+                                wordCountElement.textContent = `当前字数：${currentLength}，您已超出 ${currentLength - maxLength} 个字，请缩短评论字数`;
+                                wordCountElement.style.color = 'red';
+                                submitButton.disabled = true; // 禁用发送评论按钮
+                                submitButton.style.opacity = 0.5; // 降低按钮透明度
+                            } else {
+                                wordCountElement.textContent = `当前字数：${currentLength}，您还可以输入 ${maxLength - currentLength} 个字`;
+                                wordCountElement.style.color = '#666';
+                                submitButton.disabled = false; // 启用发送评论按钮
+                                submitButton.style.opacity = 1; // 恢复按钮透明度
+                            }
+                        });
+                    } else {
+                        // 如果没有字数限制，显示当前字数
+                        textarea.addEventListener('input', function () {
+                            const currentLength = Array.from(textarea.value).length;
+                            wordCountElement.textContent = `当前字数：${currentLength}`;
+                        });
+                    }
+
                     new OwO({
                         logo: 'OωO',
                         container: document.getElementsByClassName('OwO')[0],
                         target: document.getElementsByClassName('OwO-textarea')[0],
-                        api: '<?php echo $getThemeUrl('assets/json/OwO.json'); ?>',
-                        position: 'down',
-                        width: '100%',
-                        maxHeight: '250px'
+                        api: '<?php echo get_theme_url('assets/json/OwO.json'); ?>'
                     });
                 });
             </script>
@@ -85,7 +108,6 @@ function threadedComments($comments, $options)
     if ($comments->authorId) {
         $commentClass .= $comments->authorId == $comments->ownerId ? ' comment-by-author' : ' comment-by-user';
     }
-
     $commentLevelClass = $comments->_levels > 0 ? ' comment-child' : ' comment-parent';  //评论层数大于0为子级，否则是父级
 ?>
 
@@ -107,7 +129,7 @@ function threadedComments($comments, $options)
         <div class="comment-content">
             <?php $comments->content(); ?>
         </div>
-        <?php if ('waiting' == $comments->status) : ?><span class="badge">待审核</span><?php endif; ?>
+        <?php if ('waiting' == $comments->status) { ?><span class="badge" style="color: #3354AA;">待审核</span><?php } ?>
         <span class="badge" style="color: #3354AA;"><?php echo convertip($comments->ip); ?></span>
     </div>
     <?php if ($comments->children) : ?>
