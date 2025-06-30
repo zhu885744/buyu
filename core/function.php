@@ -31,7 +31,7 @@ function processContent($content, $title) {
             $src = $matches[1];
             // 简单的 URL 验证
             if (filter_var($src, FILTER_VALIDATE_URL)) {
-                return '<a data-fancybox data-src="' . htmlspecialchars($src) . '" class="index-img"><img data-src="' . htmlspecialchars($src) . '" src="' . htmlspecialchars($src) . '" loading="lazy" alt="' . htmlspecialchars($title) . '" title="点击查看大图"></a>';
+                return '<a data-fancybox="gallery" data-src="' . htmlspecialchars($src) . '" class="index-img"><img data-src="' . htmlspecialchars($src) . '" src="' . htmlspecialchars($src) . '" loading="lazy" alt="' . htmlspecialchars($title) . '" title="点击查看大图"></a>';
             }
         }
         // 如果匹配失败或 URL 无效，返回原始的 img 标签
@@ -48,8 +48,17 @@ if (isset($_GET['action']) && ($_GET['action'] == 'like' || $_GET['action'] == '
     // 简单IP限制
     if ($_GET['action'] == 'like') {
         session_start();
-        $ip = $_SERVER['REMOTE_ADDR'];
-        $key = 'like_' . $cid . '_' . md5($ip);
+        $user = Typecho_Widget::widget('Widget_User');
+        if ($user->hasLogin()) {
+            // 登录用户使用 uid 记录点赞状态
+            $uid = $user->uid;
+            $key = 'like_' . $cid . '_' . $uid;
+        } else {
+            // 未登录用户使用 IP 记录点赞状态
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $key = 'like_' . $cid . '_' . md5($ip);
+        }
+
         if (isset($_SESSION[$key])) {
             header('Content-Type: application/json');
             echo json_encode(['success'=>false, 'msg'=>'您已经点过赞啦！']);
@@ -363,8 +372,15 @@ function video_shortcode($atts) {
         'src' => '',          // 视频地址
         'poster' => '',       // 视频封面
         'width' => '100%',    // 视频宽度
-        'height' => '100%',  // 视频高度
-        'autoplay' => 'false' // 是否自动播放
+        'height' => '100%',   // 视频高度
+        'autoplay' => 'false',// 是否自动播放
+        'loop' => 'false',    // 是否循环播放
+        'preload' => 'auto',  // 预加载策略
+        'lang' => 'zh-cn',    // 语言设置
+        'mutex' => 'true',    // 是否互斥播放
+        'theme' => '#b7daff', // 主题颜色
+        'hotkey' => 'true',   // 是否启用热键
+        'volume' => 0.7       // 音量大小
     );
     $atts = array_merge($default_atts, $atts);
 
@@ -377,12 +393,19 @@ function video_shortcode($atts) {
     $containerId = 'dplayer-' . uniqid();
 
     // 构建 DPlayer 播放器的 HTML 和 JavaScript
-    return '<div id="' . $containerId . '" style="width: ' . htmlspecialchars($atts['width'], ENT_QUOTES) . '; height: ' . htmlspecialchars($atts['height'], ENT_QUOTES) . ';"></div>
+    $html = '<div id="' . $containerId . '" style="width: ' . htmlspecialchars($atts['width'], ENT_QUOTES) . '; height: ' . htmlspecialchars($atts['height'], ENT_QUOTES) . ';"></div>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const dp = new DPlayer({
                 container: document.getElementById("' . $containerId . '"),
                 autoplay: ' . ($atts['autoplay'] === 'true' ? 'true' : 'false') . ',
+                loop: ' . ($atts['loop'] === 'true' ? 'true' : 'false') . ',
+                preload: "' . htmlspecialchars($atts['preload'], ENT_QUOTES) . '",
+                lang: "' . htmlspecialchars($atts['lang'], ENT_QUOTES) . '",
+                mutex: ' . ($atts['mutex'] === 'true' ? 'true' : 'false') . ',
+                theme: "' . htmlspecialchars($atts['theme'], ENT_QUOTES) . '",
+                hotkey: ' . ($atts['hotkey'] === 'true' ? 'true' : 'false') . ',
+                volume: ' . floatval($atts['volume']) . ',
                 video: {
                     url: "' . htmlspecialchars($atts['src'], ENT_QUOTES) . '",
                     pic: "' . htmlspecialchars($atts['poster'], ENT_QUOTES) . '"
@@ -390,6 +413,8 @@ function video_shortcode($atts) {
             });
         });
     </script>';
+
+    return $html;
 }
 
 // 音频短代码处理函数
@@ -427,9 +452,17 @@ function audio_shortcode($atts) {
 // 短代码解析函数
 function parse_shortcodes($content) {
     $shortcodes = array(
-        'video' => 'video_shortcode',//音频短代码
-        'audio' => 'audio_shortcode'//视频短代码
+        'video' => 'video_shortcode',// 视频短代码
+        'audio' => 'audio_shortcode'// 音频短代码
     );
+
+    // 存储 <pre style="position: relative;"><code> 标签内的内容及其占位符
+    $pre_code_blocks = [];
+    $content = preg_replace_callback('/<pre(?: [^>]*)?><code(?: [^>]*)?>([\s\S]*?)<\/code><\/pre>/i', function ($matches) use (&$pre_code_blocks) {
+        $placeholder = 'PRE_CODE_BLOCK_' . count($pre_code_blocks);
+        $pre_code_blocks[$placeholder] = $matches[0];
+        return $placeholder;
+    }, $content);
 
     foreach ($shortcodes as $tag => $function) {
         $pattern = '/\['.$tag.'(.*?)\]/is';
@@ -449,6 +482,12 @@ function parse_shortcodes($content) {
             }
         }
     }
+
+    // 将占位符换回原始 <pre><code> 标签内的内容
+    foreach ($pre_code_blocks as $placeholder => $pre_code_block) {
+        $content = str_replace($placeholder, $pre_code_block, $content);
+    }
+
     return $content;
 }
 

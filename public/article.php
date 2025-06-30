@@ -1,5 +1,5 @@
 <?php if ($this->is('index')) : ?>
-  <div class="col-mb-12 col-8" id="main" role="main">
+  <div class="col-mb-12 col-12" id="main" role="main">
     <?php while ($this->next()): ?>
       <article class="post">
         <h2 class="post-title" itemprop="name headline">
@@ -29,7 +29,7 @@
   <link href="<?php echo get_theme_url('assets/css/buyu.APlayer.css'); ?>" rel="stylesheet" >
   <script src="<?php echo get_theme_url('assets/js/buyu.APlayer.js'); ?>"></script>
   <script src="<?php echo get_theme_url('assets/js/buyu.DPlayer.js'); ?>"></script>
-  <div class="col-mb-12 col-8" id="main" role="main">
+  <div class="col-mb-12 col-12" id="main" role="main">
     <article class="post">
         <h1 class="post-title" itemprop="name headline">
           <?php $this->title() ?>
@@ -62,9 +62,7 @@
           <?php echo processContent($this->content, $this->title); ?>
           <?php endif;?>
         </div>
-        <?php if ($this->is('post')) : ?>
-          <p itemprop="keywords" class="tags"><?php _e('标签: '); ?><?php $this->tags(', ', true, 'none'); ?></p>
-        <?php endif; ?>
+        <?php $this->need('public/copyright.php'); ?>
         <div class="post-button" style="text-align: center;">
           <?php if ($this->options->like!== "off") :?>
             <button class="post-bth" id="like" data-cid="<?php $this->cid(); ?>" data-like-url="<?php echo Helper::options()->index; ?>?action=like" data-get-like-url="<?php echo Helper::options()->index; ?>?action=get_like">

@@ -6,19 +6,6 @@ use Typecho\Widget\Helper\Form\Element\Checkbox;
 use Typecho\Widget\Helper\Form\Element\Textarea;
 /* buyu主题核心文件 */
 require_once("core/core.php");
-
-// 自定义函数，用于获取 CSS 文件的 URL
-function get_css_url($file_name) {
-  $options = Typecho_Widget::widget('Widget_Options');
-  return $options->themeUrl('assets/typecho/config/css/' . $file_name);
-}
-
-// 自定义函数，用于获取 JS 文件的 URL
-function get_js_url($file_name) {
-  $options = Typecho_Widget::widget('Widget_Options');
-  return $options->themeUrl('assets/typecho/config/js/' . $file_name);
-}
-
 /**
  * 主题后台设置
 */
@@ -41,8 +28,8 @@ $_db = Typecho_Db::get();
   }
 ?>
 
-<link rel="stylesheet" href="<?php echo get_css_url('buyu.config.css'); ?>">
-<script src="<?php echo get_js_url('buyu.config.js'); ?>"></script>
+<link rel="stylesheet" href="<?php echo get_theme_url('assets/typecho/config/css/buyu.config.css'); ?>">
+<script src="<?php echo get_theme_url('assets/typecho/config/js/buyu.config.js'); ?>"></script>
 <div class="buyu_config">
   <div>
     <div class="buyu_config__aside">
@@ -105,12 +92,26 @@ $_db = Typecho_Db::get();
   $JCommentStatus->setAttribute('class', 'buyu_content buyu_comments');
   $form->addInput($JCommentStatus->multiMode());
   /* --------------------------------------- */
+  $JSensitiveWordsAction = new Typecho_Widget_Helper_Form_Element_Select(
+    'JSensitiveWordsAction',
+    array(
+        'none' => '无动作（默认）',
+        'waiting' => '标记为待审核',
+        'fail' => '评论失败'
+    ),
+    'none',
+    '评论敏感词操作',
+    '介绍：选择当评论中包含敏感词汇时的操作'
+  );
+  $JSensitiveWordsAction->setAttribute('class', 'buyu_content buyu_comments');
+  $form->addInput($JSensitiveWordsAction->multiMode());
+  /* --------------------------------------- */
   $JSensitiveWords = new Typecho_Widget_Helper_Form_Element_Textarea(
     'JSensitiveWords',
     NULL,
     '你妈死了 || 傻逼 || 推广 || 群发 || 广告',
     '评论敏感词（非必填）',
-    '介绍：用于设置评论敏感词汇，如果用户评论包含这些词汇，则将会把评论置为审核状态'
+    '介绍：用于设置评论敏感词汇，如果用户评论包含这些词汇，则将会把评论设置为待审核状态<br>示例：你妈死了 || 傻逼 || 推广 || 群发 || 广告<br>注意：多个词汇中间请用 || 符号间隔'
   );
   $JSensitiveWords->setAttribute('class', 'buyu_content buyu_comments');
   $form->addInput($JSensitiveWords);
@@ -120,7 +121,7 @@ $_db = Typecho_Db::get();
     array('off' => '关闭（默认）', 'on' => '开启'),
     'off',
     '是否开启评论至少包含一个中文',
-    '介绍：开启后如果评论内容未包含一个中文，则将会把评论置为审核状态 <br />
+    '介绍：开启后如果评论内容未包含一个中文，则将会把评论设置为待审核状态 <br />
          其他：用于屏蔽国外机器人刷的全英文垃圾广告信息'
   );
   $JLimitOneChinese->setAttribute('class', 'buyu_content buyu_comments');

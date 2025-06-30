@@ -91,7 +91,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
 .index{width: 400px;margin: 0 auto;padding-bottom: 100px;}
 .index-img{width: 100%;height:210px;margin-top:100px;}
 /*object-fit: cover;解决图片指定大小被压缩问题*/
-.index-img>img{width: 100%;height: 100%;object-fit: cover;}
+.index-img>img{height: 100%;object-fit: cover;}
 
 /* Special link style */
 .post-meta a,
@@ -370,6 +370,129 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
   visibility: visible;
 }
 
+/* 文章版权信息区域样式 */
+.buyu_detail__copyright {
+  border-radius: 8px;
+  margin: 24px 0;
+  border: var(--border-width) solid var(--border-color);
+}
+
+.buyu_detail__copyright .content {
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 6px;
+  border-left: 3px solid #165DFF;
+}
+
+.buyu_detail__copyright .content .item {
+  /* 基础文本样式 */
+  color: #6c757d;
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: break-word;
+  
+  /* 布局与对齐 */
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  
+  /* 文本溢出处理 - 单行显示省略号 */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  
+  /* 可选：多行溢出处理（取消注释并调整行数）
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  */
+}
+
+/* 优化图标与文本间距 */
+.buyu_detail__copyright .content .item svg {
+  margin-right: 8px;
+}
+
+/* 为文本内容单独设置溢出规则（更精准控制） */
+.buyu_detail__copyright .content .item .text {
+  flex: 1; /* 文本自动填充剩余空间 */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  
+  /* 多行溢出时取消注释以下代码 */
+  /* display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal; */
+}
+
+.buyu_detail__copyright .content .item:last-child {
+  margin-bottom: 0;
+}
+
+.buyu_detail__copyright .content .item .icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  color: #165DFF;
+  flex-shrink: 0;
+}
+
+.buyu_detail__copyright .content .item .link {
+  color: #6c757d;
+  transition: color 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.buyu_detail__copyright .content .item .link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: #165DFF;
+  transition: width 0.3s ease;
+}
+
+.buyu_detail__copyright .content .item .link:hover {
+  color: #165DFF;
+}
+
+.buyu_detail__copyright .content .item .link:hover::after {
+  width: 100%;
+}
+
+.buyu_detail__copyright .content .item {
+  color: #6c757d;
+  margin-bottom: 8px;
+  word-break: break-word;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.buyu_detail__copyright .content .item i {
+  margin-right: 8px;
+  font-size: 16px; /* 图标大小略大于文本 */
+}
+
+.buyu_detail__copyright .content .item .text {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 /* ----------- */
 /* 整体评论容器 */
 /* ----------- */
@@ -574,29 +697,51 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
 /* 文章底部按钮 */
 .post-button {
   text-align: center;
+  margin-top: 20px;
 }
 
 .post-bth {
   display: inline-block;
-  padding: 5px 15px;
-  font-size: 14px;
+  padding: 8px 20px;
+  font-size: 15px;
+  font-weight: 500;
   cursor: pointer;
   text-align: center;
   text-decoration: none;
-  outline: none;
-  color: #fff;
-  background-color: #4CAF50;
-  border: none;
+  color: #6c757d;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
   border-radius: 4px;
-  box-shadow: 0 9px #999;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+  margin: 0 1px;
 }
 
-.post-bth:hover {background-color: #3e8e41}
+.post-bth:hover {
+  background-color: #f1f1f1;
+  border-color: #ccc;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
 
 .post-bth:active {
-  background-color: #3e8e41;
-  box-shadow: 0 5px #666;
-  transform: translateY(4px);
+  background-color: #e9ecef;
+  border-color: #bbb;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  transform: translateY(1px);
+}
+
+/* 点赞按钮与分享按钮风格统一 */
+#like, #share {
+  color: #6c757d;
+  border-color: #ddd;
+}
+
+#like:hover, #share:hover {
+  background-color: #f1f1f1;
+}
+
+#like:active, #share:active {
+  background-color: #e9ecef;
 }
 
 /* 任务列表样式 */
@@ -688,7 +833,7 @@ img{transition: all 0.5s;-moz-transition: all 0.5s;	/* Firefox 4 */-webkit-trans
 
 .post-content img {
   border-radius: 4px; /* 减小圆角半径 */
-  margin: 6px 0; /* 减小边距 */
+  /* margin: 6px 0; */ /* 减小边距 */
   max-width: 100%;
   height: auto;
 }
@@ -1005,6 +1150,10 @@ img.alignright {
   .post-title,
   .post-meta {
     text-align: center;
+  }
+
+  .buyu_detail__copyright .content .item i {
+    font-size: 14px; /* 小屏幕图标大小 */
   }
 }
 

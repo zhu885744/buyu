@@ -1,7 +1,7 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
 <?php $this->need('public/header.php'); ?>
 
-<div class="col-mb-12 col-8" id="main" role="main">
+<div class="col-mb-12 col-12" id="main" role="main">
     <h3 class="archive-title"><?php $this->archiveTitle([
             'category' => _t('分类「 %s 」下的文章'),
             'search'   => _t('搜索到包含关键字「 %s 」的文章'),

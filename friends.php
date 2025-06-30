@@ -9,7 +9,7 @@ if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 $this->need('public/header.php');
 ?>
 
-<div class="col-mb-12 col-8" id="main" role="main">
+<div class="col-mb-12 col-12" id="main" role="main">
     <article class="post">
         <h1 class="post-title" itemprop="name headline">
           <?php $this->title() ?>
