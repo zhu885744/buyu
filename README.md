@@ -27,43 +27,6 @@
 1. **下载数据库**：访问 [qqwry.dat](https://chuying.lanzoue.com/iONdb20g22ud) 下载 IP 属地本地数据库压缩包。
 2. **解压并放置**：将下载好的压缩包解压为 `qqwry.dat` 文件，并将其放置在 Typecho 程序的根目录。
 
-## 常见问题
-<details><summary>请确保您符合使用条件：</summary>
-typecho版本：1.2.1
-php版本：7.4-8.1
-</details>
-
-<details><summary>打开主题后页面空白：</summary>
-检查插件冲突：进入 Typecho 后台的「插件」页面，依次禁用插件，然后刷新页面，排查是哪个插件导致的冲突。
-检查静态资源引用：检查主题文件中是否存在重复引用的静态资源，如 CSS、JS 文件等，删除重复引用的部分。
-</details>
-
-<details><summary>如何使用短代码？</summary>
-```
-视频短代码
-----------------
-默认不自动播放
-[video src="视频链接" poster="视频封面"]
-默认自动播放
-[video src="视频链接" poster="视频封面" autoplay="true"]
-----------------
-音频短代码
-[audio name="音频名称" artist="音频作者" url="音频链接" cover="音频封面链接"]
-----------------
-折叠面板短代码
-<details><summary>标题</summary>
-内容
-</details>
-
-任务列表（Task List）
-- [x] 已完成
-- [ ] 未完成
-- [ ] 未完成
-```
-</details>
-
-
-
 ## 更新日志
 [1.2.9] 更新内容如下
 - 新增：文章版权信息提示
