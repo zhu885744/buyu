@@ -101,37 +101,65 @@ $maxCommentLength = Helper::options()->JTextLimit;
     <?php endif; ?>
 </div>
 
+/**
+ * 递归渲染嵌套评论列表
+ *
+ * 该函数用于递归渲染评论列表，支持嵌套评论显示。会根据评论作者身份和评论层级添加不同的 CSS 类，
+ * 并显示评论的作者信息、发布时间、回复按钮、评论内容、审核状态和 IP 地址。
+ *
+ * @param object $comments 当前评论对象，包含评论的各种信息
+ * @param array $options 评论显示的相关选项
+ */
 <?php
 function threadedComments($comments, $options)
 {
+    // 初始化评论的 CSS 类名
     $commentClass = '';
+    // 判断评论作者是否有用户 ID
     if ($comments->authorId) {
-        $commentClass .= $comments->authorId == $comments->ownerId ? ' comment-by-author' : ' comment-by-user';
+        // 如果评论作者是文章所有者，添加 'comment-by-author' 类，否则添加 'comment-by-user' 类
+        $commentClass .= $comments->authorId == $comments->ownerId? ' comment-by-author' : ' comment-by-user';
     }
-    $commentLevelClass = $comments->_levels > 0 ? ' comment-child' : ' comment-parent';  //评论层数大于0为子级，否则是父级
+    // 根据评论层级判断是子级评论还是父级评论，添加相应的 CSS 类
+    $commentLevelClass = $comments->_levels > 0? ' comment-child' : ' comment-parent';  // 评论层数大于0为子级，否则是父级
 ?>
 
+<!-- 评论项容器，使用评论 ID 作为唯一标识，并添加评论层级和作者相关的 CSS 类 -->
 <li id="li-<?php $comments->theId(); ?>" class="comment-body<?php echo $commentLevelClass . $commentClass; ?>">
+    <!-- 单个评论的主要内容容器，使用评论 ID 作为唯一标识 -->
     <div id="<?php $comments->theId(); ?>">
+        <!-- 评论作者信息区域 -->
         <div class="comment-author">
-            <?php $comments->gravatar('40', ''); ?>
+            <!-- 显示评论作者的头像，尺寸为 40px，使用懒加载 -->
+            <?php $comments->gravatar('40', '', '', '', ['loading' => 'lazy']); ?>
+            <!-- 评论作者姓名区域 -->
             <cite class="fn">
+                <!-- 显示评论作者姓名 -->
                 <?php $comments->author(); ?>
+                <!-- 如果评论作者是文章所有者，显示 '博主' 徽章 -->
                 <?php if ($comments->authorId == $comments->ownerId) : ?>
                     <span class="comment-badge">博主</span>
                 <?php endif; ?>
             </cite>
         </div>
+        <!-- 评论元信息区域，包含评论发布时间和回复按钮 -->
         <div class="comment-meta">
+            <!-- 显示评论发布时间，格式为 'Y-m-d H:i' -->
             <cite class="fn"><?php $comments->date('Y-m-d H:i'); ?></cite>
+            <!-- 显示回复按钮 -->
             <span class="comment-reply"><?php $comments->reply(); ?></span>
         </div>
+        <!-- 评论内容区域 -->
         <div class="comment-content">
+            <!-- 显示评论内容 -->
             <?php $comments->content(); ?>
         </div>
-        <?php if ('waiting' == $comments->status) { ?><span class="badge" style="color: #3354AA;">待审核</span><?php } ?>
+        <!-- 如果评论状态为待审核，显示 '待审核' 徽章 -->
+        <?php if ('waiting' == $comments->status) {?><span class="badge" style="color: #3354AA;">待审核</span><?php } ?>
+        <!-- 显示评论者的 IP 地址，通过 convertip 函数处理 -->
         <span class="badge" style="color: #3354AA;"><?php echo convertip($comments->ip); ?></span>
     </div>
+    <!-- 如果当前评论有子评论，递归渲染子评论列表 -->
     <?php if ($comments->children) : ?>
         <div class="comment-children">
             <?php $comments->threadedComments($options); ?>

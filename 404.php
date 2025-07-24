@@ -6,8 +6,11 @@
       <p><?php _e('你想查看的页面已被隐藏或删除了, 要不要搜索看看？ '); ?></p>
       <form id="search" method="post" action="<?php $this->options->siteUrl();?>" role="search">
         <label for="s" class="sr-only"><?php _e('搜索关键字');?></label>
-        <input type="text" id="s" name="s" class="text" placeholder="<?php _e('输入关键字搜索');?>"/>
+        <!-- 添加 autocomplete 属性，提升性能 -->
+        <input type="text" id="s" name="s" class="text" placeholder="<?php _e('输入关键字搜索');?>" autocomplete="off"/>
       </form>
+      <!-- 添加返回首页链接，提升用户体验 -->
+      <p><a class="post-bth" href="<?php $this->options->siteUrl();?>"><?php _e('返回首页'); ?></a></p>
     </div>
   </div>
 <?php $this->need('public/footer.php'); ?>

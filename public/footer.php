@@ -5,11 +5,13 @@
 </div>
 
 <footer id="footer" role="contentinfo">
+  <!-- 主题设置自定义底部栏内容 -->
   <?php if ($this->options->JFooter_Left()): ?>
     <div class="item">
       <?php echo $this->options->JFooter_Left(); ?>
     </div>   
-  <?php endif; ?>  
+  <?php endif; ?>
+  <!-- 主题设置自定义icp备案号 -->
   <?php if ($this->options->ICPbeian): ?>
     <div class="item">
       <a href="http://beian.miit.gov.cn" class="icpnum" target="_blank" rel="noopener noreferrer">
@@ -17,6 +19,7 @@
       </a>
     </div>    
   <?php endif; ?>
+  <!-- 主题设置自定义公安联网备案号 -->
   <?php if ($this->options->gonganbeian): ?>
     <div class="item">
       <a href="https://beian.mps.gov.cn/#/query/webSearch" class="icpnum" target="_blank" rel="noopener noreferrer">
@@ -37,10 +40,11 @@
 <script src="<?php echo get_theme_url('assets/js/buyu.style.js'); ?>"></script>
 <script src="<?php echo get_theme_url('assets/js/buyu.fancybox.js'); ?>"></script>
 <script type="text/javascript">
-  //自定义js
+  // 主题设置自定义js
   <?php echo $this->options->JCustomScript(); ?>
 </script>
 <?php $this->footer(); ?>
+<!-- 主题设置底部自定义内容 -->
 <?php if ($this->options->CustomContent): ?>
   <?php echo $this->options->CustomContent(); ?>
 <?php endif; ?>

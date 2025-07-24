@@ -13,9 +13,19 @@
       </span>
     </div>
     <div class="item">
-      <i class="fa fa-tags fa-1x" style="color: #3e1cff;"></i>
+      <i class="fa fa-tags fa-1x" style="color:#3e1cff;"></i>
       <span>文章标签：</span>
-      <span class="text"><?php $this->tags(',', true, '无标签'); ?></span>
+      <span class="text">
+        <?php if ($this->tags): ?>
+          <?php foreach ($this->tags as $tag): ?>
+            <a href="<?php echo $tag['permalink']; ?>" class="link">
+              <?php echo $tag['name']; ?>
+            </a>
+          <?php endforeach; ?>
+          <?php else: ?>
+            无标签
+          <?php endif; ?>
+      </span>
     </div>
     <div class="item">
       <i class="fa fa-creative-commons fa-1x" style="color: #F3B243;"></i>
