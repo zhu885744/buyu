@@ -10,12 +10,13 @@ $this->need('public/header.php');
 ?>
 
 <div class="col-mb-12 col-12" id="main" role="main">
-    <article class="post">
-        <h1 class="post-title" itemprop="name headline">
+  <div class="post-cards">
+    <article class="post-card">
+        <h2 class="post-title" itemprop="name headline">
           <?php $this->title() ?>
-        </h1>
+        </h2>
         <ul class="post-meta">
-          <li><time datetime="<?php $this->date('c'); ?>" itemprop="datePublished"><?php $this->date(); ?></time></li>
+          <li><time datetime="<?php $this->date('c'); ?>" itemprop="datePublished"><?php echo time_ago($this->date); ?></time></li>
           <?php if ($this->options->JCommentStatus !== "off"): // 判断全局评论是否关闭 ?>
             <li><?php $this->commentsNum('无评论', '1 条评论', '%d 条评论'); ?></li>
           <?php endif; ?>
@@ -42,6 +43,7 @@ $this->need('public/header.php');
             </div>
         </div>
     </article>
+  </div>
     <?php $this->need('public/comments.php'); ?>
 </div><!-- end #main-->
 

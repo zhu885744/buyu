@@ -9,13 +9,19 @@ $maxCommentLength = Helper::options()->JTextLimit;
 ?>
 <div id="comments">
     <?php if ($isHidden) : ?>
-        <span>当前文章受密码保护，无法评论</span>
+      <div class="post-cards">
+        <div class="post-card">
+          <span>当前文章受密码保护，无法评论</span>
+        </div>
+      </div> 
     <?php else : ?>
         <?php if ($allowComment && $commentStatus !== "off") : ?>
-            <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.OwO.css'); ?>">
-            <h2>发表评论（<?php $this->commentsNum(_t('暂无评论'), _t('仅有 1 条评论'), _t('已有 %d 条评论')); ?>）</h2>
-            <h4>本站使用 Cookie 技术保留您的个人信息以便您下次快速评论</h4>
-            <div id="<?php $this->respondId(); ?>">
+          <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.OwO.css'); ?>">
+          <div class="post-cards">
+            <div class="post-card">
+              <span class="comment-title">发送评论（<?php $this->commentsNum(_t('暂无评论'), _t('仅有 1 条评论'), _t('已有 %d 条评论')); ?>）</span>
+              <span>本站使用 Cookie 技术保留您的个人信息</span>
+              <div id="<?php $this->respondId(); ?>">
                 <?php $comments->cancelReply(); ?>
                 <form method="post" action="<?php $this->commentUrl(); ?>" id="comment-form" role="form">
                     <div class="input-group">
@@ -44,63 +50,69 @@ $maxCommentLength = Helper::options()->JTextLimit;
                         <button type="submit" id="comment-submit-button" class="comment-submit-button">发送评论</button>
                     </div>
                 </form>
+              </div>
             </div>
+          </div>
 
-            <div class="listComments">
-                <?php if ($comments->have()) : ?>
-                    <ol class="comment-list">
-                        <?php $comments->listComments(); ?>
-                    </ol>
-                <?php endif; ?>
-            </div>
+          <div class="listComments">
+            <?php if ($comments->have()) : ?>
+              <ol class="comment-list">
+                <?php $comments->listComments(); ?>
+              </ol>
+            <?php endif; ?>
+          </div>
 
-            <script src="<?php echo get_theme_url('assets/js/buyu.OwO.js'); ?>"></script>
-            <script type="text/javascript">
-                document.addEventListener("DOMContentLoaded", function () {
-                    const textarea = document.getElementById('textarea');
-                    const wordCountElement = document.getElementById('comment-word-count');
-                    const submitButton = document.getElementById('comment-submit-button');
-                    const maxLength = <?php echo $maxCommentLength ? $maxCommentLength : 'Infinity'; ?>;
+          <script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.OwO.js'); ?>"></script>
+          <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", function () {
+                const textarea = document.getElementById('textarea');
+                const wordCountElement = document.getElementById('comment-word-count');
+                const submitButton = document.getElementById('comment-submit-button');
+                const maxLength = <?php echo $maxCommentLength ? $maxCommentLength : 'Infinity'; ?>;
 
-                    // 仅在 maxLength 不是 Infinity 时添加 input 事件监听器
-                    if (maxLength!== Infinity) {
-                        textarea.addEventListener('input', function () {
-                            console.log('Input event triggered');
-                            const currentLength = Array.from(textarea.value).length;
-                            if (currentLength > maxLength) {
-                                wordCountElement.textContent = `当前字数：${currentLength}，您已超出 ${currentLength - maxLength} 个字，请缩短评论字数`;
-                                wordCountElement.style.color = 'red';
-                                submitButton.disabled = true; // 禁用发送评论按钮
-                                submitButton.style.opacity = 0.5; // 降低按钮透明度
-                            } else {
-                                wordCountElement.textContent = `当前字数：${currentLength}，您还可以输入 ${maxLength - currentLength} 个字`;
-                                wordCountElement.style.color = '#666';
-                                submitButton.disabled = false; // 启用发送评论按钮
-                                submitButton.style.opacity = 1; // 恢复按钮透明度
-                            }
-                        });
-                    } else {
-                        // 如果没有字数限制，显示当前字数
-                        textarea.addEventListener('input', function () {
-                            const currentLength = Array.from(textarea.value).length;
-                            wordCountElement.textContent = `当前字数：${currentLength}`;
-                        });
-                    }
-
-                    new OwO({
-                        logo: 'OωO',
-                        container: document.getElementsByClassName('OwO')[0],
-                        target: document.getElementsByClassName('OwO-textarea')[0],
-                        api: '<?php echo get_theme_url('assets/json/OwO.json'); ?>'
+                // 仅在 maxLength 不是 Infinity 时添加 input 事件监听器
+                if (maxLength!== Infinity) {
+                    textarea.addEventListener('input', function () {
+                        console.log('Input event triggered');
+                        const currentLength = Array.from(textarea.value).length;
+                        if (currentLength > maxLength) {
+                            wordCountElement.textContent = `当前字数：${currentLength}，您已超出 ${currentLength - maxLength} 个字，请缩短评论字数`;
+                            wordCountElement.style.color = 'red';
+                            submitButton.disabled = true; // 禁用发送评论按钮
+                            submitButton.style.opacity = 0.5; // 降低按钮透明度
+                        } else {
+                            wordCountElement.textContent = `当前字数：${currentLength}，您还可以输入 ${maxLength - currentLength} 个字`;
+                            wordCountElement.style.color = '#666';
+                            submitButton.disabled = false; // 启用发送评论按钮
+                            submitButton.style.opacity = 1; // 恢复按钮透明度
+                        }
                     });
+                } else {
+                    // 如果没有字数限制，显示当前字数
+                    textarea.addEventListener('input', function () {
+                        const currentLength = Array.from(textarea.value).length;
+                        wordCountElement.textContent = `当前字数：${currentLength}`;
+                    });
+                }
+
+                new OwO({
+                    logo: 'OωO',
+                    container: document.getElementsByClassName('OwO')[0],
+                    target: document.getElementsByClassName('OwO-textarea')[0],
+                    api: '<?php echo get_theme_url('assets/json/OwO.json'); ?>'
                 });
-            </script>
+            });
+        </script>
         <?php else : ?>
-            <span><?php echo $commentStatus === "off" ? '博主关闭了所有页面的评论' : '博主关闭了当前页面的评论'; ?></span>
+          <div class="post-cards">
+            <div class="post-card">
+              <span><?php echo $commentStatus === "off" ? '博主关闭了所有页面的评论' : '博主关闭了当前页面的评论'; ?></span>
+            </div>
+          </div>
         <?php endif; ?>
     <?php endif; ?>
-</div>
-
+  </div>
+<?php
 /**
  * 递归渲染嵌套评论列表
  *
@@ -110,7 +122,6 @@ $maxCommentLength = Helper::options()->JTextLimit;
  * @param object $comments 当前评论对象，包含评论的各种信息
  * @param array $options 评论显示的相关选项
  */
-<?php
 function threadedComments($comments, $options)
 {
     // 初始化评论的 CSS 类名
@@ -131,15 +142,13 @@ function threadedComments($comments, $options)
         <!-- 评论作者信息区域 -->
         <div class="comment-author">
             <!-- 显示评论作者的头像，尺寸为 40px，使用懒加载 -->
-            <?php $comments->gravatar('40', '', '', '', ['loading' => 'lazy']); ?>
+            <?php echo getGravatar($comments->mail, 40, '', '', true, ['class' => 'avatar', 'loading' => 'lazy']); ?>
             <!-- 评论作者姓名区域 -->
             <cite class="fn">
                 <!-- 显示评论作者姓名 -->
                 <?php $comments->author(); ?>
                 <!-- 如果评论作者是文章所有者，显示 '博主' 徽章 -->
-                <?php if ($comments->authorId == $comments->ownerId) : ?>
-                    <span class="comment-badge">博主</span>
-                <?php endif; ?>
+                <?php dengji($comments->mail);?>
             </cite>
         </div>
         <!-- 评论元信息区域，包含评论发布时间和回复按钮 -->

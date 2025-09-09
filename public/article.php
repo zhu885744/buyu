@@ -1,41 +1,55 @@
-<?php if ($this->is('index')) : ?>
+<?php if ($this->is('index')) : ?> 
   <div class="col-mb-12 col-12" id="main" role="main">
-    <?php while ($this->next()): ?>
-      <article class="post">
-        <h2 class="post-title" itemprop="name headline">
-          <a itemprop="url" href="<?php $this->permalink() ?>">
-            <?php $this->title() ?>
-          </a>
-        </h2>
-        <ul class="post-meta">
-          <li><time datetime="<?php $this->date('c'); ?>" itemprop="datePublished"><?php $this->date(); ?></time></li>
-          <?php if ($this->options->JCommentStatus !== "off"): // 判断全局评论是否关闭 ?>
-            <li><?php $this->commentsNum('无评论', '1 条评论', '%d 条评论'); ?></li>
-          <?php endif; ?>
-          <li><?php get_post_view($this) ?>次阅读</li>
-        </ul>
-        <p class="card-text"><?php $this->excerpt(200, '...'); ?></p>
-      </article>
-    <?php endwhile; ?>
+    <div class="post-cards">
+      <div class="post-card">
+        <form id="search" method="post" action="<?php $this->options->siteUrl(); ?>" role="search">
+          <input type="text" id="s" name="s" class="text" placeholder="<?php _e('输入关键字搜索'); ?>" />
+        </form>
+      </div>
+    </div> 
+    <div class="post-cards">
+      <?php while ($this->next()): ?>
+        <article class="post-card">
+          <h2 class="post-title" itemprop="name headline">
+            <a itemprop="url" href="<?php $this->permalink() ?>">
+              <?php $this->title() ?>
+            </a>
+          </h2>
+          <ul class="post-meta">
+            <li><time datetime="<?php $this->date('c'); ?>" itemprop="datePublished"><?php echo time_ago($this->date); ?></time></li>
+            <?php if ($this->options->JCommentStatus !== "off"): ?>
+              <li><?php $this->commentsNum('无评论', '1 条评论', '%d 条评论'); ?></li>
+            <?php endif; ?>
+            <li><?php get_post_view($this) ?>次阅读</li>
+          </ul>
+          <p class="card-text"><?php $this->excerpt(150, '...'); ?></p>
+        </article>
+      <?php endwhile; ?>
+    </div>
     
+    <!-- 分页控件 -->
     <div class="pagination-container">
       <?php $this->pageLink('上一页'); ?>
-      <?php $this->pageLink('下一页','next'); ?>
+      <span class="page-info">
+        第 <?php echo $this->getCurrentPage(); ?> 页 / 共 <?php echo $this->getTotalPage(); ?> 页
+      </span>
+      <?php $this->pageLink('下一页', 'next'); ?>
     </div>
   </div>
 <?php endif; ?>
 
 <?php if ($this->is('page') || $this->is('post')) : ?>
-  <link href="<?php echo get_theme_url('assets/css/buyu.APlayer.css'); ?>" rel="stylesheet" >
-  <script src="<?php echo get_theme_url('assets/js/buyu.APlayer.js'); ?>"></script>
-  <script src="<?php echo get_theme_url('assets/js/buyu.DPlayer.js'); ?>"></script>
+  <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.APlayer.css'); ?>">
+  <script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.APlayer.js'); ?>"></script>
+  <script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.DPlayer.js'); ?>"></script>
   <div class="col-mb-12 col-12" id="main" role="main">
-    <article class="post">
-        <h1 class="post-title" itemprop="name headline">
+    <div class="post-cards">
+      <article class="post-card">
+        <h2 class="post-title" itemprop="name headline">
           <?php $this->title() ?>
-        </h1>
+        </h2>
         <ul class="post-meta">
-          <li><time datetime="<?php $this->date('c'); ?>" itemprop="datePublished"><?php $this->date(); ?></time></li>
+          <li><time datetime="<?php $this->date('c'); ?>" itemprop="datePublished"><?php echo time_ago($this->date); ?></time></li>
           <?php if ($this->options->JCommentStatus !== "off"): // 判断全局评论是否关闭 ?>
             <li><?php $this->commentsNum('无评论', '1 条评论', '%d 条评论'); ?></li>
           <?php endif; ?>
@@ -73,7 +87,8 @@
            <i class="fa fa-share-alt mr-1"></i>&nbsp;分享
           </button>
         </div>
-    </article>
+      </article>
+    </div>
     <?php $this->need('public/comments.php'); ?>
   </div>
 <?php endif; ?>

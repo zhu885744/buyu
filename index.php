@@ -1,6 +1,6 @@
 <?php
 /**
- * 这是一款基于 typecho 默认模版二次开发的 Typecho 单栏主题
+ * 一款简洁的的 Typecho 单栏主题
  *
  * @package buyu
  * @author 不语

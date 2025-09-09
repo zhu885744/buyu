@@ -22,22 +22,151 @@ function a_class_replace($content){
   return $content;
 }
 
-//文章内容渲染
-function processContent($content, $title) {
-    $pattern = '/<img.*?src="(.*?)"[^>]*>/i';
-    return preg_replace_callback($pattern, function ($matches) use ($title) {
-        // 检查匹配结果是否包含有效的图片 src
-        if (isset($matches[1])) {
-            $src = $matches[1];
-            // 简单的 URL 验证
-            if (filter_var($src, FILTER_VALIDATE_URL)) {
-                return '<a data-fancybox="gallery" data-src="' . htmlspecialchars($src) . '" class="index-img"><img data-src="' . htmlspecialchars($src) . '" src="' . htmlspecialchars($src) . '" loading="lazy" alt="' . htmlspecialchars($title) . '" title="点击查看大图"></a>';
-            }
+/**
+ * 处理文章内容渲染
+ * 
+ * @param string $content 文章内容HTML
+ * @param string $title 文章标题，用于图片alt属性
+ * @param bool $allowRelativeUrls 是否 是否允许是否允许相对路径图片
+ * @return string 处理后的文章内容
+ */
+function processContent($content, $title, $allowRelativePath = false) {
+    // 更精确的图片标签匹配正则，考虑单引号和双引号的情况
+    $pattern = '/<img\s+[^>]*src=(["\'])(.*?)\1[^>]*>/i';
+    
+    return preg_replace_callback($pattern, function ($matches) use ($title, $allowRelativePath) {
+        // 验证匹配结果结构
+        if (!isset($matches[1], $matches[2])) {
+            return $matches[0];
         }
-        // 如果匹配失败或 URL 无效，返回原始的 img 标签
+        
+        $src = $matches[2];
+        $quote = $matches[1]; // 保留原始的引号类型
+        
+        // 验证URL有效性
+        if (filter_var($src, FILTER_VALIDATE_URL) || ($allowRelativePath && isRelativePath($src))) {
+            $escapedSrc = htmlspecialchars($src, ENT_QUOTES);
+            $escapedTitle = htmlspecialchars($title, ENT_QUOTES);
+            
+            // 构建新的图片标签
+            return '<a data-fancybox="gallery" data-src="' . $escapedSrc . '" class="index-img">' .
+                   '<img data-src="' . $escapedSrc . '" src="' . $escapedSrc . '" ' .
+                   'loading="lazy" alt="' . $escapedTitle . '" title="点击查看大图">' .
+                   '</a>';
+        }
+        
+        // URL无效且不允许相对路径时返回原始标签
         return $matches[0];
     }, $content);
 }
+
+/**
+ * 判断路径是否为相对路径
+ * 
+ * @param string $path 要检查的路径
+ * @return bool 是否为相对路径
+ */
+function isRelativePath($path) {
+    // 简单判断：不包含协议且不以/开头的路径视为相对路径
+    return !preg_match('/^[a-zA-Z]+:\/\//', $path) && strpos($path, '/') !== 0;
+}
+
+/**
+ * 将文章发布时间转换为友好的时间差显示
+ * @param \Typecho\Date $date 文章发布时间对象
+ * @return string 格式化后的时间字符串 
+ */
+function time_ago($date) {
+    // 获取当前时间（使用与文章相同的时区）
+    $now = new \Typecho\Date(time());
+    // 计算时间差（秒）
+    $time_diff = $now->timeStamp - $date->timeStamp;
+    // 处理未来时间（避免显示负数）
+    if ($time_diff < 0) {
+        return '刚刚发布';
+    }
+    // 时间单位常量
+    $minute = 60;     // 1分钟
+    $hour = 3600;     // 1小时
+    $day = 86400;     // 1天
+    $month = 2592000; // 30天（近似）
+    $year = 31536000; // 365天（近似）
+    // 根据时间差选择合适的显示格式
+    if ($time_diff < $minute) {
+        return $time_diff . "秒前发布";
+    } elseif ($time_diff < $hour) {
+        return floor($time_diff / $minute) . "分钟前发布";
+    } elseif ($time_diff < $day) {
+        return floor($time_diff / $hour) . "小时前发布";
+    } elseif ($time_diff < $month) {
+        return floor($time_diff / $day) . "天前发布";
+    } elseif ($time_diff < $year) {
+        return floor($time_diff / $month) . "个月前发布";
+    } else {
+        return $date->format('Y年m月d日'); // 超过1年直接显示完整日期
+    }
+}
+
+// 评论者等级、评论博主标签显示
+function dengji($i) {
+    $db = Typecho_Db::get();
+    $adminAuthorId = 1;
+    
+    // 如果邮箱为空，使用站长邮箱
+    if (empty($i)) {
+        $admin = $db->fetchRow($db->select('mail')->from('table.users')->where('uid = ?', $adminAuthorId));
+        $i = $admin['mail'] ?? ''; // 增加空值检查
+    }
+    
+    // 查询评论者信息时增加空值判断
+    $author = $db->fetchRow($db->select('authorId')->from('table.comments')->where('mail = ?', $i)->limit(1));
+    if (!$author) { // 如果未查询到评论者信息
+        echo '<span class="comment-badge badge-unknown">访客</span>';
+        return;
+    }
+    $authorId = $author['authorId'] ?? 0; // 确保authorId有默认值
+    
+    // 定义标签样式和文本
+    if ($authorId == $adminAuthorId) {
+        echo '<span class="comment-badge badge-admin">博主</span>';
+        return;
+    }
+    
+    // 查询评论数量时增加容错处理
+    $mail = $db->fetchRow($db->select(array('COUNT(cid)' => 'rbq'))->from('table.comments')->where('mail = ?', $i)->where('authorId = ?', '0'));
+    $rbq = $mail['rbq'] ?? 0; // 确保评论数有默认值
+    
+    // 根据等级设置不同样式类
+    if ($rbq < 4) {
+        echo '<span class="comment-badge badge-lv1">Lv.1</span>';
+    } elseif ($rbq < 10) {
+        echo '<span class="comment-badge badge-lv2">Lv.2</span>';
+    } elseif ($rbq < 20) {
+        echo '<span class="comment-badge badge-lv3">Lv.3</span>';
+    } elseif ($rbq < 30) {
+        echo '<span class="comment-badge badge-lv4">Lv.4</span>';
+    } elseif ($rbq < 40) {
+        echo '<span class="comment-badge badge-lv5">Lv.5</span>';
+    } else {
+        echo '<span class="comment-badge badge-soulmate">知己</span>';
+    }
+}
+
+// 附件页面和作者页面重定向到404页面
+function redirect_404(){
+    $request = Typecho_Request::getInstance();
+    $pathInfo = $request->getPathInfo();
+    // 使用正则表达式匹配路径
+    if (preg_match('/^\/(attachment\/\d+|author\/\w+)/i', $pathInfo)) {
+        // 调用 404 页面
+        $options = Typecho_Widget::widget('Widget_Options');
+        $url = $options->siteUrl . '404';
+        header("Location: $url");
+        exit;
+    }
+}
+// 在页面加载之前调用
+Typecho_Plugin::factory('Widget_Archive')->beforeRender = 'redirect_404';
 
 // 文章点赞逻辑
 if (isset($_GET['action']) && ($_GET['action'] == 'like' || $_GET['action'] == 'get_like') && isset($_GET['cid'])) {
@@ -47,7 +176,10 @@ if (isset($_GET['action']) && ($_GET['action'] == 'like' || $_GET['action'] == '
 
     // 简单IP限制
     if ($_GET['action'] == 'like') {
-        session_start();
+        // 检查会话是否已经启动
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         $user = Typecho_Widget::widget('Widget_User');
         if ($user->hasLogin()) {
             // 登录用户使用 uid 记录点赞状态
@@ -187,19 +319,36 @@ CountChineseCharacters();
     }
 }
 
-/* 通过邮箱生成头像地址 */
-function _getAvatarByMail($mail)
-{
-  $gravatarsUrl = Helper::options()->JCustomAvatarSource ? Helper::options()->JCustomAvatarSource : 'https://weavatar.com/avatar/';
-  $mailLower = strtolower($mail);
-  $md5MailLower = md5($mailLower);
-  $qqMail = str_replace('@qq.com', '', $mailLower);
-  if (strstr($mailLower, "qq.com") && is_numeric($qqMail) && strlen($qqMail) < 11 && strlen($qqMail) > 4) {
-    echo 'https://thirdqq.qlogo.cn/g?b=qq&nk=' . $qqMail . '&s=100';
-  } else {
-    echo $gravatarsUrl . $md5MailLower . '?d=mm';
-  }
-};
+function getGravatar($email, $s = 96, $d = 'mp', $r = 'g', $img = false, $atts = array()){
+    // 获取主题配置
+    $options = Typecho_Widget::widget('Widget_Options')->themeOptions;
+    
+    $url = '';
+    
+    // QQ邮箱匹配（严格模式）
+    if (preg_match('/^(\d{5,13})@qq\.com$/', strtolower(trim($email)), $matches)) {
+        $url = 'https://q2.qlogo.cn/headimg_dl?dst_uin=' . $matches[1] . '&spec=' . $s;
+    } else {
+        // 强制使用自定义源（即使配置为空也可手动指定）
+        $defaultGravatar = 'https://cravatar.cn/avatar/'; // 默认 fallback
+        // 优先使用配置，否则用默认
+        $gravatarBase = (!empty($options->gravatarUrl) ? rtrim($options->gravatarUrl, '/') . '/' : $defaultGravatar);
+        $emailHash = md5(strtolower(trim($email)));
+        $url = $gravatarBase . $emailHash . "?s=$s&d=$d&r=$r";
+    }
+    
+    // 处理图片标签
+    if ($img) {
+        $url = '<img src="' . htmlspecialchars($url) . '"';
+        foreach ($atts as $key => $val) {
+            $url .= ' ' . htmlspecialchars($key) . '="' . htmlspecialchars($val) . '"';
+        }
+        $url .= ' />';
+    }
+    
+    return $url;
+}
+
 
 //文章阅读量
 function get_post_view($archive)
@@ -372,7 +521,6 @@ function video_shortcode($atts) {
         'src' => '',          // 视频地址
         'poster' => '',       // 视频封面
         'width' => '100%',    // 视频宽度
-        'height' => '100%',   // 视频高度
         'autoplay' => 'false',// 是否自动播放
         'loop' => 'false',    // 是否循环播放
         'preload' => 'auto',  // 预加载策略
@@ -393,7 +541,7 @@ function video_shortcode($atts) {
     $containerId = 'dplayer-' . uniqid();
 
     // 构建 DPlayer 播放器的 HTML 和 JavaScript
-    $html = '<div id="' . $containerId . '" style="width: ' . htmlspecialchars($atts['width'], ENT_QUOTES) . '; height: ' . htmlspecialchars($atts['height'], ENT_QUOTES) . ';"></div>
+    $html = '<div id="' . $containerId . '" style="width: ' . htmlspecialchars($atts['width'], ENT_QUOTES) . ';"></div>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const dp = new DPlayer({
@@ -420,10 +568,10 @@ function video_shortcode($atts) {
 // 音频短代码处理函数
 function audio_shortcode($atts) {
     $default_atts = array(
-        'name' => '未知音频',// 音频名称
-        'artist' => '未知艺术家',// 音频作者
-        'url' => '',// 音频链接
-        'cover' => ''// // 音频封面
+        'name' => '未知音频',      // 音频名称
+        'artist' => '未知艺术家', // 音频作者
+        'url' => '',            // 音频链接
+        'cover' => ''          // 音频封面
     );
     $atts = array_merge($default_atts, $atts);
 
@@ -452,8 +600,8 @@ function audio_shortcode($atts) {
 // 短代码解析函数
 function parse_shortcodes($content) {
     $shortcodes = array(
-        'video' => 'video_shortcode',// 视频短代码
-        'audio' => 'audio_shortcode'// 音频短代码
+        'video' => 'video_shortcode', // 视频短代码
+        'audio' => 'audio_shortcode'  // 音频短代码
     );
 
     // 存储 <pre style="position: relative;"><code> 标签内的内容及其占位符

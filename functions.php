@@ -56,13 +56,10 @@ $_db = Typecho_Db::get();
   );
   $JAssetsURL->setAttribute('class', 'buyu_content buyu_global');
   $form->addInput($JAssetsURL);
+  /* --------------------------------------- */
   $favicon = new Typecho_Widget_Helper_Form_Element_Text('favicon', null, null, _t('站点 favicon 地址'), _t('在这里填入一个图片 URL 地址, 以在网站标题前加上一个 favicon 图标，支持Base64 地址'));
   $favicon->setAttribute('class', 'buyu_content buyu_image');
   $form->addInput($favicon);
-  /* --------------------------------------- */
-  $logoUrl = new \Typecho\Widget\Helper\Form\Element\Text('logoUrl',null,'/usr/themes/buyu/assets/img/logo.png', _t('站点导航栏 LOGO 地址'),_t('在这里填入一个图片 URL 地址, 以在导航栏加上一个 LOGO，支持Base64 地址'));
-  $logoUrl->setAttribute('class', 'buyu_content buyu_image');
-  $form->addInput($logoUrl);
   /* --------------------------------------- */
   $ICPbeian = new Typecho_Widget_Helper_Form_Element_Text('ICPbeian', NULL, NULL, _t('ICP备案号'), _t('在这里输入ICP备案号,留空则不显示'));
 	$ICPbeian->setAttribute('class', 'buyu_content buyu_global');
@@ -71,6 +68,16 @@ $_db = Typecho_Db::get();
 	$gonganbeian = new Typecho_Widget_Helper_Form_Element_Text('gonganbeian', NULL, NULL, _t('公安联网备案号'), _t('在这里输入公安联网备案号,留空则不显示'));
   $gonganbeian->setAttribute('class', 'buyu_content buyu_global');
 	$form->addInput($gonganbeian);
+  /* --------------------------------------- */
+  $gravatarUrl = new Typecho_Widget_Helper_Form_Element_Text(
+    'gravatarUrl',
+    NULL,
+    'https://cravatar.cn/avatar', // 默认使用国内镜像
+    _t('自定义Gravatar头像源地址'),
+    _t('请输入Gravatar头像源地址（末尾无需加斜杠）。<br>推荐镜像：<br>https://cravatar.cn/avatar')
+  );
+  $gravatarUrl->setAttribute('class', 'buyu_content buyu_global');
+  $form->addInput($gravatarUrl);
   /* --------------------------------------- */
   $CustomCSS = new Typecho_Widget_Helper_Form_Element_Textarea('CustomCSS', NULL, NULL, _t('自定义css'), _t('在这里填入你的自定义css（直接填入css，无需&lt;style&gt;标签）'));
   $CustomCSS->setAttribute('class', 'buyu_content buyu_global');

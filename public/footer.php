@@ -34,11 +34,11 @@
   </div>
   <div class="item">
     Powered by&nbsp;<a href="https://typecho.org/" target="_blank" rel="noopener noreferrer">typecho</a>&nbsp;|&nbsp;Theme is&nbsp;<a href="https://github.com/zhu885744/buyu" target="_blank" rel="noopener noreferrer">buyu</a>
-  </div>
+  </div>  
 </footer>
 <i class="fa fa-arrow-up" id="backToTop"></i>
-<script src="<?php echo get_theme_url('assets/js/buyu.style.js'); ?>"></script>
-<script src="<?php echo get_theme_url('assets/js/buyu.fancybox.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.style.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.fancybox.js'); ?>"></script>
 <script type="text/javascript">
   // 主题设置自定义js
   <?php echo $this->options->JCustomScript(); ?>

@@ -1,3 +1,13 @@
+/** 开源不易，请尊重作者版权，保留本信息 **/
+function showConsoleInfo() {
+    const version = 'v1.3.0';
+    const copyright = 'buyu 主题';
+    console.log('\n' + ' %c ' + copyright + ' ' + version + ' %c https://zhuxu.asia/  ' + '\n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;');
+    console.log('开源不易，请尊重作者版权，保留基本的版权信息。');
+}
+// 调用函数
+showConsoleInfo();
+
 document.addEventListener('DOMContentLoaded', function () {
     // 初始化图片懒加载
     initLazyLoad();
@@ -13,7 +23,134 @@ document.addEventListener('DOMContentLoaded', function () {
     initArticleLiking();
     // 初始化折叠面板
     initDetailsPanels();
+    // 初始化导航菜单
+    initNavigationMenu();
 });
+
+// 初始化导航菜单
+function initNavigationMenu() {
+  // 获取元素并缓存
+  const menuToggle = document.querySelector('.menu-toggle');
+  const mainMenu = document.querySelector('.main-menu');
+  const navOverlay = document.querySelector('.nav-overlay');
+  const dropdownTriggers = document.querySelectorAll('.has-dropdown > a');
+  const dropdownMenus = document.querySelectorAll('.dropdown');
+  // 存储当前状态
+  let isMenuOpen = false;
+  // 切换菜单显示/隐藏
+  function toggleMenu(forceClose = false) {
+    if (!mainMenu || !navOverlay) return;
+    // 强制关闭或切换状态
+    const shouldOpen = forceClose ? false : !isMenuOpen;
+    mainMenu.classList.toggle('active', shouldOpen);
+    navOverlay.classList.toggle('active', shouldOpen);
+    document.body.classList.toggle('overflow-hidden', shouldOpen);
+    isMenuOpen = shouldOpen;
+    // 更新汉堡菜单图标状态
+    if (menuToggle) {
+      menuToggle.classList.toggle('active', shouldOpen);
+    }
+  }
+  
+  // 关闭所有下拉菜单
+  function closeAllDropdowns() {
+    document.querySelectorAll('.has-dropdown.active').forEach(item => {
+      item.classList.remove('active');
+      const dropdown = item.querySelector('.dropdown');
+      if (dropdown) dropdown.style.maxHeight = '0';
+    });
+  }
+  
+  // 点击汉堡菜单按钮
+  if (menuToggle) {
+    menuToggle.addEventListener('click', () => toggleMenu());
+  }
+  
+  // 点击遮罩层关闭菜单和所有下拉
+  if (navOverlay) {
+    navOverlay.addEventListener('click', () => {
+      closeAllDropdowns();
+      toggleMenu(true);
+    });
+  }
+  
+  // 处理下拉菜单
+  dropdownTriggers.forEach(trigger => {
+    trigger.addEventListener('click', function(e) {
+      const parentItem = this.parentElement;
+      const dropdown = this.nextElementSibling;
+      // 移动端处理
+      if (window.innerWidth <= 768) {
+        e.preventDefault();
+        // 如果点击的是已展开的菜单，则关闭
+        const isActive = parentItem.classList.contains('active');
+        // 关闭其他所有下拉菜单
+        if (!isActive) {
+          closeAllDropdowns();
+        }
+        // 切换当前下拉菜单状态
+        parentItem.classList.toggle('active', !isActive);
+        // 应用平滑高度过渡
+        if (dropdown) {
+          dropdown.style.maxHeight = isActive ? '0' : `${dropdown.scrollHeight}px`;
+        }
+      }
+    });
+  });
+  
+  // 点击菜单项后关闭菜单（针对移动端）
+  mainMenu?.querySelectorAll('a:not(.has-dropdown > a)').forEach(link => {
+    link.addEventListener('click', function() {
+      if (window.innerWidth <= 768 && isMenuOpen) {
+        closeAllDropdowns();
+        toggleMenu(true);
+      }
+    });
+  });
+  
+  // 窗口大小改变时重置菜单状态
+  function handleResize() {
+    const isMobile = window.innerWidth <= 768;
+    // 桌面端状态重置
+    if (!isMobile) {
+      if (isMenuOpen) {
+        toggleMenu(true);
+      }
+      closeAllDropdowns();
+      // 恢复下拉菜单默认行为
+      dropdownMenus.forEach(menu => {
+        menu.style.maxHeight = '';
+      });
+    } 
+    // 移动端状态初始化
+    else {
+      dropdownMenus.forEach(menu => {
+        const parent = menu.closest('.has-dropdown');
+        menu.style.maxHeight = parent?.classList.contains('active') 
+          ? `${menu.scrollHeight}px` 
+          : '0';
+      });
+    }
+  }
+  
+  // 初始化时执行一次
+  handleResize();
+  
+  // 监听窗口大小变化（使用防抖优化性能）
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(handleResize, 150);
+  });
+  
+  // 支持键盘Esc关闭菜单
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isMenuOpen) {
+      closeAllDropdowns();
+      toggleMenu(true);
+    }
+  });
+}
 
 // 初始化图片懒加载
 function initLazyLoad() {

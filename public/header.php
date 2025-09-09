@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="renderer" content="webkit">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="dns-prefetch" href="https://weavatar.com/">
     <link rel="icon" type="image/png" href="<?php $this->options->favicon(); ?>">
     <title><?php $this->archiveTitle(array(
             'category'  =>  _t('分类 %s 下的文章'),
@@ -15,8 +16,8 @@
     <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.grid.css');?>">
     <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.style.css');?>">
     <link rel="stylesheet" href="<?php echo get_theme_url('assets/font-awesome/font-awesome.min.css');?>">
-    <link href="<?php echo get_theme_url('assets/css/buyu.fancybox.css'); ?>" rel="stylesheet">
-    <script src="<?php echo get_theme_url('assets/js/buyu.message.js'); ?>"></script>
+    <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.fancybox.css'); ?>">
+    <script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.message.js'); ?>"></script>
     <style type="text/css">
       /* 主题设置自定义css */
       <?php $this->options->CustomCSS(); ?>
@@ -25,36 +26,72 @@
 </head>
 <body>
 
-<header id="header" class="clearfix">
+<header id="header">
     <div class="container">
-        <div class="row">
-            <div class="site-name col-mb-12" style="text-align: center;">
-                <?php if ($this->options->logoUrl): ?>
-                    <a id="logo" href="<?php $this->options->siteUrl(); ?>" >
-                        <img src="<?php $this->options->logoUrl() ?>" width="100px" alt="<?php $this->options->title() ?>"/>
-                    </a>
-                <?php else: ?>
-                    <a id="logo" href="<?php $this->options->siteUrl(); ?>"><?php $this->options->title() ?></a>
-                    <p class="description"><?php $this->options->description() ?></p>
-                <?php endif; ?>
-            </div>
-            <div class="col-mb-12">
-                <nav id="nav-menu" class="clearfix" role="navigation">
-                    <a<?php if ($this->is('index')):?> class="current"<?php endif;?> href="<?php $this->options->siteUrl();?>"><?php _e('首页');?></a>
-                    <?php \Widget\Contents\Page\Rows::alloc()->to($pages);?>
-                    <?php while ($pages->next()):?>
-                    <a<?php if ($this->is('page', $pages->slug)):?> class="current"<?php endif;?> href="<?php $pages->permalink();?>" title="<?php $pages->title();?>"><?php $pages->title();?></a>
-                    <?php endwhile;?>
-                </nav>
-                <form id="search" method="post" action="<?php $this->options->siteUrl();?>" role="search">
-                    <label for="s" class="sr-only"><?php _e('搜索关键字');?></label>
-                    <input type="text" id="s" name="s" class="text" placeholder="<?php _e('输入关键字搜索');?>"/>
-                </form>
-            </div>
+        <div class="nav-wrapper">
+            <!-- Logo -->
+            <a href="<?php $this->options->siteUrl(); ?>" class="logo"><?php $this->options->title() ?></a>
+            <!-- 汉堡菜单按钮（移动端显示） -->
+            <button class="menu-toggle" id="menuToggle">
+               <i class="fa fa-bars"></i>
+            </button>
+            <!-- 主导航菜单 -->
+            <ul class="main-menu" id="mainMenu">
+                <!-- 手机端侧边栏标题（仅在移动端显示） -->
+                <li class="sidebar-title">
+                    <span><?php $this->options->title() ?></span>
+                    <span class="subtitle"><?php $this->options->description() ?></span>
+                </li>
+                
+                <li><a<?php if($this->is('index')): ?> class="current"<?php endif; ?> href="<?php $this->options->siteUrl(); ?>"><?php _e('首页'); ?></a></li>
+                <!-- 自动获取分类并生成下拉菜单 -->
+                <li class="has-dropdown">
+                    <a href="#"><?php _e('分类'); ?></a>
+                    <ul class="dropdown">
+                        <?php $this->widget('Widget_Metas_Category_List')->to($categories); ?>
+                        <?php while ($categories->next()): ?>
+                            <?php if (!$categories->parent): // 只显示顶级分类 ?>
+                            <li>
+                                <a href="<?php $categories->permalink(); ?>" 
+                                   <?php if ($this->is('category', $categories->slug)): ?>class="current"<?php endif; ?>>
+                                    <?php $categories->name(); ?>
+                                    <?php if ($categories->count): ?>
+                                        <span class="category-count">(<?php $categories->count(); ?>)</span>
+                                    <?php endif; ?>
+                                </a>
+                                
+                                <!-- 子分类嵌套 -->
+                                <?php if ($categories->hasChildren()): ?>
+                                    <ul class="sub-dropdown">
+                                        <?php $children = $categories->getAllChildren($categories->mid); ?>
+                                        <?php foreach ($children as $child): ?>
+                                        <li>
+                                            <a href="<?php echo $child['permalink']; ?>"
+                                               <?php if ($this->is('category', $child['slug'])): ?>class="current"<?php endif; ?>>
+                                                <?php echo $child['name']; ?>
+                                                <?php if ($child['count']): ?>
+                                                    <span class="category-count">(<?php echo $child['count']; ?>)</span>
+                                                <?php endif; ?>
+                                            </a>
+                                        </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                <?php endif; ?>
+                            </li>
+                            <?php endif; ?>
+                        <?php endwhile; ?>
+                    </ul>
+                </li>
+                <?php $this->widget('Widget_Contents_Page_List')->to($pages); ?>
+                <?php while($pages->next()): ?>
+                <li><a<?php if($this->is('page', $pages->slug)): ?> class="current"<?php endif; ?> href="<?php $pages->permalink(); ?>" title="<?php $pages->title(); ?>"><?php $pages->title(); ?></a></li>
+                <?php endwhile; ?>
+            </ul>
         </div>
     </div>
 </header>
-
+    
+<div class="nav-overlay"></div> 
 <div id="body">
     <div class="container">
         <div class="row">
