@@ -224,6 +224,10 @@ $_db = Typecho_Db::get();
   $like->setAttribute('class', 'buyu_content buyu_post');
   $form->addInput($like);
   /* --------------------------------------- */
+  $copyright = new Typecho_Widget_Helper_Form_Element_Select('copyright', array('off' => '关闭（默认）', 'on' => '开启'), '3', '文章底部版权', '开启后将在文章底部显示版权信息，默认关闭');
+  $copyright->setAttribute('class', 'buyu_content buyu_post');
+  $form->addInput($copyright);
+  /* --------------------------------------- */
 }
 
 /*

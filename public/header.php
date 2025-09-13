@@ -13,11 +13,11 @@
             'tag'       =>  _t('标签 %s 下的文章'),
             'author'    =>  _t('%s的个人主页')
         ), '', ' - ');?><?php if($this->getCurrentPage()>1) _e("第 %d 页-", $this->getCurrentPage());?><?php $this->options->title();?></title>
-    <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.grid.css');?>">
-    <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.style.css');?>">
-    <link rel="stylesheet" href="<?php echo get_theme_url('assets/font-awesome/font-awesome.min.css');?>">
-    <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.fancybox.css'); ?>">
-    <script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.message.js'); ?>"></script>
+    <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.grid.css?v=1.3.1');?>">
+    <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.style.css?v=1.3.1');?>">
+    <link rel="stylesheet" href="<?php echo get_theme_url('assets/font-awesome/font-awesome.min.css?v=1.3.1');?>">
+    <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.fancybox.css?v=1.3.1'); ?>">
+    <script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.message.js?v=1.3.1'); ?>"></script>
     <style type="text/css">
       /* 主题设置自定义css */
       <?php $this->options->CustomCSS(); ?>
@@ -35,6 +35,7 @@
             <button class="menu-toggle" id="menuToggle">
                <i class="fa fa-bars"></i>
             </button>
+
             <!-- 主导航菜单 -->
             <ul class="main-menu" id="mainMenu">
                 <!-- 手机端侧边栏标题（仅在移动端显示） -->
@@ -42,7 +43,7 @@
                     <span><?php $this->options->title() ?></span>
                     <span class="subtitle"><?php $this->options->description() ?></span>
                 </li>
-                
+               
                 <li><a<?php if($this->is('index')): ?> class="current"<?php endif; ?> href="<?php $this->options->siteUrl(); ?>"><?php _e('首页'); ?></a></li>
                 <!-- 自动获取分类并生成下拉菜单 -->
                 <li class="has-dropdown">

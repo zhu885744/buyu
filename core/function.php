@@ -2,7 +2,7 @@
 /* 获取主题当前版本号 */
 function _getVersion()
 {
-  return "v1.3.0";
+  return "v1.3.1";
 };
 
 // 定义全局函数 get_theme_url 用于获取静态资源 URL

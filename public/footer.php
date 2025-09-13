@@ -37,12 +37,13 @@
   </div>  
 </footer>
 <i class="fa fa-arrow-up" id="backToTop"></i>
-<script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.style.js'); ?>"></script>
-<script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.fancybox.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.style.js?v=1.3.1'); ?>"></script>
+<script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.fancybox.js?v=1.3.1'); ?>"></script>
 <script type="text/javascript">
   // 主题设置自定义js
   <?php echo $this->options->JCustomScript(); ?>
 </script>
+
 <?php $this->footer(); ?>
 <!-- 主题设置底部自定义内容 -->
 <?php if ($this->options->CustomContent): ?>

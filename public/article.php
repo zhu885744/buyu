@@ -39,9 +39,9 @@
 <?php endif; ?>
 
 <?php if ($this->is('page') || $this->is('post')) : ?>
-  <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.APlayer.css'); ?>">
-  <script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.APlayer.js'); ?>"></script>
-  <script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.DPlayer.js'); ?>"></script>
+  <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.APlayer.css?v=1.3.1'); ?>">
+  <script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.APlayer.js?v=1.3.1'); ?>"></script>
+  <script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.DPlayer.js?v=1.3.1'); ?>"></script>
   <div class="col-mb-12 col-12" id="main" role="main">
     <div class="post-cards">
       <article class="post-card">
@@ -76,7 +76,9 @@
           <?php echo processContent($this->content, $this->title); ?>
           <?php endif;?>
         </div>
-        <?php $this->need('public/copyright.php'); ?>
+        <?php if ($this->options->copyright!== "off") :?>
+          <?php $this->need('public/copyright.php'); ?>
+        <?php endif; ?>
         <div class="post-button" style="text-align: center;">
           <?php if ($this->options->like!== "off") :?>
             <button class="post-bth" id="like" data-cid="<?php $this->cid(); ?>" data-like-url="<?php echo Helper::options()->index; ?>?action=like" data-get-like-url="<?php echo Helper::options()->index; ?>?action=get_like">

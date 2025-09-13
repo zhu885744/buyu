@@ -52,7 +52,9 @@ $this->need('public/header.php');
           }
         ?>
       </div>
-      <?php $this->need('public/copyright.php'); ?>
+      <?php if ($this->options->copyright!== "off") :?>
+        <?php $this->need('public/copyright.php'); ?>
+      <?php endif; ?>
       <div class="post-button" style="text-align: center;">
         <?php if ($this->options->like!== "off") :?>
           <button class="post-bth" id="like" data-cid="<?php $this->cid(); ?>" data-like-url="<?php echo Helper::options()->index; ?>?action=like" data-get-like-url="<?php echo Helper::options()->index; ?>?action=get_like">
