@@ -21,7 +21,6 @@ $this->need('public/header.php');
         <?php endif; ?>
         <li><?php get_post_view($this) ?>次阅读</li>
       </ul>
-
       <!-- 相册网格布局 -->
       <div class="grid-container">
         <?php

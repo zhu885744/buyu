@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initNavigationMenu();
 });
 
-// 初始化导航菜单
+// 导航菜单
 function initNavigationMenu() {
   // 获取元素并缓存
   const menuToggle = document.querySelector('.menu-toggle');
@@ -37,35 +37,52 @@ function initNavigationMenu() {
   const dropdownMenus = document.querySelectorAll('.dropdown');
   // 存储当前状态
   let isMenuOpen = false;
+
+  // -------------------------- 核心优化：点击空白处关闭下拉菜单 --------------------------
+  // 监听全局点击事件
+  document.addEventListener('click', function(e) {
+    // 仅在移动端生效（桌面端无需此逻辑）
+    if (window.innerWidth > 768) return;
+
+    // 判断点击目标是否为「下拉相关元素」
+    const isClickOnDropdownTrigger = e.target.closest('.has-dropdown > a'); // 点击下拉触发按钮
+    const isClickOnDropdownMenu = e.target.closest('.dropdown'); // 点击下拉菜单内容
+    const isClickOnMenuToggle = e.target.closest('.menu-toggle'); // 点击汉堡菜单按钮
+
+    // 若点击的是「空白区域」（非下拉相关、非汉堡按钮），且有展开的下拉菜单，则关闭
+    if (!isClickOnDropdownTrigger && !isClickOnDropdownMenu && !isClickOnMenuToggle) {
+      closeAllDropdowns();
+    }
+  });
+  // -----------------------------------------------------------------------------------
+
   // 切换菜单显示/隐藏
   function toggleMenu(forceClose = false) {
     if (!mainMenu || !navOverlay) return;
-    // 强制关闭或切换状态
     const shouldOpen = forceClose ? false : !isMenuOpen;
     mainMenu.classList.toggle('active', shouldOpen);
     navOverlay.classList.toggle('active', shouldOpen);
     document.body.classList.toggle('overflow-hidden', shouldOpen);
     isMenuOpen = shouldOpen;
-    // 更新汉堡菜单图标状态
     if (menuToggle) {
       menuToggle.classList.toggle('active', shouldOpen);
     }
   }
-  
-  // 关闭所有下拉菜单
+
+  // 关闭所有下拉菜单（新增 maxHeight 重置以确保动画流畅）
   function closeAllDropdowns() {
     document.querySelectorAll('.has-dropdown.active').forEach(item => {
       item.classList.remove('active');
       const dropdown = item.querySelector('.dropdown');
-      if (dropdown) dropdown.style.maxHeight = '0';
+      if (dropdown) dropdown.style.maxHeight = '0'; // 重置高度，配合过渡动画
     });
   }
-  
+
   // 点击汉堡菜单按钮
   if (menuToggle) {
     menuToggle.addEventListener('click', () => toggleMenu());
   }
-  
+
   // 点击遮罩层关闭菜单和所有下拉
   if (navOverlay) {
     navOverlay.addEventListener('click', () => {
@@ -73,8 +90,8 @@ function initNavigationMenu() {
       toggleMenu(true);
     });
   }
-  
-  // 处理下拉菜单
+
+  // 处理下拉菜单触发
   dropdownTriggers.forEach(trigger => {
     trigger.addEventListener('click', function(e) {
       const parentItem = this.parentElement;
@@ -82,7 +99,6 @@ function initNavigationMenu() {
       // 移动端处理
       if (window.innerWidth <= 768) {
         e.preventDefault();
-        // 如果点击的是已展开的菜单，则关闭
         const isActive = parentItem.classList.contains('active');
         // 关闭其他所有下拉菜单
         if (!isActive) {
@@ -97,7 +113,7 @@ function initNavigationMenu() {
       }
     });
   });
-  
+
   // 点击菜单项后关闭菜单（针对移动端）
   mainMenu?.querySelectorAll('a:not(.has-dropdown > a)').forEach(link => {
     link.addEventListener('click', function() {
@@ -107,7 +123,7 @@ function initNavigationMenu() {
       }
     });
   });
-  
+
   // 窗口大小改变时重置菜单状态
   function handleResize() {
     const isMobile = window.innerWidth <= 768;
@@ -132,22 +148,26 @@ function initNavigationMenu() {
       });
     }
   }
-  
+
   // 初始化时执行一次
   handleResize();
-  
-  // 监听窗口大小变化（使用防抖优化性能）
+
+  // 监听窗口大小变化（防抖优化）
   let resizeTimeout;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(handleResize, 150);
   });
-  
+
   // 支持键盘Esc关闭菜单
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && isMenuOpen) {
       closeAllDropdowns();
       toggleMenu(true);
+    }
+    // Esc键可单独关闭下拉菜单（即使主菜单未打开）
+    else if (e.key === 'Escape' && window.innerWidth <= 768) {
+      closeAllDropdowns();
     }
   });
 }

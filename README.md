@@ -1,7 +1,5 @@
 ## Typecho **buyu** 单栏主题
 
-![buyu.png](https://img1.zhuxu.asia/2025/08/24/68aa7bd343056.png)
-
 一款简洁的的 Typecho 单栏主题<br />
 用户交流群：[点击加入](https://qm.qq.com/q/PVln74J0UU)<br />
 主题宗旨：简洁、简洁、还是简洁！
