@@ -43,7 +43,7 @@
                     <span><?php $this->options->title() ?></span>
                     <span class="subtitle"><?php $this->options->description() ?></span>
                 </li>
-               
+
                 <li><a<?php if($this->is('index')): ?> class="current"<?php endif; ?> href="<?php $this->options->siteUrl(); ?>"><?php _e('首页'); ?></a></li>
                 <!-- 自动获取分类并生成下拉菜单 -->
                 <li class="has-dropdown">

@@ -349,7 +349,6 @@ function getGravatar($email, $s = 96, $d = 'mp', $r = 'g', $img = false, $atts =
     return $url;
 }
 
-
 //文章阅读量
 function get_post_view($archive)
 {

@@ -15,11 +15,11 @@ $this->need('public/header.php');
         <?php $this->title() ?>
       </h2>
       <ul class="post-meta">
-        <li><time datetime="<?php $this->date('c'); ?>" itemprop="datePublished"><?php echo time_ago($this->date); ?></time></li>
-        <?php if ($this->options->JCommentStatus !== "off"): // 判断全局评论是否关闭 ?>
-          <li><?php $this->commentsNum('无评论', '1 条评论', '%d 条评论'); ?></li>
+        <li><i class="fa fa-calendar mr-1"></i>&nbsp;<time datetime="<?php $this->date('c'); ?>" itemprop="datePublished"><?php echo time_ago($this->date); ?></time></li>
+        <?php if ($this->options->JCommentStatus !== "off"): ?>
+          <li><i class="fa fa-commenting-o mr-1"></i>&nbsp;<?php $this->commentsNum('无评论', '1 条评论', '%d 条评论'); ?></li>
         <?php endif; ?>
-        <li><?php get_post_view($this) ?>次阅读</li>
+        <li><i class="fa fa-eye mr-1"></i>&nbsp;<?php get_post_view($this) ?>次阅读</li>
       </ul>
       <div itemprop="articleBody">
         <div class="post-content" id="post-<?php $this->cid(); ?>">

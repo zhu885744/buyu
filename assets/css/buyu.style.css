@@ -69,17 +69,17 @@ a:hover, a:active {
 
 ::-webkit-scrollbar-track {
   background-color: transparent;
-  border-radius: 2em; /* 移除浏览器前缀冗余写法 */
+  border-radius: 2em;
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: #818181;
   background-image: -webkit-linear-gradient(45deg,rgba(255,255,255,.4) 100%,transparent 100%,transparent 50%,rgba(255,255,255,.4) 50%,rgba(255,255,255,.4) 75%,transparent 75%,transparent);
-  border-radius: 2em; /* 移除浏览器前缀冗余写法 */
+  border-radius: 2em;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-main); /* 使用字体系统变量 */
+  font-family: var(--font-main);
 }
 
 /* 输入框和文本域样式 */
@@ -120,13 +120,11 @@ img {
   margin-top: 100px;
 }
 
-/* object-fit: cover; 解决图片指定大小被压缩问题 */
 .index-img > img {
   height: 100%;
   object-fit: cover;
 }
 
-/* Special link style */
 .post-meta a,
 .post-content a,
 .comment-content a {
@@ -509,8 +507,8 @@ header a {
 
 /* 底部分页按钮样式 */
 .pagination-container {
-  display: flex; /* 启用flex布局 */
-  justify-content: center; /* 水平居中对齐子元素 */
+  display: flex;
+  justify-content: center;
   margin: var(--spacing-lg) 0;
   gap: var(--spacing-sm); 
 }
@@ -565,7 +563,7 @@ header a {
   right: var(--spacing-lg);
   opacity: 0;
   visibility: hidden;
-  transition: var(--transition); /* 简化过渡属性写法 */
+  transition: var(--transition);
   padding: var(--spacing-md); 
   background-color: var(--primary-color);
   color: #ffffff;
@@ -695,8 +693,8 @@ header a {
 
 /* 悬停效果 */
 .grid-item:hover {
-  transform: scale(1.03); /* 轻微放大 */
-  box-shadow: var(--box-shadow-hover); /* 使用悬停阴影变量 */
+  filter: blur(0) brightness(0.75);
+  -webkit-filter: blur(0) brightness(0.75);
 }
 
 /* 图片标题 */
@@ -831,7 +829,7 @@ header a {
 .comment-badge {
   display: inline-block;
   padding: 2px 8px;
-  border-radius: 8px;
+  border-radius: 4px;
   font-size: var(--font-size-xs);
   font-weight: 500;
   margin-left: var(--spacing-xs); 
@@ -1549,6 +1547,25 @@ img.alignright {
   .post-title {
     font-size: var(--font-size-2xl);
     text-align: center;
+  }
+
+  .nav-wrapper {
+    display: flex;
+    justify-content: center; /* 让标题居中 */
+    align-items: center;
+    position: relative; /* 为绝对定位的菜单按钮提供参考 */
+  }
+    
+  .menu-toggle {
+    position: absolute;
+    left: 0; /* 菜单按钮居左 */
+    z-index: 10; /* 确保按钮在标题上方可点击 */
+  }
+    
+  .logo {
+    display: block;
+    text-align: center;
+    margin: 0 auto; /* 确保标题居中 */
   }
   
   /* 遮罩层过渡动画 */
