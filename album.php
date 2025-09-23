@@ -54,16 +54,6 @@ $this->need('public/header.php');
       <?php if ($this->options->copyright!== "off") :?>
         <?php $this->need('public/copyright.php'); ?>
       <?php endif; ?>
-      <div class="post-button" style="text-align: center;">
-        <?php if ($this->options->like!== "off") :?>
-          <button class="post-bth" id="like" data-cid="<?php $this->cid(); ?>" data-like-url="<?php echo Helper::options()->index; ?>?action=like" data-get-like-url="<?php echo Helper::options()->index; ?>?action=get_like">
-            <i class="fa fa-thumbs-up mr-1"></i>&nbsp;点赞 <span id="like-count">0</span>
-          </button>
-        <?php endif; ?>
-        <button class="post-bth" id="share" data-title="<?php echo htmlspecialchars($this->title); ?>" data-url="<?php echo htmlspecialchars($this->permalink); ?>">
-          <i class="fa fa-share-alt mr-1"></i>&nbsp;分享
-        </button>
-      </div>
     </article>
   </div>
   <?php $this->need('public/comments.php'); ?>

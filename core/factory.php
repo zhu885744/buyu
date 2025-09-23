@@ -427,3 +427,20 @@ class Email
         }
     }
 }
+
+/* 加强版文章编辑器 */
+if (Helper::options()->JEditor !== 'off') {
+  Typecho_Plugin::factory('admin/write-post.php')->richEditor  = array('Editor', 'Edit');
+  Typecho_Plugin::factory('admin/write-page.php')->richEditor  = array('Editor', 'Edit');
+}
+
+class Editor
+{
+  public static function Edit()
+  {
+?>
+    <link href="<?php echo get_theme_url('assets/css/buyu.APlayer.css?v=1.3.1'); ?>" rel="stylesheet" />
+    <script src="<?php echo get_theme_url('assets/js/buyu.APlayer.js?v=1.3.1'); ?>"></script>
+<?php
+  }
+}

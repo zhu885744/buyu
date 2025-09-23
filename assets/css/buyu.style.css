@@ -521,6 +521,7 @@ header a {
   color: var(--text-color);
   border: var(--border); 
   text-decoration: none;
+  box-shadow: var(--box-shadow);
   border-radius: var(--border-radius);
   transition: background-color var(--transition);
 }
@@ -537,6 +538,7 @@ header a {
   color: var(--text-color);
   border: var(--border); 
   text-decoration: none;
+  box-shadow: var(--box-shadow);
   border-radius: var(--border-radius);
   transition: background-color var(--transition);
 }
@@ -552,6 +554,7 @@ header a {
   color: var(--text-color);
   border: var(--border); 
   text-decoration: none;
+  box-shadow: var(--box-shadow);
   border-radius: var(--border-radius);
   transition: background-color var(--transition);
 }
@@ -568,8 +571,13 @@ header a {
   background-color: var(--primary-color);
   color: #ffffff;
   border: none;
+  box-shadow: var(--box-shadow);
   border-radius: var(--border-radius);
   cursor: pointer;
+}
+
+#backToTop:hover {
+  background-color: #000000;
 }
 
 #backToTop.visible {
@@ -883,6 +891,12 @@ header a {
   line-height: 1.6; /* 调整行高 */
 }
 
+/* 评论内容自动换行 */
+.comment-content p {
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
 /* 评论提交按钮样式 */
 .comment-submit-button {
   float: right;
@@ -1031,7 +1045,6 @@ header a {
   line-height: 1.5; /* 微调行高 */
   font-family: var(--font-main); /* 使用主字体变量 */
   box-sizing: border-box; /* 确保内边距不影响整体宽度计算 */
-  /* padding: 0 10px; */ /* 给内容左右留10px边距，避免贴边 */
   letter-spacing: 0.8px; /* 减小字母间距 */
   background-size: 16px 16px; /* 减小背景尺寸 */
   background-position: center center;
@@ -1643,17 +1656,17 @@ img.alignright {
   isolation: isolate;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--spacing-md); /* 使用MD间距变量作为卡片间距 */
+  gap: var(--spacing-md);
 }
 
 .friend-container .friend-card {
   display: flex;
   align-items: center;
   border: var(--border); 
-  background-color: var(--background-color); /* 使用背景色变量 */
+  background-color: var(--background-color);
   padding: 0.8em;
   text-decoration: none;
-  border-radius: var(--border-radius); /* 使用圆角变量 */
+  border-radius: var(--border-radius);
   color: inherit;
   transition: var(--transition);
 }
@@ -1695,7 +1708,7 @@ img.alignright {
 
 .friend-container .friend-card .friend-description {
   font-size: 0.9em;
-  color: var(--muted-text-color); /* 使用次要文本颜色变量 */
+  color: var(--muted-text-color);
   margin: 1px 0 0 0;
 }
 /* 友链卡片样式结束 */
@@ -1713,8 +1726,8 @@ img.alignright {
 }
 
 .error-page p {
-  font-size: var(--font-size-md); /* 使用MD字体大小变量 */
-  margin-bottom: var(--spacing-lg); /* 使用LG间距变量 */
+  font-size: var(--font-size-md);
+  margin-bottom: var(--spacing-lg);
   animation: fadeIn 1s ease;
 }
 
@@ -1729,8 +1742,8 @@ img.alignright {
   width: 100%;
   padding: var(--spacing-md); 
   border: var(--border); 
-  border-radius: var(--border-radius); /* 使用圆角变量 */
-  font-size: var(--font-size-lg); /* 使用LG字体大小变量 */
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-lg);
 }
 
 .error-page form#search label {
@@ -1754,9 +1767,9 @@ img.alignright {
 .custom-video-container {
   display: flex;
   justify-content: center;
-  margin: var(--spacing-lg) 0; /* 使用LG间距变量 */
-  box-shadow: var(--box-shadow); /* 使用阴影变量 */
-  border-radius: var(--border-radius); /* 使用圆角变量 */
+  margin: var(--spacing-lg) 0;
+  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius);
   overflow: hidden;
 }
 .custom-video-container video {
@@ -1767,7 +1780,7 @@ img.alignright {
 .custom-audio-container {
   display: flex;
   justify-content: center;
-  margin: var(--spacing-lg) 0; /* 使用LG间距间距变量 */
+  margin: var(--spacing-lg) 0;
 }
 .custom-audio-container audio {
   width: 80%;

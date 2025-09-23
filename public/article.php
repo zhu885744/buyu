@@ -85,6 +85,12 @@
               <i class="fa fa-thumbs-up mr-1"></i>&nbsp;点赞 <span id="like-count">0</span>
             </button>
           <?php endif; ?>
+          <?php if ($this->options->tip!== "off") :?>
+            <button class="post-bth" onclick="showReward()">
+              <i class="fa fa-heart"></i>&nbsp;打赏
+            </button>
+            <?php $this->need('public/Modal.php'); ?>
+          <?php endif; ?>
           <button class="post-bth" id="share" data-title="<?php echo htmlspecialchars($this->title); ?>" data-url="<?php echo htmlspecialchars($this->permalink); ?>">
            <i class="fa fa-share-alt mr-1"></i>&nbsp;分享
           </button>

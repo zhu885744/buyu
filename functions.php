@@ -220,9 +220,35 @@ $_db = Typecho_Db::get();
   $JCommentMailPassword->setAttribute('class', 'buyu_content buyu_comments');
   $form->addInput($JCommentMailPassword->multiMode());
   /* --------------------------------------- */
+  $JEditor = new Typecho_Widget_Helper_Form_Element_Select(
+    'JEditor',
+    array(
+      'on' => '开启（默认）',
+      'off' => '关闭',
+    ),
+    'on',
+    '是否启用主题自带编辑器',
+    '介绍：开启后，文章编辑器将替换成主题自带编辑器 <br>
+         其他：目前编辑器处于开发阶段，如果想继续使用原生编辑器，关闭此项即可'
+  );
+  $JEditor->setAttribute('class', 'buyu_content buyu_post');
+  $form->addInput($JEditor->multiMode());
+  /* --------------------------------------- */
   $like = new Typecho_Widget_Helper_Form_Element_Select('like', array('off' => '关闭（默认）', 'on' => '开启'), '3', '文章点赞', '开启后将在文章底部显示点赞按钮，默认关闭');
   $like->setAttribute('class', 'buyu_content buyu_post');
   $form->addInput($like);
+  /* --------------------------------------- */
+  $tip = new Typecho_Widget_Helper_Form_Element_Select('tip', array('off' => '关闭（默认）', 'on' => '开启'), '3', '文章打赏', '开启后将在文章底部显示打赏按钮，默认关闭');
+  $tip->setAttribute('class', 'buyu_content buyu_post');
+  $form->addInput($tip);
+  /* --------------------------------------- */
+  $weixin = new Typecho_Widget_Helper_Form_Element_Text('weixin', NULL, NULL, _t('微信收款码链接'), _t('在这里输入微信收款码链接,留空则不显示'));
+	$weixin->setAttribute('class', 'buyu_content buyu_post');
+  $form->addInput($weixin);
+  /* --------------------------------------- */
+  $zfb = new Typecho_Widget_Helper_Form_Element_Text('zfb', NULL, NULL, _t('支付宝收款码链接'), _t('在这里输入支付宝收款码链接,留空则不显示'));
+	$zfb->setAttribute('class', 'buyu_content buyu_post');
+  $form->addInput($zfb);
   /* --------------------------------------- */
   $copyright = new Typecho_Widget_Helper_Form_Element_Select('copyright', array('off' => '关闭（默认）', 'on' => '开启'), '3', '文章底部版权', '开启后将在文章底部显示版权信息，默认关闭');
   $copyright->setAttribute('class', 'buyu_content buyu_post');

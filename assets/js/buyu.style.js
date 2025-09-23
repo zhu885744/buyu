@@ -37,8 +37,6 @@ function initNavigationMenu() {
   const dropdownMenus = document.querySelectorAll('.dropdown');
   // 存储当前状态
   let isMenuOpen = false;
-
-  // -------------------------- 核心优化：点击空白处关闭下拉菜单 --------------------------
   // 监听全局点击事件
   document.addEventListener('click', function(e) {
     // 仅在移动端生效（桌面端无需此逻辑）
@@ -54,7 +52,6 @@ function initNavigationMenu() {
       closeAllDropdowns();
     }
   });
-  // -----------------------------------------------------------------------------------
 
   // 切换菜单显示/隐藏
   function toggleMenu(forceClose = false) {

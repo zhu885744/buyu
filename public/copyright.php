@@ -6,13 +6,6 @@
       <span class="text"><?php $this->author(); ?></span>
     </div>
     <div class="item">
-      <i class="fa fa-link fa-1x" style="color: #39B54A;"></i>
-      <span>本文链接：</span>
-      <span class="text">
-        <a class="link" href="<?php $this->permalink() ?>" target="_blank" rel="noopener noreferrer nofollow"><?php $this->permalink() ?></a>
-      </span>
-    </div>
-    <div class="item">
       <i class="fa fa-tags fa-1x" style="color:#3e1cff;"></i>
       <span>文章标签：</span>
       <span class="text">
@@ -25,6 +18,13 @@
           <?php else: ?>
             无标签
           <?php endif; ?>
+      </span>
+    </div>
+    <div class="item">
+      <i class="fa fa-link fa-1x" style="color: #39B54A;"></i>
+      <span>本文链接：</span>
+      <span class="text">
+        <a class="link" href="<?php $this->permalink() ?>" target="_blank" rel="noopener noreferrer nofollow"><?php $this->permalink() ?></a>
       </span>
     </div>
     <div class="item">
