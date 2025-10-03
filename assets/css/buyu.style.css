@@ -1387,20 +1387,6 @@ header a {
   text-align: center;
 }
 
-@media (max-width: 720px) {
-  .post-content h1 {
-    font-size: var(--font-size-2xl); /* 使用2XL字体大小变量 */
-  }
-
-  .post-content h2 {
-    font-size: var(--font-size-xl); /* 使用XL字体大小变量 */
-  }
-
-  .post-content h3 {
-    font-size: var(--font-size-lg); /* 使用LG字体大小变量 */
-  }
-}
-
 .aligncenter, div.aligncenter {
   display: block;
   margin-left: auto;
@@ -1447,6 +1433,20 @@ img.alignright {
   }
 }
 
+@media (max-width: 720px) {
+  .post-content h1 {
+    font-size: var(--font-size-2xl); /* 使用2XL字体大小变量 */
+  }
+
+  .post-content h2 {
+    font-size: var(--font-size-xl); /* 使用XL字体大小变量 */
+  }
+
+  .post-content h3 {
+    font-size: var(--font-size-lg); /* 使用LG字体大小变量 */
+  }
+}
+
 @media (max-width: 767px) {
   body {
     font-size: 81.25%;
@@ -1466,9 +1466,8 @@ img.alignright {
   }
 
   .post-content pre>code {
-    /* 调整移动端代码块内边距 */
-    padding: 12px 10px; /* 上下12px，左右10px */
-    font-size: 0.9em; /* 进一步减小代码块字体 */
+    padding: 12px 10px;
+    font-size: 0.9em;
     /* 优化长代码换行规则 */
     word-wrap: break-word; /* 允许长单词拆分换行 */
     white-space: pre-wrap; /* 保留换行符，同时允许自动换行 */
@@ -1481,9 +1480,9 @@ img.alignright {
     transition: transform var(--transition); /* 仅过渡变换属性 */
   }
   
-  /* 汉堡菜单点击状态过渡 */
-  .menu-toggle.active {
-    transform: rotate(90deg);
+  .menu-toggle:hover {
+    color: var(--highlight-color);
+    background-color: #f5f5f5;
   }
   
   /* 移动端侧边栏容器 - 纯过渡动画设置 */

@@ -329,8 +329,8 @@ function getGravatar($email, $s = 96, $d = 'mp', $r = 'g', $img = false, $atts =
     if (preg_match('/^(\d{5,13})@qq\.com$/', strtolower(trim($email)), $matches)) {
         $url = 'https://q2.qlogo.cn/headimg_dl?dst_uin=' . $matches[1] . '&spec=' . $s;
     } else {
-        // 强制使用自定义源（即使配置为空也可手动指定）
-        $defaultGravatar = 'https://cravatar.cn/avatar/'; // 默认 fallback
+        // 自定义源
+        $defaultGravatar = 'https://weavatar.com/avatar/';
         // 优先使用配置，否则用默认
         $gravatarBase = (!empty($options->gravatarUrl) ? rtrim($options->gravatarUrl, '/') . '/' : $defaultGravatar);
         $emailHash = md5(strtolower(trim($email)));
