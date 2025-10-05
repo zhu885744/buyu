@@ -609,7 +609,7 @@ function parse_shortcodes($content) {
         $placeholder = 'PRE_CODE_BLOCK_' . count($pre_code_blocks);
         $pre_code_blocks[$placeholder] = $matches[0];
         return $placeholder;
-    }, $content);
+    }, $content ?? '');
 
     foreach ($shortcodes as $tag => $function) {
         $pattern = '/\['.$tag.'(.*?)\]/is';
