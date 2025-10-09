@@ -141,6 +141,7 @@ img {
 #header {
   background-color: var(--background-color);
   box-shadow: var(--box-shadow);
+  border-bottom: var(--border);
   position: relative;
   z-index: 100;
   width: 100%;
@@ -407,7 +408,7 @@ header a {
 
 /* 卡片样式 */
 .post-card {
-  background: #fff;
+  background: var(--background-color);
   border-radius: var(--border-radius);
   padding: var(--spacing-md);
   border: var(--border);
@@ -889,6 +890,13 @@ header a {
 .comment-content {
   margin-top: var(--spacing-sm);
   line-height: 1.6; /* 调整行高 */
+}
+
+/* 评论图片适配 */
+.comment-content img {
+  border-radius: var(--border-radius);
+  max-width: 40%;
+  height: auto;
 }
 
 /* 评论内容自动换行 */

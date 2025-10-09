@@ -1,7 +1,7 @@
 ## Typecho **buyu** 单栏主题
 
 一款简洁的的 Typecho 单栏主题<br />
-用户交流群：[点击加入](https://qm.qq.com/q/PVln74J0UU)<br />
+用户交流群：[点击加入](https://qm.qq.com/q/Yxs7ezX5mY)<br />
 主题宗旨：简洁、简洁、还是简洁！
 
 ## 特点和功能

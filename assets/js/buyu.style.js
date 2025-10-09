@@ -1,4 +1,4 @@
-/** 开源不易，请尊重作者版权，保留本信息 **/
+// 开源不易，请尊重作者版权，保留本信息
 function showConsoleInfo() {
     const version = 'v1.3.1';
     const copyright = 'buyu 主题';
