@@ -16,7 +16,7 @@
       </div> 
     <?php else : ?>
       <?php if ($allowComment && $commentStatus !== "off") : ?>
-        <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.OwO.css?v=1.3.0'); ?>">
+        <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.OwO.css?v=1.3.1'); ?>">
         <div class="post-cards">
           <div class="post-card">
             <span class="comment-title">发送评论（<?php $this->commentsNum(_t('暂无评论'), _t('仅有 1 条评论'), _t('已有 %d 条评论')); ?>）</span>
@@ -62,7 +62,7 @@
           <?php endif; ?>
         </div>
 
-        <script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.OwO.js?v=1.3.0'); ?>"></script>
+        <script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.OwO.js?v=1.3.1'); ?>"></script>
         <script type="text/javascript">
           document.addEventListener("DOMContentLoaded", function () {
             const textarea = document.getElementById('textarea');
@@ -99,7 +99,7 @@
               logo: 'OωO',
               container: document.getElementsByClassName('OwO')[0],
               target: document.getElementsByClassName('OwO-textarea')[0],
-              api: '<?php echo get_theme_url('assets/json/OwO.json?v=1.3.0'); ?>'
+              api: '<?php echo get_theme_url('assets/json/OwO.json?v=1.3.1'); ?>'
             });
           });
         </script>

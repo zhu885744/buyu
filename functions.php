@@ -9,9 +9,8 @@ require_once("core/core.php");
 /**
  * 主题后台设置
 */
-function themeConfig($form)
-{
-$_db = Typecho_Db::get();
+function themeConfig($form){
+  $_db = Typecho_Db::get();
   $_prefix = $_db->getPrefix();
   try {
     // 检查 `views` 字段是否存在，如果不存在则添加
@@ -27,8 +26,8 @@ $_db = Typecho_Db::get();
   }
 ?>
 
-<link rel="stylesheet" href="<?php echo get_theme_url('assets/typecho/config/css/buyu.config.css'); ?>">
-<script src="<?php echo get_theme_url('assets/typecho/config/js/buyu.config.js'); ?>"></script>
+<link rel="stylesheet" href="<?php echo get_theme_url('assets/typecho/config/css/buyu.config.css?v=1.3.1'); ?>">
+<script src="<?php echo get_theme_url('assets/typecho/config/js/buyu.config.js?v=1.3.1'); ?>"></script>
 <div class="buyu_config">
   <div>
     <div class="buyu_config__aside">
