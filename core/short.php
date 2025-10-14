@@ -22,32 +22,6 @@ function _parseContent($post, $login)
         return preg_replace('/\s{4}/', "&emsp;", $match[0]);
     }, $content);
 
-    // 处理视频短代码，使用正则表达式匹配 [video] 短代码
-    $content = preg_replace_callback('/\[video src="(.*?)" poster="(.*?)"( autoplay="true")?\]/', function ($matches) {
-        // 获取视频源地址
-        $src = $matches[1];
-        // 获取视频封面地址
-        $poster = $matches[2];
-        // 判断是否设置自动播放，若设置则添加 autoplay 属性
-        $autoplay = isset($matches[3])? ' autoplay' : '';
-        // 将短代码替换为自定义的视频播放容器和 video 标签
-        return '<div class="custom-video-container"><video src="'. $src. '" poster="'. $poster. '"'.$autoplay.' controls></video></div>';
-    }, $content);
-
-    // 处理音频短代码，使用正则表达式匹配 [audio] 短代码
-    $content = preg_replace_callback('/\[audio name="(.*?)" artist="(.*?)" url="(.*?)" cover="(.*?)"\]/', function ($matches) {
-        // 获取音频名称
-        $name = $matches[1];
-        // 获取音频艺术家
-        $artist = $matches[2];
-        // 获取音频文件地址
-        $url = $matches[3];
-        // 获取音频封面地址
-        $cover = $matches[4];
-        // 将短代码替换为自定义的音频播放容器和 audio 标签
-        return '<div class="custom-audio-container"><audio controls><source src="'. $url. '" type="audio/mpeg">您的浏览器不支持音频播放。</audio></div>';
-    }, $content);
-
     // 处理折叠面板短代码，使用正则表达式匹配 <details> 标签及其内容
     $content = preg_replace('/<details><summary>(.*?)<\/summary><br>(.*?)<\/details>/s', '<details><summary>$1</summary><div class="details-content">$2</div></details>', $content);
 

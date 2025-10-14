@@ -116,31 +116,6 @@
   --color-purple-800: #451a8b;
   --color-purple-900: #32126b;
 
-  /* 兼容颜色 */
-  --bs-blue: #0d6efd;
-  --bs-indigo: #6610f2;
-  --bs-purple: #6f42c1;
-  --bs-pink: #d63384;
-  --bs-red: #dc3545;
-  --bs-orange: #fd7e14;
-  --bs-yellow: #ffc107;
-  --bs-green: #198754;
-  --bs-teal: #20c997;
-  --bs-cyan: #0dcaf0;
-  --bs-black: #000;
-  --bs-white: #fff;
-  --bs-gray: #6c757d;
-  --bs-gray-dark: #343a40;
-  --bs-gray-100: #f8f9fa;
-  --bs-gray-200: #e9ecef;
-  --bs-gray-300: #dee2e6;
-  --bs-gray-400: #ced4da;
-  --bs-gray-500: #adb5bd;
-  --bs-gray-600: #6c757d;
-  --bs-gray-700: #495057;
-  --bs-gray-800: #343a40;
-  --bs-gray-900: #212529;
-
   /* ==========================================
    * 阴影系统
    * ========================================== */
@@ -258,6 +233,169 @@
 }
 
 /* ==========================================
+ * 公共工具类
+ * ========================================== */
+.hidden {
+  display: none !important;
+  visibility: hidden; 
+}
+
+.sr-only {
+  border: 0;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px; 
+}
+
+.sr-only.focusable:active,
+.sr-only.focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto; 
+}
+
+.invisible {
+  visibility: hidden; 
+}
+
+/* 布局工具类 */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.gap-sm {
+  gap: var(--spacing-sm);
+}
+
+.gap-md {
+  gap: var(--spacing-md);
+}
+
+/* 间距工具类 */
+.mt-xs { margin-top: var(--spacing-xs); }
+.mt-sm { margin-top: var(--spacing-sm); }
+.mt-md { margin-top: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }
+.mt-xl { margin-top: var(--spacing-xl); }
+
+.mb-xs { margin-bottom: var(--spacing-xs); }
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+.mb-xl { margin-bottom: var(--spacing-xl); }
+
+.p-xs { padding: var(--spacing-xs); }
+.p-sm { padding: var(--spacing-sm); }
+.p-md { padding: var(--spacing-md); }
+.p-lg { padding: var(--spacing-lg); }
+.p-xl { padding: var(--spacing-xl); }
+
+/* 边框工具类 */
+.border {
+  border: var(--border);
+}
+
+.border-b {
+  border-bottom: var(--border);
+}
+
+.border-l {
+  border-left: var(--border);
+}
+
+/* 圆角工具类 */
+.rounded {
+  border-radius: var(--border-radius);
+}
+
+/* 阴影工具类 */
+.shadow {
+  box-shadow: var(--bs-box-shadow);
+}
+
+.shadow-sm {
+  box-shadow: var(--shadow-xs);
+}
+
+.shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+.shadow-hover {
+  transition: var(--transition-shadow);
+}
+
+.shadow-hover:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* 文本工具类 */
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+/* 过渡工具类 */
+.transition {
+  transition: var(--transition-all);
+}
+
+.transition-color {
+  transition: var(--transition-color);
+}
+
+.transition-transform {
+  transition: var(--transition-transform);
+}
+
+/* ==========================================
  * 基础样式
  * ========================================== */
 body {
@@ -270,7 +408,7 @@ body {
 a {
   text-decoration: none;
   color: var(--color-text);
-  transition: var(--transition-color);
+  transition: var(--transition-color); 
 }
 
 a:hover, a:active {
@@ -309,7 +447,7 @@ textarea {
   width: 100%;
   box-sizing: border-box;
   border-radius: var(--border-radius);
-  transition: var(--transition-border);
+  transition: var(--transition-border); 
 }
 
 input:focus,
@@ -324,7 +462,7 @@ textarea {
 
 /* 图片样式 */
 img {
-  transition: var(--transition);
+  transition: var(--transition-all); 
   max-width: 100%;
   height: auto;
   border-radius: var(--border-radius);
@@ -333,36 +471,6 @@ img {
 img:hover {
   filter: blur(0) brightness(0.75);
   -webkit-filter: blur(0) brightness(0.75);
-}
-
-/* 通用工具类 */
-.hidden {
-  display: none !important;
-  visibility: hidden; 
-}
-
-.sr-only {
-  border: 0;
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px; 
-}
-
-.sr-only.focusable:active,
-.sr-only.focusable:focus {
-  clip: auto;
-  height: auto;
-  margin: 0;
-  overflow: visible;
-  position: static;
-  width: auto; 
-}
-
-.invisible {
-  visibility: hidden; 
 }
 
 /* ==========================================
@@ -445,7 +553,7 @@ img:hover {
   padding: var(--spacing-xl) var(--spacing-md);
   display: block;
   font-weight: bold;
-  transition: var(--transition);
+  transition: var(--transition-all); 
 }
 
 /* 高亮样式 - 当前页面链接 */
@@ -492,7 +600,7 @@ img:hover {
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px);
-  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+  transition: opacity var(--transition-normal), transform var(--transition-normal), visibility var(--transition-normal); 
 }
 
 /* 下拉菜单显示状态 */
@@ -505,7 +613,7 @@ img:hover {
 .dropdown a {
   padding: var(--spacing-md) var(--spacing-md);
   border-bottom: var(--border-width) solid var(--color-neutral-100);
-  transition: padding-left 0.2s ease;
+  transition: padding-left var(--transition-fast); 
 }
 
 /* 菜单项悬停效果增强 */
@@ -541,7 +649,7 @@ img:hover {
   z-index: 99;
   display: none;
   opacity: 0;
-  transition: var(--transition);
+  transition: var(--transition-all); 
 }
 
 .nav-overlay.active {
@@ -595,7 +703,7 @@ img:hover {
   transform: translateY(-50%);
   color: var(--color-neutral-500);
   pointer-events: none;
-  transition: var(--transition);
+  transition: var(--transition-all); 
 }
 
 #search input[type="text"]:focus + label,
@@ -660,7 +768,7 @@ img:hover {
   border: var(--border);
   display: flex;
   flex-direction: column;
-  transition: var(--transition);
+  transition: var(--transition-all); 
   box-shadow: var(--bs-box-shadow);
   margin-top: 0;
 }
@@ -718,7 +826,7 @@ img:hover {
   border-radius: var(--border-radius);
   font-size: var(--font-size-md); 
   cursor: pointer;
-  transition: background-color var(--transition);
+  transition: background-color var(--transition-normal); 
 }
 
 .post-pwp .post-input .btn:hover {
@@ -772,7 +880,7 @@ img:hover {
   text-decoration: none;
   box-shadow: var(--bs-box-shadow);
   border-radius: var(--border-radius);
-  transition: background-color var(--transition);
+  transition: background-color var(--transition-normal); 
 }
 
 .prev:hover, .next:hover {
@@ -786,7 +894,7 @@ img:hover {
   right: var(--spacing-lg);
   opacity: 0;
   visibility: hidden;
-  transition: var(--transition);
+  transition: var(--transition-all); 
   padding: var(--spacing-md); 
   background-color: var(--color-primary);
   color: var(--color-background);
@@ -842,7 +950,7 @@ img:hover {
 
 .buyu_detail__copyright .content .item .link {
   color: var(--color-text-muted);
-  transition: color var(--transition-fast);
+  transition: color var(--transition-fast); 
   position: relative;
   overflow: hidden;
   display: inline-flex;
@@ -858,7 +966,7 @@ img:hover {
   width: 0;
   height: 1px;
   background-color: var(--color-primary);
-  transition: width var(--transition);
+  transition: width var(--transition-normal); 
 }
 
 .buyu_detail__copyright .content .item .link:hover {
@@ -896,14 +1004,14 @@ img:hover {
   border: var(--border); 
   border-radius: var(--border-radius);
   box-shadow: var(--bs-box-shadow);
-  transition: var(--transition-fast);
+  transition: var(--transition-fast); 
   margin: 0 1px;
 }
 
 .post-bth:hover {
   background-color: var(--color-neutral-100);
   border-color: var(--color-border);
-  box-shadow: var(--box-shadow-hover);
+  box-shadow: var(--shadow-hover);
 }
 
 .post-bth:active {
@@ -913,7 +1021,7 @@ img:hover {
   transform: translateY(1px);
 }
 
-/* 点赞按钮与分享按钮风格统一 */
+/* 点赞按钮与分享按钮 */
 #like, #share {
   color: var(--color-text-muted);
   border-color: var(--color-border);
@@ -945,7 +1053,7 @@ img:hover {
   border-radius: var(--border-radius);
   overflow: hidden;
   box-shadow: var(--bs-box-shadow);
-  transition: transform var(--transition);
+  transition: transform var(--transition-normal); 
 }
 
 /* 图片样式 */
@@ -1003,7 +1111,7 @@ img:hover {
   width: 50px;
   height: 2px;
   background-color: var(--color-orange-500);
-  transition: width 0.3s ease;
+  transition: width var(--transition-normal); 
 }
 
 .post-card .comment-title:hover::after {
@@ -1038,7 +1146,7 @@ img:hover {
   background-color: var(--color-background);
   border-radius: var(--border-radius);
   box-shadow: var(--bs-box-shadow);
-  transition: var(--transition);
+  transition: var(--transition-all); 
 }
 
 /* 奇数层级评论的背景色 */
@@ -1069,7 +1177,7 @@ img:hover {
   color: var(--color-text);
   font-size: 0.92857em;
   text-decoration: none;
-  transition: color var(--transition);
+  transition: color var(--transition-normal); 
 }
 
 /* 评论作者信息样式 */
@@ -1142,7 +1250,7 @@ img:hover {
   color: var(--color-text);
   font-size: var(--font-size-md); 
   line-height: 30px;
-  transition: var(--transition-fast);
+  transition: var(--transition-fast); 
   cursor: pointer;
 }
 
@@ -1171,7 +1279,7 @@ img:hover {
   font-size: 0.92857em;
   cursor: pointer;
   color: var(--color-neutral-600);
-  transition: color var(--transition);
+  transition: color var(--transition-normal); 
 }
 
 /* 评论表单标签样式 */
@@ -1216,13 +1324,13 @@ img:hover {
   font-size: 36px;
   color: var(--color-highlight);
   margin-bottom: var(--spacing-md); 
-  animation: fadeIn 1s ease;
+  animation: fadeIn 1s var(--animation-timing-ease); 
 }
 
 .error-page p {
   font-size: var(--font-size-md);
   margin-bottom: var(--spacing-lg);
-  animation: fadeIn 1s ease;
+  animation: fadeIn 1s var(--animation-timing-ease); 
 }
 
 .error-page form#search {
@@ -1496,7 +1604,7 @@ img:hover {
   border: var(--border);
   border-radius: var(--border-radius);
   overflow: hidden;
-  transition: max-height 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition: max-height 0.6s var(--animation-timing-ease); 
   max-height: 40px;
 }
 
@@ -1524,7 +1632,7 @@ img:hover {
   right: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  transition: transform var(--transition);
+  transition: transform var(--transition-normal); 
 }
 
 .post-content details[open] summary::after {
@@ -1537,11 +1645,11 @@ img:hover {
 }
 
 .post-content details[open] .year-content {
-  animation: slide-down 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+  animation: slide-down 0.6s var(--animation-timing-ease); 
 }
 
 .post-content details:not([open]) .year-content {
-  animation: slide-up 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+  animation: slide-up 0.6s var(--animation-timing-ease); 
 }
 
 /* 图片排版 */
@@ -1592,7 +1700,7 @@ img.alignright {
   justify-content: center;
   align-items: center;
   opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 1s var(--animation-timing-ease);
   backdrop-filter: blur(2px);
 }
 
@@ -1605,7 +1713,7 @@ img.alignright {
   overflow: hidden;
   transform: scale(0.95);
   opacity: 0;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 1s var(--animation-timing-ease);
 }
 
 /* 模态框头部样式 */
@@ -1632,7 +1740,7 @@ img.alignright {
   color: var(--color-text-muted);
   cursor: pointer;
   padding: var(--spacing-xs);
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
   border-radius: 50%;
   width: 28px;
   height: 28px;
@@ -1667,7 +1775,7 @@ img.alignright {
   font-size: var(--font-size-md);
   color: var(--color-text-muted);
   position: relative;
-  transition: all var(--transition);
+  transition: all var(--transition-normal);
   font-weight: 500;
 }
 
@@ -1684,7 +1792,7 @@ img.alignright {
   height: var(--border-width);
   background-color: var(--color-primary);
   border-radius: var(--border-radius) var(--border-radius) 0 0;
-  transition: width var(--transition);
+  transition: width var(--transition-normal);
 }
 
 .tab-btn:not(.active):hover {
@@ -1709,7 +1817,7 @@ img.alignright {
 
 .tab-content.active {
   display: block;
-  animation: fadeIn var(--transition);
+  animation: fadeIn 1s;
 }
 
 /* 二维码和描述文字的容器 */
@@ -1726,7 +1834,7 @@ img.alignright {
   box-shadow: var(--bs-box-shadow);
   border: var(--border);
   border-radius: var(--border-radius);
-  transition: transform var(--transition);
+  transition: transform var(--transition-normal);
 }
 
 .qrcode-container img {
@@ -1797,7 +1905,7 @@ img.alignright {
   text-decoration: none;
   border-radius: var(--border-radius);
   color: inherit;
-  transition: var(--transition);
+  transition: var(--transition-all); 
 }
 
 .friend-description {
@@ -1813,7 +1921,7 @@ img.alignright {
 
 .friend-container .friend-card:hover {
   border-bottom-color: var(--color-neutral-200);
-  box-shadow: var(--box-shadow-hover);
+  box-shadow: var(--shadow-hover); 
 }
 
 .friend-container .friend-card .friend-avatar {
@@ -1894,8 +2002,8 @@ img.alignright {
 .qmsg .qmsg-item{
   padding: 8px;
   text-align: center;
-  -webkit-animation-duration: .3s;
-  animation-duration: .3s;
+  -webkit-animation-duration: var(--animation-duration-sm); 
+  animation-duration: var(--animation-duration-sm); 
   position: relative;
 }
 
@@ -1912,8 +2020,8 @@ img.alignright {
   display: inline-block;
   min-width: 16px;
   height: 16px;
-  -webkit-animation-duration: .3s;
-  animation-duration: .3s;
+  -webkit-animation-duration: var(--animation-duration-sm); 
+  animation-duration: var(--animation-duration-sm); 
 }
 
 .qmsg .qmsg-item:first-child{
@@ -1982,7 +2090,7 @@ img.alignright {
   outline: none;
   cursor: pointer;
   color: rgba(0, 0, 0, .45);
-  transition: color .3s
+  transition: color var(--transition-normal); 
 }
 
 .qmsg .qmsg-icon-close:hover>svg path{
@@ -1990,8 +2098,8 @@ img.alignright {
 }
 
 .qmsg .animate-turn{
-  animation: MessageTurn 1s linear infinite;  
-  -webkit-animation: MessageTurn 1s linear infinite;
+  animation: MessageTurn var(--animation-duration-lg) var(--animation-timing-linear) infinite; 
+  -webkit-animation: MessageTurn var(--animation-duration-lg) var(--animation-timing-linear) infinite; 
 }
 
 /* ==========================================
@@ -2201,7 +2309,7 @@ img.alignright {
   /* 显示移动端汉堡菜单 */
   .menu-toggle {
     display: block;
-    transition: transform var(--transition);
+    transition: transform var(--transition-normal); 
   }
   
   .menu-toggle:hover {
@@ -2224,10 +2332,10 @@ img.alignright {
     opacity: 0;
     visibility: hidden;
     transition-property: transform, opacity, visibility;
-    transition-duration: var(--transition-duration, 0.3s);
-    transition-timing-function: ease;
+    transition-duration: var(--transition-normal); 
+    transition-timing-function: var(--animation-timing-ease); 
     z-index: 101;
-    box-shadow: var(--box-shadow-hover);
+    box-shadow: var(--shadow-hover); 
   }
   
   /* 侧边栏展开状态 */
@@ -2240,7 +2348,7 @@ img.alignright {
   
   /* 侧边栏关闭时的延迟 */
   .main-menu {
-    transition-delay: 0s, 0s, var(--transition-duration, 0.3s);
+    transition-delay: 0s, 0s, var(--transition-normal); 
   }
   
   /* 侧边栏菜单项 */
@@ -2258,7 +2366,7 @@ img.alignright {
     box-shadow: none;
     max-height: 0;
     overflow: hidden;
-    transition: max-height var(--transition);
+    transition: max-height var(--transition-normal); 
   }
   
   .has-dropdown:hover .dropdown,
@@ -2305,7 +2413,7 @@ img.alignright {
   
   /* 遮罩层过渡动画 */
   .nav-overlay {
-    transition: opacity var(--transition), visibility var(--transition);
+    transition: opacity var(--transition-normal), visibility var(--transition-normal); 
     opacity: 0;
     visibility: hidden;
   }
@@ -2341,6 +2449,6 @@ img.alignright {
 /* 大屏幕设备（≥ 1200px） */
 @media (min-width: 1200px) {
   .container {
-    max-width: 952px;
+    max-width: 1200px;
   }
 }

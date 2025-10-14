@@ -9,22 +9,16 @@ function showConsoleInfo() {
 showConsoleInfo();
 
 document.addEventListener('DOMContentLoaded', function () {
-    // 初始化图片懒加载
+    // 初始化所有功能模块
     initLazyLoad();
-    // 初始化任务列表
     initTaskList();
-    // 初始化返回顶部按钮
     initBackToTopButton();
-    // 初始化代码复制按钮
     initCodeCopyButtons();
-    // 初始化文章分享功能
     initArticleSharing();
-    // 初始化文章点赞功能
     initArticleLiking();
-    // 初始化折叠面板
     initDetailsPanels();
-    // 初始化导航菜单
     initNavigationMenu();
+    initRewardModal(); // 新增打赏模态框初始化
 });
 
 // 导航菜单
@@ -495,4 +489,105 @@ function initDetailsPanels() {
             }
         });
     });
+}
+
+// 初始化打赏模态框功能
+function initRewardModal() {
+    // 获取元素
+    const rewardModal = document.getElementById('reward-modal');
+    const rewardContent = document.getElementById('reward-content');
+    const closeReward = document.getElementById('close-reward');
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const body = document.body;
+
+    // 显示模态框
+    function showReward() {
+        // 保存当前滚动位置
+        const scrollTop = body.scrollTop || document.documentElement.scrollTop;
+        
+        // 显示并触发动画
+        rewardModal.style.display = 'flex';
+        setTimeout(() => {
+            rewardModal.style.opacity = '1';
+            rewardContent.style.transform = 'scale(1)';
+            rewardContent.style.opacity = '1';
+        }, 10);
+        
+        // 禁止页面滚动
+        body.style.overflow = 'hidden';
+        body.style.position = 'fixed';
+        body.style.width = '100%';
+        body.style.top = `-${scrollTop}px`;
+        body.setAttribute('data-scrolltop', scrollTop);
+    }
+
+    // 关闭模态框
+    function hideReward() {
+        // 触发关闭动画
+        rewardModal.style.opacity = '0';
+        rewardContent.style.transform = 'scale(0.95)';
+        rewardContent.style.opacity = '0';
+        
+        // 恢复页面滚动和位置
+        setTimeout(() => {
+            rewardModal.style.display = 'none';
+            const scrollTop = body.getAttribute('data-scrolltop');
+            body.style.overflow = '';
+            body.style.position = '';
+            body.style.width = '';
+            body.style.top = '';
+            window.scrollTo(0, scrollTop);
+        }, 300);
+    }
+
+    // 标签页切换逻辑
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // 移除所有active类
+            tabButtons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-selected', 'false');
+            });
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // 添加当前active类
+            button.classList.add('active');
+            button.setAttribute('aria-selected', 'true');
+            const tabId = button.getAttribute('data-tab');
+            document.getElementById(`${tabId}-tab`).classList.add('active');
+        });
+        
+        // 键盘支持
+        button.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                button.click();
+            }
+        });
+    });
+
+    // 事件绑定
+    if (closeReward) {
+        closeReward.addEventListener('click', hideReward);
+    }
+    
+    // 点击遮罩层关闭
+    if (rewardModal) {
+        rewardModal.addEventListener('click', (e) => {
+            if (e.target === rewardModal) {
+                hideReward();
+            }
+        });
+    }
+    
+    // ESC键关闭
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && rewardModal && rewardModal.style.display === 'flex') {
+            hideReward();
+        }
+    });
+
+    // 暴露全局方法供外部调用
+    window.showReward = showReward;
 }

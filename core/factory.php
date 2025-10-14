@@ -35,7 +35,7 @@ class Intercept
 
         // 判断评论内容是否包含敏感词
         if (Helper::options()->JSensitiveWords) {
-            // 调用 _checkSensitiveWords 函数检查评论内容是否包含敏感词（已实现该函数）
+            // 调用 _checkSensitiveWords 函数检查评论内容是否包含敏感词
             if (self::_checkSensitiveWords(Helper::options()->JSensitiveWords, $comment['text'])) {
                 // 获取敏感词处理动作配置
                 $action = Helper::options()->JSensitiveWordsAction ?? 'none'; // 增加默认值，避免未配置时报错
@@ -55,7 +55,21 @@ class Intercept
             }
         }
         
-        // 判断评论是否至少包含一个中文
+        // 判断评论用户昵称是否至少包含一个中文
+        if (Helper::options()->JNicknameNeedChinese === "on") {
+            // 获取评论昵称（优先取用户昵称，游客取提交的author字段）
+            $nickname = !empty($comment->author) ? $comment->author : '';
+            // 正则校验：昵称是否包含至少一个中文（范围：中文汉字、中文标点）
+            $hasChinese = preg_match(
+                "/[\x{4e00}-\x{9fa5}\x{3000}-\x{303F}\x{FF00}-\x{FFEF}]/u", 
+            $nickname);
+            // 若昵称不含中文，将评论状态设为“待审核”
+            if (empty($nickname) || $hasChinese == 0) {
+                $comment['status'] = 'waiting';
+            }
+        }
+
+        // 判断评论内容是否至少包含一个中文
         if (Helper::options()->JLimitOneChinese === "on") {
             // 使用正则表达式检查评论内容是否包含中文
             if (preg_match("/[\x{4e00}-\x{9fa5}]/u", $comment['text']) == 0) {
@@ -195,7 +209,7 @@ class Email
             // 设置邮件内容为 HTML 格式
             $mail->isHTML(true);
 
-            // 修复：补充邮件HTML内容（原代码为空，导致邮件无内容）
+            // 补充邮件HTML内容（原代码为空，导致邮件无内容）
             $html = '
             <!DOCTYPE html>
             <html>
@@ -354,7 +368,7 @@ class Email
             // 如果评论是回复别人，获取被回复人的邮箱
             if ($comment->parent != 0) {
                 $db = Typecho_Db::get();
-                // 修复：增加查询结果判断，避免空值
+                // 增加查询结果判断，避免空值
                 $parentInfo = $db->fetchRow($db->select('mail')->from('table.comments')->where('coid = ?', $comment->parent));
                 $parentMail = !empty($parentInfo) ? $parentInfo['mail'] : '';
             }
@@ -373,7 +387,7 @@ class Email
                 $mail->addAddress($parentMail);
                 $mail->Subject = '您在 [' . $comment->title . '] 的评论有了新的回复！';
                 $mail->send();
-                $mail->clearAddresses(); // 修复：清除收件人，避免累积
+                $mail->clearAddresses(); // 清除收件人，避免累积
             }
 
             /* 如果是游客发的评论（无作者ID） */
@@ -381,7 +395,7 @@ class Email
                 /* 直接发表的评论（不是回复），发送邮件给博主 */
                 if ($comment->parent == 0) {
                     $db = Typecho_Db::get();
-                    // 修复：增加查询结果判断
+                    // 增加查询结果判断
                     $authoInfo = $db->fetchRow($db->select()->from('table.users')->where('uid = ?', $comment->ownerId));
                     $authorMail = !empty($authoInfo) ? $authoInfo['mail'] : '';
 
@@ -397,7 +411,7 @@ class Email
                         $mail->addAddress($authorMail);
                         $mail->Subject = '您的文章 [' . $comment->title . '] 收到一条新的评论！';
                         $mail->send();
-                        $mail->clearAddresses(); // 修复：清除收件人
+                        $mail->clearAddresses(); // 清除收件人
                     }
                 } else {
                     /* 游客回复他人评论，发送邮件给被回复人 */
@@ -417,7 +431,7 @@ class Email
                         $mail->addAddress($parentMail);
                         $mail->Subject = '您在 [' . $comment->title . '] 的评论有了新的回复！';
                         $mail->send();
-                        $mail->clearAddresses(); // 修复：清除收件人
+                        $mail->clearAddresses(); // 清除收件人
                     }
                 }
             }
@@ -439,8 +453,7 @@ class Editor
   public static function Edit()
   {
 ?>
-    <link href="<?php echo get_theme_url('assets/css/buyu.APlayer.css?v=1.3.1'); ?>" rel="stylesheet" />
-    <script src="<?php echo get_theme_url('assets/js/buyu.APlayer.js?v=1.3.1'); ?>"></script>
+    
 <?php
   }
 }
