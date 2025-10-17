@@ -1,10 +1,5 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
-
-        </div>
-    </div>
-</div>
-
-<footer id="footer" role="contentinfo">
+<footer id="pjax-footer" class="footer" role="contentinfo">
   <!-- 主题设置自定义底部栏内容 -->
   <?php if ($this->options->JFooter_Left()): ?>
     <div class="item">

@@ -18,8 +18,105 @@ document.addEventListener('DOMContentLoaded', function () {
     initArticleLiking();
     initDetailsPanels();
     initNavigationMenu();
-    initRewardModal(); // 新增打赏模态框初始化
+    initRewardModal(); // 初始化文章打赏
+    initCollapsePanels(); // 初始化折叠面板
+    initTabs(); // 初始化tabs标签页
 });
+
+// 初始化tabs标签页
+function initTabs() {
+    const tabsGroups = document.querySelectorAll('.shortcode-tabs');
+    if (!tabsGroups.length) return;
+    
+    tabsGroups.forEach(tabs => {
+        const navItems = tabs.querySelectorAll('.tabs-item');
+        const panels = tabs.querySelectorAll('.tabs-panel');
+        
+        navItems.forEach(item => {
+            // 点击切换标签
+            item.addEventListener('click', () => {
+                const index = parseInt(item.getAttribute('data-index'));
+                
+                // 更新导航状态
+                navItems.forEach(nav => nav.classList.remove('tabs-item-active'));
+                item.classList.add('tabs-item-active');
+                
+                // 更新内容面板
+                panels.forEach(panel => panel.classList.remove('tabs-panel-active'));
+                panels[index].classList.add('tabs-panel-active');
+            });
+            
+            // 键盘支持
+            item.setAttribute('tabindex', '0');
+            item.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    item.click();
+                }
+            });
+        });
+    });
+}
+
+// 折叠面板交互逻辑
+function initCollapsePanels() {
+    const headers = document.querySelectorAll(".collapse-header");
+    
+    if (headers.length === 0) return;
+    
+    headers.forEach(header => {
+        const panel = header.nextElementSibling;
+        const collapseContainer = header.closest(".shortcode-collapse");
+        
+        if (!panel || !collapseContainer) return;
+        
+        // 初始化状态
+        const isOpen = collapseContainer.classList.contains("collapse-open");
+        header.setAttribute("aria-expanded", isOpen);
+        
+        // 状态切换处理函数
+        const toggleState = () => {
+            const isOpenNow = collapseContainer.classList.contains("collapse-open");
+            // 切换容器状态类（触发CSS旋转动画）
+            collapseContainer.classList.toggle("collapse-open");
+            // 切换内容显示
+            panel.classList.toggle("hidden");
+            // 更新无障碍属性
+            header.setAttribute("aria-expanded", !isOpenNow);
+        };
+        
+        // 点击切换事件
+        header.addEventListener("click", toggleState);
+        
+        // 键盘支持（直接调用切换函数，避免模拟click）
+        header.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                toggleState();
+            }
+        });
+    });
+}
+
+// 初始化折叠面板(details元素)
+function initDetailsPanels() {
+    const detailsElements = document.querySelectorAll('details');
+    if (detailsElements.length === 0) return; // 无元素则直接返回
+    
+    detailsElements.forEach(detail => {
+        detail.addEventListener('toggle', function () {
+            if (this.open) {
+                // 关闭其他已展开的details（使用for循环提升性能）
+                for (let i = 0; i < detailsElements.length; i++) {
+                    const otherDetail = detailsElements[i];
+                    if (otherDetail !== this && otherDetail.open) {
+                        otherDetail.open = false;
+                    }
+                }
+            }
+        });
+    });
+}
 
 // 导航菜单
 function initNavigationMenu() {
@@ -296,65 +393,61 @@ function initBackToTopButton() {
     }
 }
 
-// 初始化代码复制按钮
+// 初始化代码块复制按钮
 function initCodeCopyButtons() {
     const codeblocks = document.getElementsByTagName("pre");
 
     function addCopyButton(codeBlock) {
+        // 确保代码块相对定位，使按钮可以放在内部
         codeBlock.style.position = "relative";
+        
+        // 创建复制按钮
         const copy = document.createElement("div");
         copy.style.cssText = `
             position: absolute;
-            right: 4px;
-            top: 4px;
-            background-color: white;
-            padding: 2px 8px;
-            margin: 8px;
-            border-radius: 4px;
+            right: 8px;
+            top: 8px;
             cursor: pointer;
             z-index: 9999;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.05);
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+            font: inherit;
+            color: inherit;
         `;
         copy.textContent = "复制";
-        copy.style.visibility = "hidden";
         codeBlock.appendChild(copy);
         return copy;
     }
 
-    function showCopyButton(copyButton) {
-        copyButton.style.visibility = "visible";
-    }
-
-    function hideCopyButton(copyButton) {
-        copyButton.style.visibility = "hidden";
-    }
-
     async function copyCodeToClipboard(codeBlock, copyButton) {
         try {
-            const textToCopy = codeBlock.childNodes[0].textContent;
+            // 获取代码块内的文本内容
+            const codeElement = codeBlock.querySelector('code') || codeBlock.childNodes[0];
+            const textToCopy = codeElement.textContent;
+            
             await navigator.clipboard.writeText(textToCopy);
             copyButton.textContent = "复制成功";
+            // 1秒后恢复文本
             setTimeout(() => {
                 copyButton.textContent = "复制";
             }, 1000);
         } catch (err) {
             console.error('复制失败: ', err);
+            copyButton.textContent = "复制失败";
+            setTimeout(() => {
+                copyButton.textContent = "复制";
+            }, 1000);
         }
     }
 
+    // 为所有代码块添加按钮
     for (let i = 0; i < codeblocks.length; i++) {
         const codeBlock = codeblocks[i];
         const copyButton = addCopyButton(codeBlock);
-
-        codeBlock.addEventListener('mouseover', () => {
-            showCopyButton(copyButton);
-        });
-
-        codeBlock.addEventListener('mouseout', () => {
-            hideCopyButton(copyButton);
-        });
-
-        copyButton.addEventListener('click', (event) => {
+        copyButton.addEventListener('click', () => {
             copyCodeToClipboard(codeBlock, copyButton);
         });
     }
@@ -473,22 +566,6 @@ function initArticleLiking() {
                 });
         });
     }
-}
-
-// 初始化折叠面板
-function initDetailsPanels() {
-    const detailsElements = document.querySelectorAll('details');
-    detailsElements.forEach(detail => {
-        detail.addEventListener('toggle', function () {
-            if (this.open) {
-                detailsElements.forEach(otherDetail => {
-                    if (otherDetail!== this) {
-                        otherDetail.open = false;
-                    }
-                });
-            }
-        });
-    });
 }
 
 // 初始化打赏模态框功能

@@ -15,7 +15,7 @@ function get_theme_url($path) {
     return Typecho_Common::url($path, $options->themeUrl);
 }
 
-//给文章每个超链接点击后新窗口打开，原理就是用正则替换文章内容
+// 文章内容内的超链接点击后新窗口打开
 function a_class_replace($content){
   $content = preg_replace('#<a(.*?) href="([^"]*/)?(([^"/]*)\.[^"]*)"(.*?)>#',
     '<a$1 href="$2$3"$5 target="_blank">', $content);
@@ -27,7 +27,7 @@ function a_class_replace($content){
  * 
  * @param string $content 文章内容HTML
  * @param string $title 文章标题，用于图片alt属性
- * @param bool $allowRelativeUrls 是否 是否允许是否允许相对路径图片
+ * @param bool $allowRelativeUrls 是否允许相对路径图片
  * @return string 处理后的文章内容
  */
 function processContent($content, $title, $allowRelativePath = false) {
@@ -112,42 +112,38 @@ function dengji($i) {
     $db = Typecho_Db::get();
     $adminAuthorId = 1;
     
-    // 如果邮箱为空，使用站长邮箱
     if (empty($i)) {
         $admin = $db->fetchRow($db->select('mail')->from('table.users')->where('uid = ?', $adminAuthorId));
-        $i = $admin['mail'] ?? ''; // 增加空值检查
+        $i = $admin['mail'] ?? '';
     }
     
-    // 查询评论者信息时增加空值判断
+    // 优先判断博主身份
     $author = $db->fetchRow($db->select('authorId')->from('table.comments')->where('mail = ?', $i)->limit(1));
-    if (!$author) { // 如果未查询到评论者信息
-        echo '<span class="comment-badge badge-unknown">访客</span>';
-        return;
-    }
-    $authorId = $author['authorId'] ?? 0; // 确保authorId有默认值
-    
-    // 定义标签样式和文本
+    $authorId = $author['authorId'] ?? 0;
     if ($authorId == $adminAuthorId) {
         echo '<span class="comment-badge badge-admin">博主</span>';
         return;
     }
     
-    // 查询评论数量时增加容错处理
-    $mail = $db->fetchRow($db->select(array('COUNT(cid)' => 'rbq'))->from('table.comments')->where('mail = ?', $i)->where('authorId = ?', '0'));
-    $rbq = $mail['rbq'] ?? 0; // 确保评论数有默认值
+    // 查询评论数量
+    $mail = $db->fetchRow($db->select(array('COUNT(cid)' => 'rbq'))
+        ->from('table.comments')
+        ->where('mail = ?', $i)
+        ->where('authorId = ?', '0'));
+    $rbq = $mail['rbq'] ?? 0; 
     
-    // 根据等级设置不同样式类
-    if ($rbq < 4) {
+    // 提高后的等级门槛（评论数要求更高，递增幅度更大）
+    if ($rbq < 10) {          // 1-9条
         echo '<span class="comment-badge badge-lv1">Lv.1</span>';
-    } elseif ($rbq < 10) {
+    } elseif ($rbq < 30) {    // 10-29条
         echo '<span class="comment-badge badge-lv2">Lv.2</span>';
-    } elseif ($rbq < 20) {
+    } elseif ($rbq < 60) {    // 30-59条
         echo '<span class="comment-badge badge-lv3">Lv.3</span>';
-    } elseif ($rbq < 30) {
+    } elseif ($rbq < 100) {   // 60-99条
         echo '<span class="comment-badge badge-lv4">Lv.4</span>';
-    } elseif ($rbq < 40) {
+    } elseif ($rbq < 150) {   // 100-149条
         echo '<span class="comment-badge badge-lv5">Lv.5</span>';
-    } else {
+    } else {                  // 150条及以上
         echo '<span class="comment-badge badge-soulmate">知己</span>';
     }
 }
@@ -382,7 +378,7 @@ function get_post_view($archive)
     echo $row['views'];
 }
 
-/** 获取评论者ip属地 */
+/* 获取评论ip属地 */
 function convertip($ip){  
   $ip1num = 0; 
   $ip2num = 0; 
@@ -513,8 +509,44 @@ function convertip($ip){
   return $ipaddr;  
 }
 
+/**
+ * 自定义参数解析函数，用于替代Typecho_Common::parseQuery()
+ * 将查询字符串转换为关联数组
+ */
+function custom_parse_query($str) {
+    $params = array();
+    if (empty($str)) {
+        return $params;
+    }
+    
+    // 分割参数对
+    $pairs = explode(' ', trim($str));
+    
+    foreach ($pairs as $pair) {
+        // 分割键值对
+        $pos = strpos($pair, '=');
+        if ($pos !== false) {
+            $key = trim(substr($pair, 0, $pos));
+            $value = trim(substr($pair, $pos + 1));
+            
+            // 去除值的引号
+            if (($value[0] == '"' && $value[strlen($value)-1] == '"') || 
+                ($value[0] == "'" && $value[strlen($value)-1] == "'")) {
+                $value = substr($value, 1, -1);
+            }
+            
+            $params[$key] = $value;
+        }
+    }
+    
+    return $params;
+}
+
 // 视频短代码处理函数
 function video_shortcode($atts) {
+    // 使用自定义参数解析函数处理传入的属性
+    $atts = is_array($atts) ? $atts : custom_parse_query($atts);
+    
     // 默认参数
     $default_atts = array(
         'src' => '',          // 视频地址
@@ -566,6 +598,9 @@ function video_shortcode($atts) {
 
 // 音频短代码处理函数
 function audio_shortcode($atts) {
+    // 使用自定义参数解析函数处理传入的属性
+    $atts = is_array($atts) ? $atts : custom_parse_query($atts);
+    
     $default_atts = array(
         'name' => '未知音频',      // 音频名称
         'artist' => '未知艺术家', // 音频作者
@@ -596,50 +631,445 @@ function audio_shortcode($atts) {
     return '';
 }
 
-// 短代码解析函数
-function parse_shortcodes($content) {
-    $shortcodes = array(
-        'video' => 'video_shortcode', // 视频短代码
-        'audio' => 'audio_shortcode'  // 音频短代码
-    );
+/**
+ * 折叠面板短代码处理函数（默认只显示下箭头）
+ */
+function collapse_shortcode($atts, $content = null) {
+    // 确保内容存在
+    if (empty($content)) {
+        return '<div class="error-message">折叠面板内容不能为空</div>';
+    }
+    
+    // 解析短代码参数
+    $atts = is_array($atts) ? $atts : custom_parse_query($atts);
+    
+    // 提取并验证参数
+    $title = isset($atts['title']) ? $atts['title'] : '折叠面板';
+    $open = isset($atts['open']) ? filter_var($atts['open'], FILTER_VALIDATE_BOOLEAN) : false;
+    $type = isset($atts['type']) ? $atts['type'] : 'default';
+    
+    // 验证有效的类型
+    $validTypes = ['default', 'success', 'warning', 'danger', 'info', 'primary'];
+    if (!in_array($type, $validTypes)) {
+        $type = 'default';
+    }
+    
+    // 生成唯一ID
+    $panelId = 'collapse-panel-' . uniqid();
+    
+    // 构建class属性
+    $classes = ['shortcode-collapse', 'collapse-' . $type];
+    if ($open) {
+        $classes[] = 'collapse-open';
+    }
+    
+    // 过滤标题，防止XSS
+    $title = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+    
+    // 处理内容中的短代码
+    $widget = Typecho_Widget::widget('Widget_Abstract_Contents');
+    $parsedContent = parse_shortcodes($content, $widget, '');
+    
+    // 构建HTML结构（固定只输出下箭头，通过CSS旋转实现状态变化）
+    $html = '<div class="' . implode(' ', $classes) . '">';
+    $html .= '<div class="collapse-header" role="button" tabindex="0" aria-controls="' . $panelId . '" aria-expanded="' . ($open ? 'true' : 'false') . '">';
+    $html .= '<span class="collapse-title">' . $title . '</span>';
+    $html .= '<span class="collapse-icon"><i class="fa fa-chevron-down"></i></span>';
+    $html .= '</div>';
+    $html .= '<div id="' . $panelId . '" class="collapse-content ' . ($open ? '' : 'hidden') . '">';
+    $html .= $parsedContent;
+    $html .= '</div>';
+    $html .= '</div>';
+    
+    return $html;
+}
 
-    // 存储 <pre style="position: relative;"><code> 标签内的内容及其占位符
-    $pre_code_blocks = [];
-    $content = preg_replace_callback('/<pre(?: [^>]*)?><code(?: [^>]*)?>([\s\S]*?)<\/code><\/pre>/i', function ($matches) use (&$pre_code_blocks) {
-        $placeholder = 'PRE_CODE_BLOCK_' . count($pre_code_blocks);
-        $pre_code_blocks[$placeholder] = $matches[0];
-        return $placeholder;
-    }, $content ?? '');
+/**
+ * 附件下载卡片短代码处理函数
+ */
+function attachment_shortcode($atts) {
+    // 确保atts是数组
+    $atts = is_array($atts) ? $atts : custom_parse_query($atts);
+    
+    // 提取并验证参数，使用PHP原生安全过滤函数
+    $url = isset($atts['url']) ? htmlspecialchars($atts['url'], ENT_QUOTES, 'UTF-8') : '';
+    $title = isset($atts['title']) ? htmlspecialchars($atts['title'], ENT_QUOTES, 'UTF-8') : '下载附件';
+    $size = isset($atts['size']) ? htmlspecialchars($atts['size'], ENT_QUOTES, 'UTF-8') : '';
+    $icon = isset($atts['icon']) ? htmlspecialchars($atts['icon'], ENT_QUOTES, 'UTF-8') : '📎';
+    $type = isset($atts['type']) ? htmlspecialchars($atts['type'], ENT_QUOTES, 'UTF-8') : '';
+    $new = isset($atts['new']) ? filter_var($atts['new'], FILTER_VALIDATE_BOOLEAN) : false;
+    $target = isset($atts['target']) ? htmlspecialchars($atts['target'], ENT_QUOTES, 'UTF-8') : '_blank';
+    
+    // 验证链接是否为空
+    if (empty($url)) {
+        return '<div class="shortcode-attachment error">附件链接不能为空</div>';
+    }
+    
+    // 验证链接目标是否有效
+    $validTargets = ['_self', '_blank', '_parent', '_top'];
+    if (!in_array($target, $validTargets)) {
+        $target = '_blank';
+    }
+    
+    // 自动为新窗口添加安全属性
+    $rel = 'noopener noreferrer';
+    if ($target !== '_blank') {
+        $rel = '';
+    }
+    
+    // 构建class属性
+    $classes = ['shortcode-attachment'];
+    if ($new) {
+        $classes[] = 'new';
+    }
+    
+    // 构建data属性（用于CSS文件类型识别）
+    $dataAttributes = '';
+    if (!empty($type)) {
+        $dataAttributes = ' data-type="' . $type . '"';
+    }
+    
+    // 开始构建HTML
+    $html = '<div class="' . implode(' ', $classes) . '"' . $dataAttributes . '>';
+    $html .= '<div class="attachment-icon">' . $icon . '</div>';
+    $html .= '<div class="attachment-info">';
+    $html .= '<div class="attachment-title">' . $title . '</div>';
+    
+    // 添加文件大小信息
+    if (!empty($size)) {
+        $html .= '<div class="attachment-size">' . $size . '</div>';
+    }
+    
+    $html .= '</div>'; // 关闭.attachment-info
+    
+    // 构建下载链接
+    $html .= '<a href="' . $url . '" class="attachment-download"';
+    $html .= ' target="' . $target . '"';
+    if (!empty($rel)) {
+        $html .= ' rel="' . $rel . '"';
+    }
+    $html .= '>下载</a>';
+    
+    $html .= '</div>'; // 关闭.shortcode-attachment
+    
+    return $html;
+}
 
-    foreach ($shortcodes as $tag => $function) {
-        $pattern = '/\['.$tag.'(.*?)\]/is';
-        preg_match_all($pattern, $content, $matches);
-        if (!empty($matches[0])) {
-            foreach ($matches[0] as $key => $match) {
-                $atts = array();
-                if (isset($matches[1][$key])) {
-                    preg_match_all('/(\w+)\s*=\s*"([^"]*)"/', $matches[1][$key], $att_matches);
-                    if (!empty($att_matches[1])) {
-                        foreach ($att_matches[1] as $i => $att_name) {
-                            $atts[$att_name] = $att_matches[2][$i];
-                        }
-                    }
-                }
-                $content = str_replace($match, call_user_func($function, $atts), $content);
-            }
+/**
+ * 徽章短代码处理函数
+ */
+function badge_shortcode($atts, $content = null) {
+    // 确保内容存在
+    if (empty($content)) {
+        return '';
+    }
+    
+    // 使用自定义参数解析函数
+    $atts = is_array($atts) ? $atts : custom_parse_query($atts);
+    
+    // 提取并验证参数
+    $type = isset($atts['type']) ? $atts['type'] : 'default';
+    $color = isset($atts['color']) ? $atts['color'] : '';
+    $size = isset($atts['size']) ? $atts['size'] : '';
+    $outline = isset($atts['outline']) ? filter_var($atts['outline'], FILTER_VALIDATE_BOOLEAN) : false;
+    
+    // 验证有效的类型
+    $validTypes = ['default', 'success', 'warning', 'danger', 'info', 'orange', 'cyan', 'purple'];
+    if (!in_array($type, $validTypes)) {
+        $type = 'default';
+    }
+    
+    // 验证有效的尺寸
+    $validSizes = ['', 'sm', 'lg'];
+    if (!in_array($size, $validSizes)) {
+        $size = '';
+    }
+    
+    // 构建class属性
+    $classes = ['shortcode-badge', 'badge-' . $type];
+    
+    // 添加尺寸类
+    if (!empty($size)) {
+        $classes[] = 'badge-' . $size;
+    }
+    
+    // 添加轮廓样式类
+    if ($outline) {
+        $classes[] = 'badge-outline';
+    }
+    
+    $class = implode(' ', $classes);
+    
+    // 处理自定义颜色（使用PHP原生函数过滤）
+    $style = '';
+    if (!empty($color)) {
+        // 简单验证颜色格式（十六进制或rgb/rgba）
+        if (preg_match('/^#([0-9a-fA-F]{3}){1,2}$/', $color) || 
+            preg_match('/^rgb\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*\)$/', $color) ||
+            preg_match('/^rgba\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*[0-1](\.\d+)?\s*\)$/', $color)) {
+            $style = ' style="background-color: ' . htmlspecialchars($color, ENT_QUOTES, 'UTF-8') . ';"';
         }
     }
+    
+    // 过滤内容确保安全
+    $content = htmlspecialchars($content, ENT_QUOTES, 'UTF-8');
+    
+    return '<span class="' . $class . '"' . $style . '>' . $content . '</span>';
+}
 
-    // 将占位符换回原始 <pre><code> 标签内的内容
-    foreach ($pre_code_blocks as $placeholder => $pre_code_block) {
-        $content = str_replace($placeholder, $pre_code_block, $content);
+/**
+ * 按钮短代码处理函数（支持轮廓按钮）
+ */
+function button_shortcode($atts, $content = null) {
+    // 确保内容存在，避免空按钮
+    if (empty($content)) {
+        $content = '按钮';
+    }
+    
+    // 使用自定义参数解析函数
+    $atts = is_array($atts) ? $atts : custom_parse_query($atts);
+    
+    // 提取并过滤参数，设置默认值
+    $url = isset($atts['url']) ? Typecho_Common::safeUrl($atts['url']) : '#';
+    $type = isset($atts['type']) ? $atts['type'] : 'default';
+    $size = isset($atts['size']) ? $atts['size'] : '';
+    $target = isset($atts['target']) ? $atts['target'] : '_self';
+    $block = isset($atts['block']) ? filter_var($atts['block'], FILTER_VALIDATE_BOOLEAN) : false;
+    $rel = isset($atts['rel']) ? $atts['rel'] : '';
+    
+    // 验证链接目标是否有效
+    $validTargets = ['_self', '_blank', '_parent', '_top'];
+    if (!in_array($target, $validTargets)) {
+        $target = '_self';
+    }
+    
+    // 自动为外部链接添加noopener noreferrer
+    if ($target === '_blank' && empty($rel)) {
+        $rel = 'noopener noreferrer';
+    }
+    
+    // 定义所有有效的按钮类型
+    $validTypes = [
+        'default', 'blue', 'red', 'orange', 'yellow', 
+        'green', 'cyan', 'purple',
+        'outline-blue', 'outline-red', 'outline-orange', 
+        'outline-yellow', 'outline-green', 'outline-cyan', 'outline-purple'
+    ];
+    
+    // 验证按钮类型，如果无效则使用默认值
+    if (!in_array($type, $validTypes)) {
+        $type = 'default';
+    }
+    
+    // 构建class属性
+    $class = ['shortcode-button'];
+    
+    // 处理轮廓按钮的特殊类名结构
+    if (strpos($type, 'outline-') === 0) {
+        $class[] = 'button-outline';
+        $class[] = 'button-' . $type;
+    } else {
+        $class[] = 'button-' . $type;
+    }
+    
+    // 添加尺寸类
+    if (!empty($size) && in_array($size, ['sm', 'lg'])) {
+        $class[] = 'button-' . $size;
+    }
+    
+    // 添加块级类
+    if ($block) {
+        $class[] = 'button-block';
+    }
+    
+    $class = implode(' ', $class);
+    
+    $output = '<a href="' . $url . '" class="' . $class . '"';
+    $output .= ' target="' . htmlspecialchars($target) . '"';
+    if (!empty($rel)) {
+        $output .= ' rel="' . htmlspecialchars($rel) . '"';
+    }
+    $output .= '>';
+    
+    // 添加内容
+    $output .= $content;
+    
+    // 关闭标签
+    $output .= '</a>';
+    
+    return $output;
+}
+
+/**
+ * 进度条短代码处理函数
+ */
+function progress_shortcode($atts) {
+    // 使用自定义参数解析函数
+    $atts = is_array($atts) ? $atts : custom_parse_query($atts);
+    $percent = isset($atts['percent']) ? intval($atts['percent']) : 0;
+    $title = isset($atts['title']) ? $atts['title'] : '';
+    $type = isset($atts['type']) ? $atts['type'] : 'default';
+    $striped = isset($atts['striped']) ? filter_var($atts['striped'], FILTER_VALIDATE_BOOLEAN) : false;
+    $animated = isset($atts['animated']) ? filter_var($atts['animated'], FILTER_VALIDATE_BOOLEAN) : false;
+    
+    if ($percent < 0) $percent = 0;
+    if ($percent > 100) $percent = 100;
+    
+    $class = 'shortcode-progress progress-' . $type;
+    if ($striped) {
+        $class .= ' progress-striped';
+    }
+    if ($animated) {
+        $class .= ' progress-animated';
+    }
+    
+    $html = '<div class="' . $class . '">';
+    
+    if (!empty($title)) {
+        $html .= '<div class="progress-title">' . $title . ' (' . $percent . '%)</div>';
+    }
+    
+    $html .= '<div class="progress-bar-container">
+                <div class="progress-bar" style="width: ' . $percent . '%;">
+                    <span class="progress-text">' . $percent . '%</span>
+                </div>
+              </div>
+            </div>';
+    
+    return $html;
+}
+
+/**
+ * tabs标签页短代码处理函数
+ */
+function tabs_shortcode($atts, $content = null) {
+    static $tabIndex = 0;
+    $tabIndex++; // 确保每个标签页组ID唯一
+    
+    // 解析外层tabs参数
+    $atts = is_array($atts) ? $atts : custom_parse_query($atts);
+    $defaultSelected = isset($atts['selected']) ? intval($atts['selected']) : 1;
+    $defaultSelected = max(1, $defaultSelected); // 确保至少为1
+    
+    // 提取所有tab子标签
+    preg_match_all('/\{tab\s+name="([^"]+)"\}(.*?)\{\/tab\}/s', $content, $matches);
+    $tabNames = $matches[1];
+    $tabContents = $matches[2];
+    
+    // 验证标签页内容
+    if (empty($tabNames)) {
+        return '<div class="error-message">标签页内容不能为空</div>';
+    }
+    
+    // 修正默认选中项（防止超出范围）
+    $totalTabs = count($tabNames);
+    $selectedIndex = $defaultSelected - 1; // 转换为0基索引
+    $selectedIndex = max(0, min($totalTabs - 1, $selectedIndex));
+    
+    // 生成唯一ID
+    $tabsId = 'tabs-group-' . $tabIndex;
+    
+    // 构建标签页HTML
+    $html = '<div class="shortcode-tabs" id="' . $tabsId . '">';
+    
+    // 标签页导航
+    $html .= '<div class="tabs-nav">';
+    $html .= '<ul class="tabs-list">';
+    foreach ($tabNames as $i => $name) {
+        $activeClass = ($i == $selectedIndex) ? 'tabs-item-active' : '';
+        $html .= '<li class="tabs-item ' . $activeClass . '" data-index="' . $i . '">';
+        $html .= htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+        $html .= '</li>';
+    }
+    $html .= '</ul>';
+    $html .= '</div>';
+    
+    // 标签页内容
+    $html .= '<div class="tabs-content">';
+    foreach ($tabContents as $i => $content) {
+        $activeClass = ($i == $selectedIndex) ? 'tabs-panel-active' : '';
+        // 处理内容中的嵌套短代码
+        $widget = Typecho_Widget::widget('Widget_Abstract_Contents');
+        $parsedContent = parse_shortcodes(trim($content), $widget, '');
+        $html .= '<div class="tabs-panel ' . $activeClass . '" data-index="' . $i . '">';
+        $html .= $parsedContent;
+        $html .= '</div>';
+    }
+    $html .= '</div>';
+    
+    $html .= '</div>';
+    return $html;
+}
+
+/**
+ * 短代码解析函数
+ */
+function parse_shortcodes($content, $widget, $lastResult) {
+    $content = empty($lastResult) ? $content : $lastResult;
+    
+    if (!$widget instanceof Widget_Abstract_Contents || !$widget->isMarkdown) {
+        return $content;
     }
 
+    // 解析标签页（tabs）短代码
+    $content = preg_replace_callback('/\{tabs(.*?)\}(.*?)\{\/tabs\}/s', function($matches) use ($widget) {
+        $atts = custom_parse_query($matches[1]);
+        $content = parse_shortcodes($matches[2], $widget, '');
+        return tabs_shortcode($atts, $content);
+    }, $content);
+    
+    // 解析附件下载卡片短代码
+    $content = preg_replace_callback('/\[attachment\s+(.*?)\]/', function($matches) {
+        // 使用自定义参数解析函数
+        $atts = custom_parse_query($matches[1]);
+        return attachment_shortcode($atts);
+    }, $content);
+    
+    // 解析徽章短代码
+    $content = preg_replace_callback('/\[badge\s+(.*?)\](.*?)\[\/badge\]/s', function($matches) {
+        // 使用自定义参数解析函数
+        $atts = custom_parse_query($matches[1]);
+        return badge_shortcode($atts, $matches[2]);
+    }, $content);
+    
+    // 解析按钮短代码
+    $content = preg_replace_callback('/\[button\s+(.*?)\](.*?)\[\/button\]/s', function($matches) {
+        // 使用自定义参数解析函数
+        $atts = custom_parse_query($matches[1]);
+        return button_shortcode($atts, $matches[2]);
+    }, $content);
+    
+    // 解析进度条短代码
+    $content = preg_replace_callback('/\[progress\s+(.*?)\]/', function($matches) {
+        // 使用自定义参数解析函数
+        $atts = custom_parse_query($matches[1]);
+        return progress_shortcode($atts);
+    }, $content);
+    
+    // 解析视频短代码
+    $content = preg_replace_callback('/\[video\s+(.*?)\]/', function($matches) {
+        // 使用自定义参数解析函数
+        $atts = custom_parse_query($matches[1]);
+        return video_shortcode($atts);
+    }, $content);
+    
+    // 解析音频短代码
+    $content = preg_replace_callback('/\[audio\s+(.*?)\]/', function($matches) {
+        // 使用自定义参数解析函数
+        $atts = custom_parse_query($matches[1]);
+        return audio_shortcode($atts);
+    }, $content);
+
+    // 折叠面板短代码解析
+    $content = preg_replace_callback('/\[collapse\s+(.*?)\](.*?)\[\/collapse\]/s', function($matches) use ($widget) {
+        $atts = custom_parse_query($matches[1]);
+        // 手动处理内容中的短代码
+        $content = parse_shortcodes($matches[2], $widget, '');
+        return collapse_shortcode($atts, $content);
+    }, $content);
+    
     return $content;
 }
 
-// 为Typecho文章内容添加短代码过滤器
-Typecho_Plugin::factory('Widget_Abstract_Contents')->contentEx = function($content, $widget, $lastResult) {
-    $content = empty($lastResult) ? $content : $lastResult;
-    return parse_shortcodes($content);
-};
+// 注册短代码过滤器
+Typecho_Plugin::factory('Widget_Abstract_Contents')->contentEx = 'parse_shortcodes';

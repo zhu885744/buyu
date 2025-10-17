@@ -37,7 +37,7 @@
 <body>
 
 <!-- 头部导航 -->
-<header id="header" class="site-header">
+<header id="pjax-header" class="header">
     <div class="container">
         <!-- 导航容器 -->
         <div class="nav-wrapper">
@@ -113,9 +113,3 @@
 
 <!-- 侧边导航遮罩层：移动端菜单展开时显示 -->
 <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
-
-<!-- 主体内容区 -->
-<main id="body" class="site-main">
-    <div class="container">
-        <div class="row">
-            <!-- 主体内容 -->
