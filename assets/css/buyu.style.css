@@ -1955,6 +1955,68 @@ img.alignright {
   max-width: 600px;
 }
 
+/* 标签页容器 */
+.shortcode-tabs {
+  margin: 1rem 0;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+/* 标签导航 */
+.tabs-nav {
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tabs-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* 标签项 */
+.tabs-item {
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+  user-select: none;
+}
+
+.tabs-item:hover {
+  background-color: #f3f4f6;
+}
+
+.tabs-item-active {
+  color: var(--color-blue-500);
+  border-bottom-color: var(--color-blue-500);
+  font-weight: 600;
+}
+
+/* 标签内容面板 */
+.tabs-content {
+  position: relative;
+  min-height: 100px; /* 防止内容过短时布局错乱 */
+}
+
+.tabs-panel {
+  display: none;
+  padding: 1.25rem;
+}
+
+.tabs-panel-active {
+  display: block;
+  animation: tabFadeIn 0.3s ease;
+}
+
+/* 淡入动画 */
+@keyframes tabFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* 附件下载卡片通用样式设置 */
 .shortcode-attachment,
 .shortcode-badge,
