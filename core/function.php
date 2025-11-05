@@ -1,25 +1,53 @@
 <?php
 /* 获取主题当前版本号 */
-function _getVersion()
+function _getVersion(): string
 {
-  return "v1.3.1";
+    return "v1.3.1";
 }
 
-// 定义全局函数 get_theme_url 用于获取静态资源 URL
-function get_theme_url($path) {
+/**
+ * 获取静态资源URL（主题设置支持自定义静态资源CDN地址）
+ * @param string $path 资源相对路径
+ * @return string 完整资源URL
+ */
+function get_theme_url(string $path): string
+{
+    if (empty($path)) {
+        return '';
+    }
+
     $options = Typecho_Widget::widget('Widget_Options');
-    $cdnUrl = $options->JAssetsURL;
+    $cdnUrl = $options->JAssetsURL ?? '';
+
     if (!empty($cdnUrl)) {
         return rtrim($cdnUrl, '/') . '/' . ltrim($path, '/');
     }
+
     return Typecho_Common::url($path, $options->themeUrl);
 }
 
-// 文章内容内的超链接点击后新窗口打开
-function a_class_replace($content){
-  $content = preg_replace('#<a(.*?) href="([^"]*/)?(([^"/]*)\.[^"]*)"(.*?)>#',
-    '<a$1 href="$2$3"$5 target="_blank">', $content);
-  return $content;
+/**
+ * 为超链接添加新窗口属性
+ * @param string|null $content HTML内容
+ * @return string 处理后的内容
+ */
+function a_class_replace(?string $content): string
+{
+    if (empty($content)) {
+        return '';
+    }
+
+    // 安全匹配超链接，避免XSS
+    $pattern = '/<a(.*?)href=(["\'])([^"\']+)\2(.*?)>/i';
+    return preg_replace_callback($pattern, function (array $matches): string {
+        // 已存在target则不修改
+        if (preg_match('/target=["\']?_blank["\']?/i', $matches[1] . $matches[4])) {
+            return $matches[0];
+        }
+        // 过滤危险属性
+        $attrs = preg_replace('/\s+on\w+=[^>]+/', '', $matches[1] . $matches[4]);
+        return "<a{$attrs} href={$matches[2]}{$matches[3]}{$matches[2]} target=\"_blank\">";
+    }, $content);
 }
 
 /**
@@ -30,11 +58,12 @@ function a_class_replace($content){
  * @param bool $allowRelativeUrls 是否允许相对路径图片
  * @return string 处理后的文章内容
  */
-function processContent($content, $title, $allowRelativePath = false) {
+function processContent(string $content, string $title, bool $allowRelativePath = false): string
+{
     // 更精确的图片标签匹配正则，考虑单引号和双引号的情况
     $pattern = '/<img\s+[^>]*src=(["\'])(.*?)\1[^>]*>/i';
     
-    return preg_replace_callback($pattern, function ($matches) use ($title, $allowRelativePath) {
+    return preg_replace_callback($pattern, function (array $matches) use ($title, $allowRelativePath): string {
         // 验证匹配结果结构
         if (!isset($matches[1], $matches[2])) {
             return $matches[0];
@@ -66,8 +95,8 @@ function processContent($content, $title, $allowRelativePath = false) {
  * @param string $path 要检查的路径
  * @return bool 是否为相对路径
  */
-function isRelativePath($path) {
-    // 简单判断：不包含协议且不以/开头的路径视为相对路径
+function isRelativePath(string $path): bool
+{
     return !preg_match('/^[a-zA-Z]+:\/\//', $path) && strpos($path, '/') !== 0;
 }
 
@@ -76,7 +105,8 @@ function isRelativePath($path) {
  * @param \Typecho\Date $date 文章发布时间对象
  * @return string 格式化后的时间字符串 
  */
-function time_ago($date) {
+function time_ago(\Typecho\Date $date): string
+{
     // 获取当前时间（使用与文章相同的时区）
     $now = new \Typecho\Date(time());
     // 计算时间差（秒）
@@ -95,20 +125,117 @@ function time_ago($date) {
     if ($time_diff < $minute) {
         return $time_diff . "秒前发布";
     } elseif ($time_diff < $hour) {
-        return floor($time_diff / $minute) . "分钟前发布";
+        return (int)floor($time_diff / $minute) . "分钟前发布";
     } elseif ($time_diff < $day) {
-        return floor($time_diff / $hour) . "小时前发布";
+        return (int)floor($time_diff / $hour) . "小时前发布";
     } elseif ($time_diff < $month) {
-        return floor($time_diff / $day) . "天前发布";
+        return (int)floor($time_diff / $day) . "天前发布";
     } elseif ($time_diff < $year) {
-        return floor($time_diff / $month) . "个月前发布";
+        return (int)floor($time_diff / $month) . "个月前发布";
     } else {
         return $date->format('Y年m月d日'); // 超过1年直接显示完整日期
     }
 }
 
+/* 判断是否是手机 */
+function _isMobile()
+{
+  if (isset($_SERVER['HTTP_X_WAP_PROFILE']))
+    return true;
+  if (isset($_SERVER['HTTP_VIA'])) {
+    return stristr($_SERVER['HTTP_VIA'], "wap") ? true : false;
+  }
+  if (isset($_SERVER['HTTP_USER_AGENT'])) {
+    $clientkeywords = array('nokia', 'sony', 'ericsson', 'mot', 'samsung', 'htc', 'sgh', 'lg', 'sharp', 'sie-', 'philips', 'panasonic', 'alcatel', 'lenovo', 'iphone', 'ipod', 'blackberry', 'meizu', 'android', 'netfront', 'symbian', 'ucweb', 'windowsce', 'palm', 'operamini', 'operamobi', 'openwave', 'nexusone', 'cldc', 'midp', 'wap', 'mobile');
+    if (preg_match("/(" . implode('|', $clientkeywords) . ")/i", strtolower($_SERVER['HTTP_USER_AGENT'])))
+      return true;
+  }
+  if (isset($_SERVER['HTTP_ACCEPT'])) {
+    if ((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== false) && (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === false || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html')))) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/* 根据评论agent获取浏览器类型 */
+function _getAgentBrowser($agent)
+{
+  if (preg_match('/MSIE\s([^\s|;]+)/i', $agent, $regs)) {
+    $outputer = 'Internet Explore';
+  } else if (preg_match('/FireFox\/([^\s]+)/i', $agent, $regs)) {
+    $outputer = 'FireFox';
+  } else if (preg_match('/Maxthon([\d]*)\/([^\s]+)/i', $agent, $regs)) {
+    $outputer = 'MicroSoft Edge';
+  } else if (preg_match('#360([a-zA-Z0-9.]+)#i', $agent, $regs)) {
+    $outputer = '360 Fast Browser';
+  } else if (preg_match('/Edge([\d]*)\/([^\s]+)/i', $agent, $regs)) {
+    $outputer = 'MicroSoft Edge';
+  } else if (preg_match('/UC/i', $agent)) {
+    $outputer = 'UC Browser';
+  } else if (preg_match('/QQ/i', $agent, $regs) || preg_match('/QQ Browser\/([^\s]+)/i', $agent, $regs)) {
+    $outputer = 'QQ Browser';
+  } else if (preg_match('/UBrowser/i', $agent, $regs)) {
+    $outputer = 'UC Browser';
+  } else if (preg_match('/Opera[\s|\/]([^\s]+)/i', $agent, $regs)) {
+    $outputer = 'Opera';
+  } else if (preg_match('/Chrome([\d]*)\/([^\s]+)/i', $agent, $regs)) {
+    $outputer = 'Google Chrome';
+  } else if (preg_match('/safari\/([^\s]+)/i', $agent, $regs)) {
+    $outputer = 'Safari';
+  } else {
+    $outputer = 'Google Chrome';
+  }
+  echo $outputer;
+}
+
+/* 根据评论agent获取设备类型 */
+function _getAgentOS($agent)
+{
+  $os = "Linux";
+  if (preg_match('/win/i', $agent)) {
+    if (preg_match('/nt 6.0/i', $agent)) {
+      $os = 'Windows Vista';
+    } else if (preg_match('/nt 6.1/i', $agent)) {
+      $os = 'Windows 7';
+    } else if (preg_match('/nt 6.2/i', $agent)) {
+      $os = 'Windows 8';
+    } else if (preg_match('/nt 6.3/i', $agent)) {
+      $os = 'Windows 8.1';
+    } else if (preg_match('/nt 5.1/i', $agent)) {
+      $os = 'Windows XP';
+    } else if (preg_match('/nt 10.0/i', $agent)) {
+      $os = 'Windows 10';
+    } else {
+      $os = 'Windows X64';
+    }
+  } else if (preg_match('/android/i', $agent)) {
+    if (preg_match('/android 9/i', $agent)) {
+      $os = 'Android Pie';
+    } else if (preg_match('/android 8/i', $agent)) {
+      $os = 'Android Oreo';
+    } else {
+      $os = 'Android';
+    }
+  } else if (preg_match('/ubuntu/i', $agent)) {
+    $os = 'Ubuntu';
+  } else if (preg_match('/linux/i', $agent)) {
+    $os = 'Linux';
+  } else if (preg_match('/iPhone/i', $agent)) {
+    $os = 'iPhone';
+  } else if (preg_match('/mac/i', $agent)) {
+    $os = 'MacOS';
+  } else if (preg_match('/fusion/i', $agent)) {
+    $os = 'Android';
+  } else {
+    $os = 'Linux';
+  }
+  echo $os;
+}
+
 // 评论者等级、评论博主标签显示
-function dengji($i) {
+function dengji(?string $i): void
+{
     $db = Typecho_Db::get();
     $adminAuthorId = 1;
     
@@ -121,7 +248,7 @@ function dengji($i) {
     $author = $db->fetchRow($db->select('authorId')->from('table.comments')->where('mail = ?', $i)->limit(1));
     $authorId = $author['authorId'] ?? 0;
     if ($authorId == $adminAuthorId) {
-        echo '<span class="comment-badge badge-admin">博主</span>';
+        echo '<span class="shortcode-badge badge-purple">博主</span>';
         return;
     }
     
@@ -134,22 +261,23 @@ function dengji($i) {
     
     // 提高后的等级门槛（评论数要求更高，递增幅度更大）
     if ($rbq < 10) {          // 1-9条
-        echo '<span class="comment-badge badge-lv1">Lv.1</span>';
+        echo '<span class="shortcode-badge badge-default">Lv.1</span>';
     } elseif ($rbq < 30) {    // 10-29条
-        echo '<span class="comment-badge badge-lv2">Lv.2</span>';
+        echo '<span class="shortcode-badge badge-success">Lv.2</span>';
     } elseif ($rbq < 60) {    // 30-59条
-        echo '<span class="comment-badge badge-lv3">Lv.3</span>';
+        echo '<span class="shortcode-badge badge-warning">Lv.3</span>';
     } elseif ($rbq < 100) {   // 60-99条
-        echo '<span class="comment-badge badge-lv4">Lv.4</span>';
+        echo '<span class="shortcode-badge badge-danger">Lv.4</span>';
     } elseif ($rbq < 150) {   // 100-149条
-        echo '<span class="comment-badge badge-lv5">Lv.5</span>';
+        echo '<span class="shortcode-badge badge-info">Lv.5</span>';
     } else {                  // 150条及以上
-        echo '<span class="comment-badge badge-soulmate">知己</span>';
+        echo '<span class="shortcode-badge badge-orange">知己</span>';
     }
 }
 
 // 附件页面和作者页面重定向到404页面
-function redirect_404(){
+function redirect_404(): void
+{
     $request = Typecho_Request::getInstance();
     $pathInfo = $request->getPathInfo();
     // 使用正则表达式匹配路径
@@ -165,13 +293,13 @@ function redirect_404(){
 Typecho_Plugin::factory('Widget_Archive')->beforeRender = 'redirect_404';
 
 // 文章点赞逻辑
-if (isset($_GET['action']) && ($_GET['action'] == 'like' || $_GET['action'] == 'get_like') && isset($_GET['cid'])) {
-    $cid = intval($_GET['cid']);
+if (isset($_GET['action']) && ($_GET['action'] === 'like' || $_GET['action'] === 'get_like') && isset($_GET['cid'])) {
+    $cid = (int)$_GET['cid'];
     $db = Typecho_Db::get();
     $prefix = $db->getPrefix();
 
     // 简单IP限制
-    if ($_GET['action'] == 'like') {
+    if ($_GET['action'] === 'like') {
         // 检查会话是否已经启动
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -183,13 +311,13 @@ if (isset($_GET['action']) && ($_GET['action'] == 'like' || $_GET['action'] == '
             $key = 'like_' . $cid . '_' . $uid;
         } else {
             // 未登录用户使用 IP 记录点赞状态
-            $ip = $_SERVER['REMOTE_ADDR'];
+            $ip = $_SERVER['REMOTE_ADDR'] ?? '';
             $key = 'like_' . $cid . '_' . md5($ip);
         }
 
         if (isset($_SESSION[$key])) {
             header('Content-Type: application/json');
-            echo json_encode(['success'=>false, 'msg'=>'您已经点过赞啦！']);
+            echo json_encode(['success' => false, 'msg' => '您已经点过赞啦！']);
             exit;
         }
         $db->query("UPDATE `{$prefix}contents` SET `agree` = `agree` + 1 WHERE `cid` = $cid");
@@ -200,31 +328,32 @@ if (isset($_GET['action']) && ($_GET['action'] == 'like' || $_GET['action'] == '
     header('Content-Type: application/json');
     echo json_encode([
         'success' => true,
-        'count' => intval($row['agree'])
+        'count' => (int)($row['agree'] ?? 0)
     ]);
     exit;
 }
 
 /* 判断评论敏感词是否在字符串内 */
-function _checkSensitiveWords($words_str, $str)
+function _checkSensitiveWords(string $words_str, string $str): bool
 {
-  $words = explode("||", $words_str);
-  if (empty($words)) {
-    return false;
-  }
-  foreach ($words as $word) {
-    if (false !== strpos($str, trim($word))) {
-      return true;
+    $words = explode("||", $words_str);
+    if (empty($words)) {
+        return false;
     }
-  }
-  return false;
+    foreach ($words as $word) {
+        $trimmedWord = trim($word);
+        if ($trimmedWord !== '' && strpos($str, $trimmedWord) !== false) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /* 文章编辑器添加字符统计 */
-Typecho_Plugin::factory('admin/write-post.php')->bottom = array('myyodu', 'one');
-Typecho_Plugin::factory('admin/write-page.php')->bottom = array('myyodu', 'one');
+Typecho_Plugin::factory('admin/write-post.php')->bottom = ['myyodu', 'one'];
+Typecho_Plugin::factory('admin/write-page.php')->bottom = ['myyodu', 'one'];
 class myyodu {
-    public static function one()
+    public static function one(): void
     {
     ?>
 <style>
@@ -250,22 +379,21 @@ class myyodu {
         alert(Word);
     }
     function CountChineseCharacters() {
-        Words = document.getElementById('text').value;
-        var W = new Object();
-        var Result = new Array();
-        var iNumwords = 0;
-        var sNumwords = 0;
-        var sTotal = 0;
-        var iTotal = 0;
-        var eTotal = 0;
-        var otherTotal = 0;
-        var bTotal = 0;
-        var inum = 0;
-      var znum = 0;
-      var gl = 0;
-      var paichu = 0;
-        for (i = 0; i < Words.length; i++) {
-            var c = Words.charAt(i);
+        const Words = document.getElementById('text').value;
+        const W = new Object();
+        let iNumwords = 0;
+        let sNumwords = 0;
+        let sTotal = 0;
+        let iTotal = 0;
+        let eTotal = 0;
+        let otherTotal = 0;
+        let bTotal = 0;
+        let inum = 0;
+        let znum = 0;
+        let gl = 0;
+        let paichu = 0;
+        for (let i = 0; i < Words.length; i++) {
+            const c = Words.charAt(i);
             if (c.match(/[\u4e00-\u9fa5]/) || c.match(/[\u0800-\u4e00]/) || c.match(/[\uac00-\ud7ff]/)) {
                 if (isNaN(W[c])) {
                     iNumwords++;
@@ -274,8 +402,8 @@ class myyodu {
                 iTotal++;
             }
         }
-        for (i = 0; i < Words.length; i++) {
-            var c = Words.charAt(i);
+        for (let i = 0; i < Words.length; i++) {
+            const c = Words.charAt(i);
             if (c.match(/[^\x00-\xff]/)) {
                 if (isNaN(W[c])) {
                     sNumwords++;
@@ -287,14 +415,14 @@ class myyodu {
             if (c.match(/[0-9]/)) {
                 inum++;
             }
-           if (c.match(/[a-zA-Z]/)) {
+            if (c.match(/[a-zA-Z]/)) {
                 znum++;
             }
-          if (c.match(/[\s]/)) {
-               gl++;
+            if (c.match(/[\s]/)) {
+                gl++;
             }
-           if (c.match(/[　◕‿↑↓←→↖↗↘↙↔↕。《》、【】“”•‘’❝❞′……—―‐〈〉„╗╚┐└‖〃「」‹›『』〖〗〔〕∶〝〞″≌∽≦≧≒≠≤≥㏒≡≈✓✔◐◑◐◑✕✖★☆₸₹€₴₰₤₳र₨₲₪₵₣₱฿₡₮₭₩₢₧₥₫₦₠₯○㏄㎏㎎㏎㎞㎜㎝㏕㎡‰〒々℃℉ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦㄧㄨㄩ]/)) {
-               paichu++;
+            if (c.match(/[　◕‿↑↓←→↖↗↘↙↔↕。《》、【】“”•‘’❝❞′……—―‐〈〉„╗╚┐└‖〃「」‹›『』〖〗〔〕∶〝〞″≌∽≦≧≒≠≤≥㏒≡≈✓✔◐◑◐◑✕✖★☆₸₹€₴₰₤₳र₨₲₪₵₣₱฿₡₮₭₩₢₧₥₫₦₠₯○㏄㎏㎎㏎㎞㎜㎝㏕㎡‰〒々℃℉ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦㄧㄨㄩ]/)) {
+                paichu++;
             }
         }
         document.getElementById('hanzi').innerText = iTotal - paichu;
@@ -315,7 +443,8 @@ CountChineseCharacters();
     }
 }
 
-function getGravatar($email, $s = 96, $d = 'mp', $r = 'g', $img = false, $atts = array()){
+function getGravatar(string $email, int $s = 96, string $d = 'mp', string $r = 'g', bool $img = false, array $atts = []): string
+{
     // 获取主题配置
     $options = Typecho_Widget::widget('Widget_Options')->themeOptions;
     
@@ -346,7 +475,7 @@ function getGravatar($email, $s = 96, $d = 'mp', $r = 'g', $img = false, $atts =
 }
 
 //文章阅读量
-function get_post_view($archive)
+function get_post_view($archive): void
 {
     $cid    = $archive->cid;
     $db     = Typecho_Db::get();
@@ -360,16 +489,16 @@ function get_post_view($archive)
     if ($archive->is('single')) {
         $views = Typecho_Cookie::get('extend_contents_views');
         if(empty($views)){
-            $views = array();
+            $views = [];
         }else{
             $views = explode(',', $views);
         }
         // 获取请求头信息
-        $referer = isset($_SERVER['HTTP_REFERER'])? $_SERVER['HTTP_REFERER'] : '';
-        $currentUrl = $_SERVER['REQUEST_URI'];
+        $referer = $_SERVER['HTTP_REFERER'] ?? '';
+        $currentUrl = $_SERVER['REQUEST_URI'] ?? '';
         if (!in_array($cid,$views) && ($referer === '' || strpos($referer, $currentUrl) === false)) {
-            $db->query($db->update('table.contents')->rows(array('views' => (int) $row['views'] + 1))->where('cid =?', $cid));
-            array_push($views, $cid);
+            $db->query($db->update('table.contents')->rows(['views' => (int) $row['views'] + 1])->where('cid =?', $cid));
+            $views[] = $cid;
             $views = implode(',', $views);
             // 设置 Cookie 过期时间为 1 天（86400 秒）
             Typecho_Cookie::set('extend_contents_views', $views, time() + 86400);
@@ -379,142 +508,144 @@ function get_post_view($archive)
 }
 
 /* 获取评论ip属地 */
-function convertip($ip){  
-  $ip1num = 0; 
-  $ip2num = 0; 
-  $ipAddr1 =""; 
-  $ipAddr2 =""; 
-  $dat_path = './qqwry.dat';  // qqwry.dat 文件需放置在typecho根目录  
-  if(!preg_match("/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/", $ip)) {  
-    return '可能来自火星';  
-  }   
-  if(!$fd = @fopen($dat_path, 'rb')){  
-    return '可能来自火星';  
-  }   
-  $ip = explode('.', $ip);  
-  $ipNum = $ip[0] * 16777216 + $ip[1] * 65536 + $ip[2] * 256 + $ip[3];   
-  $DataBegin = fread($fd, 4);  
-  $DataEnd = fread($fd, 4);  
-  $ipbegin = implode('', unpack('L', $DataBegin));  
-  if($ipbegin < 0) $ipbegin += pow(2, 32);  
+function convertip(string $ip): string
+{  
+    $ip1num = 0; 
+    $ip2num = 0; 
+    $ipAddr1 =""; 
+    $ipAddr2 =""; 
+    $dat_path = './qqwry.dat';  // qqwry.dat 文件需放置在typecho根目录  
+    if(!preg_match("/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/", $ip)) {  
+        return '可能来自火星';  
+    }   
+    if(!$fd = @fopen($dat_path, 'rb')){  
+        return '可能来自火星';  
+    }   
+    $ipParts = explode('.', $ip);  
+    $ipNum = $ipParts[0] * 16777216 + $ipParts[1] * 65536 + $ipParts[2] * 256 + $ipParts[3];   
+    $DataBegin = fread($fd, 4);  
+    $DataEnd = fread($fd, 4);  
+    $ipbegin = implode('', unpack('L', $DataBegin));  
+    if($ipbegin < 0) $ipbegin += pow(2, 32);  
     $ipend = implode('', unpack('L', $DataEnd));  
-  if($ipend < 0) $ipend += pow(2, 32);  
+    if($ipend < 0) $ipend += pow(2, 32);  
     $ipAllNum = ($ipend - $ipbegin) / 7 + 1;  
-  $BeginNum = 0;  
-  $EndNum = $ipAllNum;   
-  while($ip1num>$ipNum || $ip2num<$ipNum) {  
-    $Middle= intval(($EndNum + $BeginNum) / 2);  
-    fseek($fd, $ipbegin + 7 * $Middle);  
-    $ipData1 = fread($fd, 4);  
-    if(strlen($ipData1) < 4) {  
-      fclose($fd);  
-      return 'System Error';  
-    } 
-    $ip1num = implode('', unpack('L', $ipData1));  
-    if($ip1num < 0) $ip1num += pow(2, 32);  
-   
-    if($ip1num > $ipNum) {  
-      $EndNum = $Middle;  
-      continue;  
-    }  
-    $DataSeek = fread($fd, 3);  
-    if(strlen($DataSeek) < 3) {  
-      fclose($fd);  
-      return 'System Error';  
-    }  
-    $DataSeek = implode('', unpack('L', $DataSeek.chr(0)));  
-    fseek($fd, $DataSeek);  
-    $ipData2 = fread($fd, 4);  
-    if(strlen($ipData2) < 4) {  
-      fclose($fd);  
-      return 'System Error';  
-    }  
-    $ip2num = implode('', unpack('L', $ipData2));  
-    if($ip2num < 0) $ip2num += pow(2, 32);   
-      if($ip2num < $ipNum) {  
-        if($Middle == $BeginNum) {  
-          fclose($fd);  
-          return 'Unknown';  
+    $BeginNum = 0;  
+    $EndNum = $ipAllNum;   
+    while($ip1num>$ipNum || $ip2num<$ipNum) {  
+        $Middle= (int)(($EndNum + $BeginNum) / 2);  
+        fseek($fd, $ipbegin + 7 * $Middle);  
+        $ipData1 = fread($fd, 4);  
+        if(strlen($ipData1) < 4) {  
+            fclose($fd);  
+            return 'System Error';  
+        } 
+        $ip1num = implode('', unpack('L', $ipData1));  
+        if($ip1num < 0) $ip1num += pow(2, 32);  
+       
+        if($ip1num > $ipNum) {  
+            $EndNum = $Middle;  
+            continue;  
         }  
-        $BeginNum = $Middle;  
-      }  
+        $DataSeek = fread($fd, 3);  
+        if(strlen($DataSeek) < 3) {  
+            fclose($fd);  
+            return 'System Error';  
+        }  
+        $DataSeek = implode('', unpack('L', $DataSeek.chr(0)));  
+        fseek($fd, $DataSeek);  
+        $ipData2 = fread($fd, 4);  
+        if(strlen($ipData2) < 4) {  
+            fclose($fd);  
+            return 'System Error';  
+        }  
+        $ip2num = implode('', unpack('L', $ipData2));  
+        if($ip2num < 0) $ip2num += pow(2, 32);   
+        if($ip2num < $ipNum) {  
+            if($Middle == $BeginNum) {  
+                fclose($fd);  
+                return 'Unknown';  
+            }  
+            $BeginNum = $Middle;  
+        }  
     }   
     $ipFlag = fread($fd, 1);  
     if($ipFlag == chr(1)) {  
-      $ipSeek = fread($fd, 3);  
-      if(strlen($ipSeek) < 3) {  
-        fclose($fd);  
-        return 'System Error';  
-      }  
-      $ipSeek = implode('', unpack('L', $ipSeek.chr(0)));  
-      fseek($fd, $ipSeek);  
-      $ipFlag = fread($fd, 1);  
+        $ipSeek = fread($fd, 3);  
+        if(strlen($ipSeek) < 3) {  
+            fclose($fd);  
+            return 'System Error';  
+        }  
+        $ipSeek = implode('', unpack('L', $ipSeek.chr(0)));  
+        fseek($fd, $ipSeek);  
+        $ipFlag = fread($fd, 1);  
     }  
     if($ipFlag == chr(2)) {  
-      $AddrSeek = fread($fd, 3);  
-      if(strlen($AddrSeek) < 3) {  
-      fclose($fd);  
-      return 'System Error';  
-    }  
-    $ipFlag = fread($fd, 1);  
-    if($ipFlag == chr(2)) {  
-      $AddrSeek2 = fread($fd, 3);  
-      if(strlen($AddrSeek2) < 3) {  
-        fclose($fd);  
-        return 'System Error';  
-      }  
-      $AddrSeek2 = implode('', unpack('L', $AddrSeek2.chr(0)));  
-      fseek($fd, $AddrSeek2);  
+        $AddrSeek = fread($fd, 3);  
+        if(strlen($AddrSeek) < 3) {  
+            fclose($fd);  
+            return 'System Error';  
+        }  
+        $ipFlag = fread($fd, 1);  
+        if($ipFlag == chr(2)) {  
+            $AddrSeek2 = fread($fd, 3);  
+            if(strlen($AddrSeek2) < 3) {  
+                fclose($fd);  
+                return 'System Error';  
+            }  
+            $AddrSeek2 = implode('', unpack('L', $AddrSeek2.chr(0)));  
+            fseek($fd, $AddrSeek2);  
+        } else {  
+            fseek($fd, -1, SEEK_CUR);  
+        }  
+        while(($char = fread($fd, 1)) != chr(0))  
+        $ipAddr2 .= $char;  
+        $AddrSeek = implode('', unpack('L', $AddrSeek.chr(0)));  
+        fseek($fd, $AddrSeek);  
+        while(($char = fread($fd, 1)) != chr(0))  
+        $ipAddr1 .= $char;  
     } else {  
-      fseek($fd, -1, SEEK_CUR);  
+        fseek($fd, -1, SEEK_CUR);  
+        while(($char = fread($fd, 1)) != chr(0))  
+        $ipAddr1 .= $char;  
+        $ipFlag = fread($fd, 1);  
+        if($ipFlag == chr(2)) {  
+            $AddrSeek2 = fread($fd, 3);  
+            if(strlen($AddrSeek2) < 3) {  
+                fclose($fd);  
+                return 'System Error';  
+            }  
+            $AddrSeek2 = implode('', unpack('L', $AddrSeek2.chr(0)));  
+            fseek($fd, $AddrSeek2);  
+        } else {  
+            fseek($fd, -1, SEEK_CUR);  
+        }  
+        while(($char = fread($fd, 1)) != chr(0)){  
+            $ipAddr2 .= $char;  
+        }  
     }  
-    while(($char = fread($fd, 1)) != chr(0))  
-    $ipAddr2 .= $char;  
-    $AddrSeek = implode('', unpack('L', $AddrSeek.chr(0)));  
-    fseek($fd, $AddrSeek);  
-    while(($char = fread($fd, 1)) != chr(0))  
-    $ipAddr1 .= $char;  
-  } else {  
-    fseek($fd, -1, SEEK_CUR);  
-    while(($char = fread($fd, 1)) != chr(0))  
-    $ipAddr1 .= $char;  
-    $ipFlag = fread($fd, 1);  
-    if($ipFlag == chr(2)) {  
-      $AddrSeek2 = fread($fd, 3);  
-      if(strlen($AddrSeek2) < 3) {  
-        fclose($fd);  
-        return 'System Error';  
-      }  
-      $AddrSeek2 = implode('', unpack('L', $AddrSeek2.chr(0)));  
-      fseek($fd, $AddrSeek2);  
-    } else {  
-      fseek($fd, -1, SEEK_CUR);  
+    fclose($fd);   
+    if(preg_match('/http/i', $ipAddr2)) {  
+        $ipAddr2 = '';  
     }  
-    while(($char = fread($fd, 1)) != chr(0)){  
-      $ipAddr2 .= $char;  
-    }  
-  }  
-  fclose($fd);   
-  if(preg_match('/http/i', $ipAddr2)) {  
-    $ipAddr2 = '';  
-  }  
-  $ipaddr = "$ipAddr1 $ipAddr2";  
-  $ipaddr = preg_replace('/CZ88.NET/is', '', $ipaddr);  
-  $ipaddr = preg_replace('/^s*/is', '', $ipaddr);  
-  $ipaddr = preg_replace('/s*$/is', '', $ipaddr);  
-  if(preg_match('/http/i', $ipaddr) || $ipaddr == '') {  
-    $ipaddr = '可能来自火星';  
-  }
-  $ipaddr = iconv('gbk', 'utf-8//IGNORE', $ipaddr); 
-  return $ipaddr;  
+    $ipaddr = "$ipAddr1 $ipAddr2";  
+    $ipaddr = preg_replace('/CZ88.NET/is', '', $ipaddr);  
+    $ipaddr = preg_replace('/^s*/is', '', $ipaddr);  
+    $ipaddr = preg_replace('/s*$/is', '', $ipaddr);  
+    if(preg_match('/http/i', $ipaddr) || $ipaddr == '') {  
+        $ipaddr = '可能来自火星';  
+    }
+    $ipaddr = iconv('gbk', 'utf-8//IGNORE', $ipaddr); 
+    return $ipaddr;  
 }
 
 /**
- * 自定义参数解析函数，用于替代Typecho_Common::parseQuery()
+ * 自定义参数解析函数
  * 将查询字符串转换为关联数组
  */
-function custom_parse_query($str) {
-    $params = array();
+function custom_parse_query(string $str): array
+{
+    $params = [];
     if (empty($str)) {
         return $params;
     }
@@ -530,8 +661,8 @@ function custom_parse_query($str) {
             $value = trim(substr($pair, $pos + 1));
             
             // 去除值的引号
-            if (($value[0] == '"' && $value[strlen($value)-1] == '"') || 
-                ($value[0] == "'" && $value[strlen($value)-1] == "'")) {
+            if (($value !== '' && $value[0] === '"' && $value[strlen($value)-1] === '"') || 
+                ($value !== '' && $value[0] === "'" && $value[strlen($value)-1] === "'")) {
                 $value = substr($value, 1, -1);
             }
             
@@ -542,13 +673,75 @@ function custom_parse_query($str) {
     return $params;
 }
 
+/**
+ * tabs标签页短代码处理函数
+ */
+function tabs_shortcode(array $atts, ?string $content = null): string
+{
+    static $tabIndex = 0;
+    $tabIndex++;
+    $atts = is_array($atts) ? $atts : custom_parse_query($atts);
+    $defaultSelected = isset($atts['selected']) ? (int)$atts['selected'] : 1;
+    $defaultSelected = max(1, $defaultSelected);
+    
+    // 使用更精确的模式捕获tab内容
+    preg_match_all('/\{tab\s+name="([^"]+)"\}(.*?)\{\/tab\}/s', (string)$content, $matches, PREG_SET_ORDER);
+    
+    $tabNames = [];
+    $tabContents = [];
+    
+    foreach ($matches as $match) {
+        if (isset($match[1], $match[2])) {
+            // 对每个标签内容进行独立的短代码解析
+            $tabNames[] = $match[1];
+            $widget = Typecho_Widget::widget('Widget_Abstract_Contents');
+            $tabContents[] = parse_shortcodes(trim($match[2]), $widget, '');
+        }
+    }
+    
+    if (empty($tabNames)) {
+        return '<div class="error-message">标签页内容不能为空</div>';
+    }
+    
+    $totalTabs = count($tabNames);
+    $selectedIndex = $defaultSelected - 1;
+    $selectedIndex = max(0, min($totalTabs - 1, $selectedIndex));
+    
+    $tabsId = 'tabs-group-' . $tabIndex;
+    
+    $html = '<div class="shortcode-tabs" id="' . $tabsId . '">';
+    $html .= '<div class="tabs-nav">';
+    $html .= '<ul class="tabs-list">';
+    foreach ($tabNames as $i => $name) {
+        $activeClass = ($i == $selectedIndex) ? 'tabs-item-active' : '';
+        $html .= '<li class="tabs-item ' . $activeClass . '" data-index="' . $i . '" data-tabs-id="' . $tabsId . '">';
+        $html .= htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+        $html .= '</li>';
+    }
+    $html .= '</ul>';
+    $html .= '</div>';
+    
+    $html .= '<div class="tabs-content">';
+    foreach ($tabContents as $i => $content) {
+        $activeClass = ($i == $selectedIndex) ? 'tabs-panel-active' : '';
+        $html .= '<div class="tabs-panel ' . $activeClass . '" data-index="' . $i . '" data-tabs-id="' . $tabsId . '">';
+        $html .= $content;
+        $html .= '</div>';
+    }
+    $html .= '</div>';
+    $html .= '</div>';
+    
+    return $html;
+}
+
 // 视频短代码处理函数
-function video_shortcode($atts) {
+function video_shortcode(array $atts): string
+{
     // 使用自定义参数解析函数处理传入的属性
     $atts = is_array($atts) ? $atts : custom_parse_query($atts);
     
     // 默认参数
-    $default_atts = array(
+    $default_atts = [
         'src' => '',          // 视频地址
         'poster' => '',       // 视频封面
         'width' => '100%',    // 视频宽度
@@ -560,7 +753,7 @@ function video_shortcode($atts) {
         'theme' => '#b7daff', // 主题颜色
         'hotkey' => 'true',   // 是否启用热键
         'volume' => 0.7       // 音量大小
-    );
+    ];
     $atts = array_merge($default_atts, $atts);
 
     // 如果未提供视频地址，返回空字符串
@@ -584,7 +777,7 @@ function video_shortcode($atts) {
                 mutex: ' . ($atts['mutex'] === 'true' ? 'true' : 'false') . ',
                 theme: "' . htmlspecialchars($atts['theme'], ENT_QUOTES) . '",
                 hotkey: ' . ($atts['hotkey'] === 'true' ? 'true' : 'false') . ',
-                volume: ' . floatval($atts['volume']) . ',
+                volume: ' . (float)$atts['volume'] . ',
                 video: {
                     url: "' . htmlspecialchars($atts['src'], ENT_QUOTES) . '",
                     pic: "' . htmlspecialchars($atts['poster'], ENT_QUOTES) . '"
@@ -597,16 +790,17 @@ function video_shortcode($atts) {
 }
 
 // 音频短代码处理函数
-function audio_shortcode($atts) {
+function audio_shortcode(array $atts): string
+{
     // 使用自定义参数解析函数处理传入的属性
     $atts = is_array($atts) ? $atts : custom_parse_query($atts);
     
-    $default_atts = array(
+    $default_atts = [
         'name' => '未知音频',      // 音频名称
         'artist' => '未知艺术家', // 音频作者
         'url' => '',            // 音频链接
         'cover' => ''          // 音频封面
-    );
+    ];
     $atts = array_merge($default_atts, $atts);
 
     if ($atts['url']) {
@@ -632,9 +826,10 @@ function audio_shortcode($atts) {
 }
 
 /**
- * 折叠面板短代码处理函数（默认只显示下箭头）
+ * 折叠面板短代码处理函数
  */
-function collapse_shortcode($atts, $content = null) {
+function collapse_shortcode(array $atts, ?string $content = null): string
+{
     // 确保内容存在
     if (empty($content)) {
         return '<div class="error-message">折叠面板内容不能为空</div>';
@@ -646,19 +841,12 @@ function collapse_shortcode($atts, $content = null) {
     // 提取并验证参数
     $title = isset($atts['title']) ? $atts['title'] : '折叠面板';
     $open = isset($atts['open']) ? filter_var($atts['open'], FILTER_VALIDATE_BOOLEAN) : false;
-    $type = isset($atts['type']) ? $atts['type'] : 'default';
-    
-    // 验证有效的类型
-    $validTypes = ['default', 'success', 'warning', 'danger', 'info', 'primary'];
-    if (!in_array($type, $validTypes)) {
-        $type = 'default';
-    }
     
     // 生成唯一ID
     $panelId = 'collapse-panel-' . uniqid();
     
     // 构建class属性
-    $classes = ['shortcode-collapse', 'collapse-' . $type];
+    $classes = ['shortcode-collapse'];
     if ($open) {
         $classes[] = 'collapse-open';
     }
@@ -670,7 +858,7 @@ function collapse_shortcode($atts, $content = null) {
     $widget = Typecho_Widget::widget('Widget_Abstract_Contents');
     $parsedContent = parse_shortcodes($content, $widget, '');
     
-    // 构建HTML结构（固定只输出下箭头，通过CSS旋转实现状态变化）
+    // 构建HTML结构
     $html = '<div class="' . implode(' ', $classes) . '">';
     $html .= '<div class="collapse-header" role="button" tabindex="0" aria-controls="' . $panelId . '" aria-expanded="' . ($open ? 'true' : 'false') . '">';
     $html .= '<span class="collapse-title">' . $title . '</span>';
@@ -687,7 +875,8 @@ function collapse_shortcode($atts, $content = null) {
 /**
  * 附件下载卡片短代码处理函数
  */
-function attachment_shortcode($atts) {
+function attachment_shortcode(array $atts): string
+{
     // 确保atts是数组
     $atts = is_array($atts) ? $atts : custom_parse_query($atts);
     
@@ -695,33 +884,21 @@ function attachment_shortcode($atts) {
     $url = isset($atts['url']) ? htmlspecialchars($atts['url'], ENT_QUOTES, 'UTF-8') : '';
     $title = isset($atts['title']) ? htmlspecialchars($atts['title'], ENT_QUOTES, 'UTF-8') : '下载附件';
     $size = isset($atts['size']) ? htmlspecialchars($atts['size'], ENT_QUOTES, 'UTF-8') : '';
-    $icon = isset($atts['icon']) ? htmlspecialchars($atts['icon'], ENT_QUOTES, 'UTF-8') : '📎';
+    // 支持Font Awesome图标，默认使用fa-file-o
+    $icon = isset($atts['icon']) ? htmlspecialchars($atts['icon'], ENT_QUOTES, 'UTF-8') : 'fa-file-o';
     $type = isset($atts['type']) ? htmlspecialchars($atts['type'], ENT_QUOTES, 'UTF-8') : '';
-    $new = isset($atts['new']) ? filter_var($atts['new'], FILTER_VALIDATE_BOOLEAN) : false;
-    $target = isset($atts['target']) ? htmlspecialchars($atts['target'], ENT_QUOTES, 'UTF-8') : '_blank';
     
     // 验证链接是否为空
     if (empty($url)) {
         return '<div class="shortcode-attachment error">附件链接不能为空</div>';
     }
     
-    // 验证链接目标是否有效
-    $validTargets = ['_self', '_blank', '_parent', '_top'];
-    if (!in_array($target, $validTargets)) {
-        $target = '_blank';
-    }
+    // 链接默认在当前窗口打开，不设置rel属性
+    $target = '_self';
+    $rel = '';
     
-    // 自动为新窗口添加安全属性
-    $rel = 'noopener noreferrer';
-    if ($target !== '_blank') {
-        $rel = '';
-    }
-    
-    // 构建class属性
+    // 构建class属性（移除new相关类）
     $classes = ['shortcode-attachment'];
-    if ($new) {
-        $classes[] = 'new';
-    }
     
     // 构建data属性（用于CSS文件类型识别）
     $dataAttributes = '';
@@ -729,26 +906,43 @@ function attachment_shortcode($atts) {
         $dataAttributes = ' data-type="' . $type . '"';
     }
     
+    // 根据文件类型自动设置图标（如果未指定）
+    if ($icon === 'fa-file-o' && !empty($type)) {
+        $typeIcons = [
+            'pdf' => 'fa-file-pdf-o',
+            'doc' => 'fa-file-word-o',
+            'xls' => 'fa-file-excel-o',
+            'zip' => 'fa-file-zip-o',
+            'img' => 'fa-file-image-o',
+            'video' => 'fa-file-video-o',
+            'audio' => 'fa-file-audio-o',
+            'txt' => 'fa-file-text-o'
+        ];
+        if (isset($typeIcons[$type])) {
+            $icon = $typeIcons[$type];
+        }
+    }
+    
     // 开始构建HTML
     $html = '<div class="' . implode(' ', $classes) . '"' . $dataAttributes . '>';
-    $html .= '<div class="attachment-icon">' . $icon . '</div>';
+    $html .= '<div class="attachment-icon"><i class="fa ' . $icon . '" aria-hidden="true"></i></div>';
     $html .= '<div class="attachment-info">';
     $html .= '<div class="attachment-title">' . $title . '</div>';
     
     // 添加文件大小信息
     if (!empty($size)) {
-        $html .= '<div class="attachment-size">' . $size . '</div>';
+        $html .= '<div class="attachment-size"><i class="fa fa-database" aria-hidden="true"></i> ' . $size . '</div>';
     }
     
     $html .= '</div>'; // 关闭.attachment-info
     
-    // 构建下载链接
+    // 构建下载链接（固定在当前窗口打开）
     $html .= '<a href="' . $url . '" class="attachment-download"';
     $html .= ' target="' . $target . '"';
     if (!empty($rel)) {
         $html .= ' rel="' . $rel . '"';
     }
-    $html .= '>下载</a>';
+    $html .= '><i class="fa fa-download" aria-hidden="true"></i></a>';
     
     $html .= '</div>'; // 关闭.shortcode-attachment
     
@@ -758,7 +952,8 @@ function attachment_shortcode($atts) {
 /**
  * 徽章短代码处理函数
  */
-function badge_shortcode($atts, $content = null) {
+function badge_shortcode(array $atts, ?string $content = null): string
+{
     // 确保内容存在
     if (empty($content)) {
         return '';
@@ -793,7 +988,7 @@ function badge_shortcode($atts, $content = null) {
         $classes[] = 'badge-' . $size;
     }
     
-    // 添加轮廓样式类
+    // 添加边框样式类
     if ($outline) {
         $classes[] = 'badge-outline';
     }
@@ -818,9 +1013,10 @@ function badge_shortcode($atts, $content = null) {
 }
 
 /**
- * 按钮短代码处理函数（支持轮廓按钮）
+ * 按钮短代码处理函数
  */
-function button_shortcode($atts, $content = null) {
+function button_shortcode(array $atts, ?string $content = null): string
+{
     // 确保内容存在，避免空按钮
     if (empty($content)) {
         $content = '按钮';
@@ -864,7 +1060,7 @@ function button_shortcode($atts, $content = null) {
     // 构建class属性
     $class = ['shortcode-button'];
     
-    // 处理轮廓按钮的特殊类名结构
+    // 处理边框按钮的特殊类名结构
     if (strpos($type, 'outline-') === 0) {
         $class[] = 'button-outline';
         $class[] = 'button-' . $type;
@@ -903,10 +1099,11 @@ function button_shortcode($atts, $content = null) {
 /**
  * 进度条短代码处理函数
  */
-function progress_shortcode($atts) {
+function progress_shortcode(array $atts): string
+{
     // 使用自定义参数解析函数
     $atts = is_array($atts) ? $atts : custom_parse_query($atts);
-    $percent = isset($atts['percent']) ? intval($atts['percent']) : 0;
+    $percent = isset($atts['percent']) ? (int)$atts['percent'] : 0;
     $title = isset($atts['title']) ? $atts['title'] : '';
     $type = isset($atts['type']) ? $atts['type'] : 'default';
     $striped = isset($atts['striped']) ? filter_var($atts['striped'], FILTER_VALIDATE_BOOLEAN) : false;
@@ -940,133 +1137,82 @@ function progress_shortcode($atts) {
 }
 
 /**
- * tabs标签页短代码处理函数
- */
-function tabs_shortcode($atts, $content = null) {
-    static $tabIndex = 0;
-    $tabIndex++; // 确保每个标签页组ID唯一
-    
-    // 解析外层tabs参数
-    $atts = is_array($atts) ? $atts : custom_parse_query($atts);
-    $defaultSelected = isset($atts['selected']) ? intval($atts['selected']) : 1;
-    $defaultSelected = max(1, $defaultSelected); // 确保至少为1
-    
-    // 提取所有tab子标签
-    preg_match_all('/\{tab\s+name="([^"]+)"\}(.*?)\{\/tab\}/s', $content, $matches);
-    $tabNames = $matches[1];
-    $tabContents = $matches[2];
-    
-    // 验证标签页内容
-    if (empty($tabNames)) {
-        return '<div class="error-message">标签页内容不能为空</div>';
-    }
-    
-    // 修正默认选中项（防止超出范围）
-    $totalTabs = count($tabNames);
-    $selectedIndex = $defaultSelected - 1; // 转换为0基索引
-    $selectedIndex = max(0, min($totalTabs - 1, $selectedIndex));
-    
-    // 生成唯一ID
-    $tabsId = 'tabs-group-' . $tabIndex;
-    
-    // 构建标签页HTML
-    $html = '<div class="shortcode-tabs" id="' . $tabsId . '">';
-    
-    // 标签页导航
-    $html .= '<div class="tabs-nav">';
-    $html .= '<ul class="tabs-list">';
-    foreach ($tabNames as $i => $name) {
-        $activeClass = ($i == $selectedIndex) ? 'tabs-item-active' : '';
-        $html .= '<li class="tabs-item ' . $activeClass . '" data-index="' . $i . '">';
-        $html .= htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
-        $html .= '</li>';
-    }
-    $html .= '</ul>';
-    $html .= '</div>';
-    
-    // 标签页内容
-    $html .= '<div class="tabs-content">';
-    foreach ($tabContents as $i => $content) {
-        $activeClass = ($i == $selectedIndex) ? 'tabs-panel-active' : '';
-        // 处理内容中的嵌套短代码
-        $widget = Typecho_Widget::widget('Widget_Abstract_Contents');
-        $parsedContent = parse_shortcodes(trim($content), $widget, '');
-        $html .= '<div class="tabs-panel ' . $activeClass . '" data-index="' . $i . '">';
-        $html .= $parsedContent;
-        $html .= '</div>';
-    }
-    $html .= '</div>';
-    
-    $html .= '</div>';
-    return $html;
-}
-
-/**
  * 短代码解析函数
  */
-function parse_shortcodes($content, $widget, $lastResult) {
+function parse_shortcodes(?string $content, Widget_Abstract_Contents $widget, ?string $lastResult): string
+{
     $content = empty($lastResult) ? $content : $lastResult;
+    $content = (string)$content; // 确保内容为字符串类型
     
     if (!$widget instanceof Widget_Abstract_Contents || !$widget->isMarkdown) {
         return $content;
     }
 
-    // 解析标签页（tabs）短代码
-    $content = preg_replace_callback('/\{tabs(.*?)\}(.*?)\{\/tabs\}/s', function($matches) use ($widget) {
-        $atts = custom_parse_query($matches[1]);
-        $content = parse_shortcodes($matches[2], $widget, '');
-        return tabs_shortcode($atts, $content);
+    // 提取出所有代码块并存储，避免内部短代码被解析
+    $codeBlocks = [];
+    $content = preg_replace_callback(
+        '/<pre(?:\s+[^>]*)?><code(?:\s+[^>]*)?>([\s\S]*?)<\/code><\/pre>/i',
+        function(array $matches) use (&$codeBlocks): string {
+            $placeholder = 'CODE_BLOCK_PLACEHOLDER_' . count($codeBlocks);
+            $codeBlocks[$placeholder] = $matches[0];
+            return $placeholder;
+        },
+        $content
+    );
+
+    $content = preg_replace_callback('/\[collapse\s+(.*?)\](.*?)\[\/collapse\]/s', function(array $matches) use ($widget): string {
+        // 使用更严格的非贪婪匹配，添加界定符
+        if (preg_match('/\[collapse\s+([^\]]*)\](.*?)\[\/collapse\]/s', $matches[0], $innerMatches)) {
+            $atts = custom_parse_query($innerMatches[1]);
+            $content = parse_shortcodes($innerMatches[2], $widget, '');
+            return collapse_shortcode($atts, $content);
+        }
+        return $matches[0];
     }, $content);
     
-    // 解析附件下载卡片短代码
-    $content = preg_replace_callback('/\[attachment\s+(.*?)\]/', function($matches) {
-        // 使用自定义参数解析函数
+    $content = preg_replace_callback('/\{tabs(.*?)\}(.*?)\{\/tabs\}/s', function(array $matches) use ($widget): string {
+        if (preg_match('/\{tabs\s*([^}]*)\}(.*?)\{\/tabs\}/s', $matches[0], $innerMatches)) {
+            $atts = custom_parse_query($innerMatches[1]);
+            $content = parse_shortcodes($innerMatches[2], $widget, '');
+            return tabs_shortcode($atts, $content);
+        }
+        return $matches[0];
+    }, $content);
+    
+    $content = preg_replace_callback('/\[attachment\s+(.*?)\]/', function(array $matches): string {
         $atts = custom_parse_query($matches[1]);
         return attachment_shortcode($atts);
     }, $content);
     
-    // 解析徽章短代码
-    $content = preg_replace_callback('/\[badge\s+(.*?)\](.*?)\[\/badge\]/s', function($matches) {
-        // 使用自定义参数解析函数
+    $content = preg_replace_callback('/\[badge\s+(.*?)\](.*?)\[\/badge\]/s', function(array $matches): string {
         $atts = custom_parse_query($matches[1]);
         return badge_shortcode($atts, $matches[2]);
     }, $content);
     
-    // 解析按钮短代码
-    $content = preg_replace_callback('/\[button\s+(.*?)\](.*?)\[\/button\]/s', function($matches) {
-        // 使用自定义参数解析函数
+    $content = preg_replace_callback('/\[button\s+(.*?)\](.*?)\[\/button\]/s', function(array $matches): string {
         $atts = custom_parse_query($matches[1]);
         return button_shortcode($atts, $matches[2]);
     }, $content);
     
-    // 解析进度条短代码
-    $content = preg_replace_callback('/\[progress\s+(.*?)\]/', function($matches) {
-        // 使用自定义参数解析函数
+    $content = preg_replace_callback('/\[progress\s+(.*?)\]/', function(array $matches): string {
         $atts = custom_parse_query($matches[1]);
         return progress_shortcode($atts);
     }, $content);
     
-    // 解析视频短代码
-    $content = preg_replace_callback('/\[video\s+(.*?)\]/', function($matches) {
-        // 使用自定义参数解析函数
+    $content = preg_replace_callback('/\[video\s+(.*?)\]/', function(array $matches): string {
         $atts = custom_parse_query($matches[1]);
         return video_shortcode($atts);
     }, $content);
     
-    // 解析音频短代码
-    $content = preg_replace_callback('/\[audio\s+(.*?)\]/', function($matches) {
-        // 使用自定义参数解析函数
+    $content = preg_replace_callback('/\[audio\s+(.*?)\]/', function(array $matches): string {
         $atts = custom_parse_query($matches[1]);
         return audio_shortcode($atts);
     }, $content);
 
-    // 折叠面板短代码解析
-    $content = preg_replace_callback('/\[collapse\s+(.*?)\](.*?)\[\/collapse\]/s', function($matches) use ($widget) {
-        $atts = custom_parse_query($matches[1]);
-        // 手动处理内容中的短代码
-        $content = parse_shortcodes($matches[2], $widget, '');
-        return collapse_shortcode($atts, $content);
-    }, $content);
+    // 恢复原始代码块
+    foreach ($codeBlocks as $placeholder => $codeBlock) {
+        $content = str_replace($placeholder, $codeBlock, $content);
+    }
     
     return $content;
 }

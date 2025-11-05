@@ -19,8 +19,7 @@ class Intercept
 {
     public static function message($comment)
     {
-        // 修复：将错误级日志改为通知级，避免刷屏（原error_log会触发错误日志）
-        trigger_error("Intercept::message function is called.", E_USER_NOTICE);
+        // trigger_error("Intercept::message function is called.", E_USER_NOTICE);
 
         // 判断用户评论内容是否超过了最大字数限制
         if (Helper::options()->JTextLimit) {
@@ -120,7 +119,7 @@ class Intercept
         
         // 正则匹配（支持部分匹配，如"广告"匹配"小广告"）
         if (preg_match('/' . preg_quote($word, '/') . '/ui', $content)) {
-            //trigger_error("匹配到敏感词: [{$word}]", E_USER_NOTICE);
+            trigger_error("匹配到敏感词: [{$word}]", E_USER_NOTICE);
             return true;
         }
     }
@@ -162,8 +161,8 @@ class Intercept
 /**
  * 发送评论邮件通知
  *
- * 根据评论的不同情况（回复他人、游客直接评论、游客回复他人评论等），
- * 向相应的用户发送邮件通知。
+ * 根据评论的不同情况（待审核、已通过、回复他人、游客评论等），
+ * 向相应的用户发送邮件通知，待审核评论仅通知站长
  */
 if (
     Helper::options()->JCommentMail === 'on' &&
@@ -182,34 +181,24 @@ class Email
     public static function send($comment)
     {
         try {
-            // 创建一个新的 PHPMailer 实例
-            $mail = new PHPMailer(true); // 启用异常模式
-            // 设置邮件发送方式为 SMTP
+            // 获取评论审核状态（Typecho默认字段：waiting-待审核，approved-已通过）
+            $commentStatus = $comment->status;
+            // 创建PHPMailer实例
+            $mail = new PHPMailer(true);
             $mail->isSMTP();
-            // 开启 SMTP 认证
             $mail->SMTPAuth = true;
-            // 设置邮件字符编码为 UTF-8
             $mail->CharSet = 'UTF-8';
-            // 关闭调试模式（生产环境禁用，调试时可改为2）
             $mail->SMTPDebug = 0;
-            // 设置 SMTP 安全协议
             $mail->SMTPSecure = Helper::options()->JCommentSMTPSecure;
-            // 设置 SMTP 服务器地址
             $mail->Host = Helper::options()->JCommentMailHost;
-            // 设置 SMTP 服务器端口（确保为数字）
             $mail->Port = (int)Helper::options()->JCommentMailPort;
-            // 设置发件人姓名
             $mail->FromName = Helper::options()->JCommentMailFromName;
-            // 设置 SMTP 用户名
             $mail->Username = Helper::options()->JCommentMailAccount;
-            // 设置发件人邮箱
             $mail->From = Helper::options()->JCommentMailAccount;
-            // 设置 SMTP 密码（授权码）
             $mail->Password = Helper::options()->JCommentMailPassword;
-            // 设置邮件内容为 HTML 格式
             $mail->isHTML(true);
 
-            // 补充邮件HTML内容（原代码为空，导致邮件无内容）
+            // 邮件HTML模板
             $html = '
             <!DOCTYPE html>
             <html>
@@ -217,243 +206,146 @@ class Email
             <meta charset="UTF-8">
             <title>{title}</title>
             <style>
-            /* 基础样式重置 */
             * { margin: 0; padding: 0; box-sizing: border-box; }
-            body { 
-            line-height: 1.7; 
-            color: #444; 
-            background-color: #f8f9fa; 
-            padding: 20px 0;
-            }
-            /* 容器样式 */
-            .container { 
-            max-width: 720px; 
-            margin: 0 auto; 
-            background: #fff; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
-            overflow: hidden;
-            }
-            /* 头部品牌区域 */
-            .mail-header { 
-            background: #165DFF; 
-            padding: 24px 30px; 
-            color: #fff;
-            }
-            .brand { 
-            display: flex; 
-            align-items: center; 
-            gap: 12px;
-            }
-            .brand-name { 
-            font-size: 18px; 
-            font-weight: 600;
-            }
-            /* 内容区域 */
-            .mail-content { 
-            padding: 30px; 
-            }
-            .mail-title { 
-            font-size: 22px; 
-            color: #222; 
-            margin-bottom: 20px; 
-            padding-bottom: 15px; 
-            border-bottom: 1px solid #f0f0f0;
-            }
-            .subtitle { 
-            color: #666; 
-            margin-bottom: 24px; 
-            font-size: 15px;
-            }
-            /* 评论内容卡片 */
-            .comment-card { 
-            background: #f9fafb; 
-            border-radius: 8px; 
-            padding: 20px; 
-            margin: 20px 0 30px; 
-            border-left: 4px solid #165DFF; 
-            font-size: 15px;
-            }
-            .comment-content { 
-            line-height: 1.8; 
-            color: #333;
-            }
-            /* 操作按钮 */
-            .action-btn { 
-            display: inline-block; 
-            background: #165DFF; 
-            color: #fff; 
-            padding: 12px 24px; 
-            border-radius: 6px; 
-            text-decoration: none; 
-            font-weight: 500; 
-            margin: 10px 0 25px; 
-            transition: background 0.3s;
-            }
-            .action-btn:hover { 
-            background: #0E42D2; 
-            }
-            /* 底部信息 */
-            .mail-footer { 
-            padding: 20px 30px; 
-            background: #f9fafb; 
-            border-top: 1px solid #f0f0f0; 
-            font-size: 14px; 
-            color: #888;
-            }
-            .footer-note { 
-            margin-bottom: 12px; 
-            }
-            .unsubscribe { 
-            color: #165DFF; 
-            text-decoration: none;
-            }
-            .unsubscribe:hover { 
-            text-decoration: underline;
-            }
-            /* 响应式适配 */
+            body { line-height: 1.7; color: #444; background-color: #f8f9fa; padding: 20px 0; }
+            .container { max-width: 720px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden; }
+            .mail-header { background: #165DFF; padding: 24px 30px; color: #fff; }
+            .brand { display: flex; align-items: center; gap: 12px; }
+            .brand-name { font-size: 18px; font-weight: 600; }
+            .mail-content { padding: 30px; }
+            .mail-title { font-size: 22px; color: #222; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0; }
+            .subtitle { color: #666; margin-bottom: 24px; font-size: 15px; }
+            .comment-card { background: #f9fafb; border-radius: 8px; padding: 20px; margin: 20px 0 30px; border-left: 4px solid #165DFF; font-size: 15px; }
+            .comment-content { line-height: 1.8; color: #333; }
+            .action-btn { display: inline-block; background: #165DFF; color: #fff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 500; margin: 10px 0 25px; transition: background 0.3s; }
+            .action-btn:hover { background: #0E42D2; }
+            .mail-footer { padding: 20px 30px; background: #f9fafb; border-top: 1px solid #f0f0f0; font-size: 14px; color: #888; }
+            .footer-note { margin-bottom: 12px; }
+            .unsubscribe { color: #165DFF; text-decoration: none; }
+            .unsubscribe:hover { text-decoration: underline; }
             @media (max-width: 600px) {
-            .container { 
-                width: 95%; 
-                margin: 0 auto;
-            }
-            .mail-header, .mail-content, .mail-footer { 
-                padding: 20px 15px;
-            }
-            .mail-title { 
-                font-size: 18px;
-            }
-            .action-btn { 
-                width: 100%; 
-                text-align: center;
-            }
+                .container { width: 95%; margin: 0 auto; }
+                .mail-header, .mail-content, .mail-footer { padding: 20px 15px; }
+                .mail-title { font-size: 18px; }
+                .action-btn { width: 100%; text-align: center; }
             }
             </style>
             </head>
             <body>
             <div class="container">
-            <!-- 邮件头部品牌区域 -->
             <div class="mail-header">
-            <div class="brand">
-                <div class="brand-name">{title}</div>
+                <div class="brand"><div class="brand-name">{title}</div></div>
             </div>
-            </div>
-
-            <!-- 邮件主要内容 -->
             <div class="mail-content">
-            <p class="subtitle">{subtitle}</p>
-
-            <div class="comment-card">
-                <div class="comment-content">{content}</div>
+                <p class="subtitle">{subtitle}</p>
+                <div class="comment-card"><div class="comment-content">{content}</div></div>
+                <a href="' . substr($comment->permalink, 0, strrpos($comment->permalink, "#")) . '" target="_blank" class="action-btn">查看评论详情</a>
             </div>
-            
-            <a href="' . substr($comment->permalink, 0, strrpos($comment->permalink, "#")) . '" target="_blank" class="action-btn">查看评论详情</a>
-            </div>
-
-            <!-- 邮件底部信息 -->
             <div class="mail-footer">
-            <p class="footer-note">这是自动发送的通知邮件，如有疑问可通过站点内联系方式找我</p>
+                <p class="footer-note">这是自动发送的通知邮件，如有疑问可通过站点内的联系方式找到我</p>
             </div>
             </div>
             </body>
             </html>';
 
-            // 获取评论内容并处理图片标签
+            // 处理评论内容中的图片标签
             $text = $comment->text;
             $text = preg_replace('/\{!\{([^\"]*)\}!\}/', '<img style="max-width: 100%;vertical-align: middle;" src="$1"/>', $text);
 
-            // 定义被回复人的邮箱
-            $parentMail = '';
-
-            // 如果评论是回复别人，获取被回复人的邮箱
-            if ($comment->parent != 0) {
+            // 待审核评论处理（仅通知站长）
+            if ($commentStatus === 'waiting') {
                 $db = Typecho_Db::get();
-                // 增加查询结果判断，避免空值
-                $parentInfo = $db->fetchRow($db->select('mail')->from('table.comments')->where('coid = ?', $comment->parent));
-                $parentMail = !empty($parentInfo) ? $parentInfo['mail'] : '';
-            }
-
-            /* 被回复的人不是自己时，发送邮件 */
-            if ($parentMail != $comment->mail && !empty($parentMail)) {
-                // 替换邮件正文中的占位符
-                $mail->Body = strtr(
-                    $html,
-                    array(
-                        "{title}" => '您在 [' . $comment->title . '] 的评论有了新的回复！',
-                        "{subtitle}" => '博主：[ ' . $comment->author . ' ] <br>在《 <a style="color: #12addb;text-decoration: none;" href="' . substr($comment->permalink, 0, strrpos($comment->permalink, "#")) . '" target="_blank">' . $comment->title . '</a> 》上回复了您:',
-                        "{content}" => $text,
-                    )
-                );
-                $mail->addAddress($parentMail);
-                $mail->Subject = '您在 [' . $comment->title . '] 的评论有了新的回复！';
-                $mail->send();
-                $mail->clearAddresses(); // 清除收件人，避免累积
-            }
-
-            /* 如果是游客发的评论（无作者ID） */
-            if (empty($comment->authorId)) {
-                /* 直接发表的评论（不是回复），发送邮件给博主 */
-                if ($comment->parent == 0) {
-                    $db = Typecho_Db::get();
-                    // 增加查询结果判断
-                    $authoInfo = $db->fetchRow($db->select()->from('table.users')->where('uid = ?', $comment->ownerId));
-                    $authorMail = !empty($authoInfo) ? $authoInfo['mail'] : '';
-
-                    if (!empty($authorMail)) {
-                        $mail->Body = strtr(
-                            $html,
-                            array(
-                                "{title}" => '您的文章 [' . $comment->title . '] 收到一条新的评论！',
-                                "{subtitle}" => $comment->author . ' [' . $comment->ip . '] <br>在您的《 <a style="color: #12addb;text-decoration: none;" href="' . substr($comment->permalink, 0, strrpos($comment->permalink, "#")) . '" target="_blank">' . $comment->title . '</a> 》上发表评论:',
-                                "{content}" => $text,
-                            )
-                        );
-                        $mail->addAddress($authorMail);
-                        $mail->Subject = '您的文章 [' . $comment->title . '] 收到一条新的评论！';
-                        $mail->send();
-                        $mail->clearAddresses(); // 清除收件人
+                $authorInfo = $db->fetchRow($db->select('mail')->from('table.users')->where('uid = ?', $comment->ownerId));
+                $adminMail = !empty($authorInfo) ? $authorInfo['mail'] : '';
+                
+                if (!empty($adminMail)) {
+                    // 区分待审核的是新评论还是回复
+                    if ($comment->parent == 0) {
+                        $subject = '您的文章 [' . $comment->title . '] 收到一条待审核评论';
+                        $subtitle = '用户：[ ' . $comment->author . ' ]（IP：' . $comment->ip . '）<br>在《 <a style="color: #12addb;text-decoration: none;" href="' . substr($comment->permalink, 0, strrpos($comment->permalink, "#")) . '" target="_blank">' . $comment->title . '</a> 》发表了新评论，待您审核：';
+                    } else {
+                        $parentInfo = $db->fetchRow($db->select('author')->from('table.comments')->where('coid = ?', $comment->parent));
+                        $parentAuthor = !empty($parentInfo['author']) ? $parentInfo['author'] : '未知用户';
+                        $subject = '您的文章 [' . $comment->title . '] 收到一条待审核回复';
+                        $subtitle = '用户：[ ' . $comment->author . ' ]（IP：' . $comment->ip . '）<br>在《 <a style="color: #12addb;text-decoration: none;" href="' . substr($comment->permalink, 0, strrpos($comment->permalink, "#")) . '" target="_blank">' . $comment->title . '</a> 》中回复了 [' . $parentAuthor . '] 的评论，待您审核：';
                     }
-                } else {
-                    /* 游客回复他人评论，发送邮件给被回复人 */
-                    $db = Typecho_Db::get();
-                    $parentInfo = $db->fetchRow($db->select('mail')->from('table.comments')->where('coid = ?', $comment->parent));
-                    $parentMail = !empty($parentInfo) ? $parentInfo['mail'] : '';
 
-                    if ($parentMail != $comment->mail && !empty($parentMail)) {
-                        $mail->Body = strtr(
-                            $html,
-                            array(
-                                "{title}" => '您在 [' . $comment->title . '] 的评论有了新的回复！',
-                                "{subtitle}" => $comment->author . ' <br>在《 <a style="color: #12addb;text-decoration: none;" href="' . substr($comment->permalink, 0, strrpos($comment->permalink, "#")) . '" target="_blank">' . $comment->title . '</a> 》上回复了您:',
-                                "{content}" => $text,
-                            )
-                        );
-                        $mail->addAddress($parentMail);
-                        $mail->Subject = '您在 [' . $comment->title . '] 的评论有了新的回复！';
+                    $mail->Body = strtr($html, [
+                        "{title}" => $subject,
+                        "{subtitle}" => $subtitle,
+                        "{content}" => $text
+                    ]);
+                    $mail->addAddress($adminMail);
+                    $mail->Subject = $subject;
+                    $mail->send();
+                    $mail->clearAddresses();
+                }
+                return; // 待审核评论不执行后续逻辑
+            }
+
+            // 已通过审核的评论处理
+            if ($commentStatus === 'approved') {
+                $parentMail = '';
+                $parentAuthorId = '';
+                $parentAuthorName = '';
+
+                // 获取被回复人信息
+                if ($comment->parent != 0) {
+                    $db = Typecho_Db::get();
+                    $parentInfo = $db->fetchRow($db->select('mail', 'authorId', 'author')->from('table.comments')->where('coid = ?', $comment->parent));
+                    $parentMail = !empty($parentInfo) ? $parentInfo['mail'] : '';
+                    $parentAuthorId = !empty($parentInfo) ? $parentInfo['authorId'] : '';
+                    $parentAuthorName = !empty($parentInfo['author']) ? $parentInfo['author'] : '未知用户';
+                }
+
+                // 向被回复人发送通知
+                if ($parentMail != $comment->mail && !empty($parentMail)) {
+                    $mail->Body = strtr($html, [
+                        "{title}" => '您在 [' . $comment->title . '] 的评论有了新的回复',
+                        "{subtitle}" => '用户：[ ' . $comment->author . ' ] <br>在《 <a style="color: #12addb;text-decoration: none;" href="' . substr($comment->permalink, 0, strrpos($comment->permalink, "#")) . '" target="_blank">' . $comment->title . '</a> 》上回复了您:',
+                        "{content}" => $text
+                    ]);
+                    $mail->addAddress($parentMail);
+                    $mail->Subject = '您在 [' . $comment->title . '] 的评论有了新的回复';
+                    $mail->send();
+                    $mail->clearAddresses();
+                }
+
+                // 向站长发送通知
+                $db = Typecho_Db::get();
+                $authorInfo = $db->fetchRow($db->select('mail')->from('table.users')->where('uid = ?', $comment->ownerId));
+                $adminMail = !empty($authorInfo) ? $authorInfo['mail'] : '';
+
+                if (!empty($adminMail)) {
+                    // 游客直接评论
+                    if (empty($comment->authorId) && $comment->parent == 0) {
+                        $mail->Body = strtr($html, [
+                            "{title}" => '您的文章 [' . $comment->title . '] 收到新评论',
+                            "{subtitle}" => $comment->author . ' [' . $comment->ip . '] <br>在您的《 <a style="color: #12addb;text-decoration: none;" href="' . substr($comment->permalink, 0, strrpos($comment->permalink, "#")) . '" target="_blank">' . $comment->title . '</a> 》上发表评论:',
+                            "{content}" => $text
+                        ]);
+                        $mail->addAddress($adminMail);
+                        $mail->Subject = '您的文章 [' . $comment->title . '] 收到新评论';
                         $mail->send();
-                        $mail->clearAddresses(); // 清除收件人
+                        $mail->clearAddresses();
+                    }
+                    // 游客间回复
+                    else if (empty($comment->authorId) && $comment->parent != 0 && empty($parentAuthorId)) {
+                        $mail->Body = strtr($html, [
+                            "{title}" => '您的文章 [' . $comment->title . '] 有游客间新回复',
+                            "{subtitle}" => '游客 [' . $comment->author . '] 回复了游客 [' . $parentAuthorName . '] 的评论：',
+                            "{content}" => $text
+                        ]);
+                        $mail->addAddress($adminMail);
+                        $mail->Subject = '您的文章 [' . $comment->title . '] 有游客间新回复';
+                        $mail->send();
+                        $mail->clearAddresses();
                     }
                 }
             }
+
         } catch (Exception $e) {
-            // 记录邮件发送失败原因（使用通知级日志）
             trigger_error("邮件发送失败: " . $e->getMessage(), E_USER_NOTICE);
         }
     }
-}
-
-/* 加强版文章编辑器 */
-if (Helper::options()->JEditor !== 'off') {
-  Typecho_Plugin::factory('admin/write-post.php')->richEditor  = array('Editor', 'Edit');
-  Typecho_Plugin::factory('admin/write-page.php')->richEditor  = array('Editor', 'Edit');
-}
-
-class Editor
-{
-  public static function Edit()
-  {
-?>
-    
-<?php
-  }
 }

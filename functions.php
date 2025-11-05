@@ -3,30 +3,20 @@ if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 use Typecho\Widget\Helper\Form\Element\Text;
 use Typecho\Widget\Helper\Form\Element\Textarea;
 use Typecho\Widget\Helper\Form\Element\Select;
+use Typecho\Widget\Helper\Form\Element\Checkbox;
+use Typecho\Widget\Helper\Form\Element\Radio;
 
 /* buyu主题核心文件 */
-require_once("core/core.php");
+require_once "core/core.php";
 
 /**
  * 主题后台设置
+ * @param Typecho_Widget_Helper_Form $form
  */
 function themeConfig($form)
 {
     // 数据库字段初始化
-    $db = Typecho_Db::get();
-    $prefix = $db->getPrefix();
-    $requiredFields = ['views', 'agree'];
-    
-    try {
-        $contentRow = $db->fetchRow($db->select()->from('table.contents')->page(1, 1));
-        foreach ($requiredFields as $field) {
-            if (!array_key_exists($field, $contentRow)) {
-                $db->query("ALTER TABLE `{$prefix}contents` ADD `{$field}` INT DEFAULT 0;");
-            }
-        }
-    } catch (Exception $e) {
-        Typecho_Log::write('主题配置错误: ' . $e->getMessage(), Typecho_Log::ERROR);
-    }
+    initDatabaseFields();
 ?>
 
 <link rel="stylesheet" href="<?php echo get_theme_url('assets/typecho/config/css/buyu.config.css?v=1.3.1'); ?>">
@@ -41,16 +31,111 @@ function themeConfig($form)
         <li class="item" data-current="buyu_post"><?php _e('文章设置'); ?></li>
         <li class="item" data-current="buyu_comments"><?php _e('评论设置'); ?></li>
       </ul>
-      <?php require_once('core/backup.php'); ?>
+      <?php require_once 'core/backup.php'; ?>
     </div>
   </div>
 <?php
-    // 全局设置组
-    $globalFields = [
+    // 定义表单字段配置
+    $fieldGroups = [
+        'buyu_global' => getGlobalFields(),
+        'buyu_image' => getImageFields(),
+        'buyu_comments' => getCommentFields(),
+        'buyu_post' => getPostFields()
+    ];
+
+    // 批量添加表单字段
+    foreach ($fieldGroups as $groupClass => $fields) {
+        foreach ($fields as $fieldName => $config) {
+            $element = createFormElement($fieldName, $config);
+            $element->setAttribute('class', "buyu_content {$groupClass}");
+            $form->addInput($element);
+        }
+    }
+}
+
+/**
+ * 初始化数据库字段
+ */
+function initDatabaseFields()
+{
+    try {
+        $db = Typecho_Db::get();
+        $prefix = $db->getPrefix();
+        $requiredFields = ['views', 'agree'];
+        
+        // 检查是否有内容表记录
+        $contentExists = $db->fetchRow($db->select(['cid'])->from('table.contents')->limit(1));
+        if (!$contentExists) {
+            return; // 没有内容记录，无需添加字段
+        }
+        
+        // 获取表结构信息
+        $tableInfo = $db->query("DESCRIBE `{$prefix}contents`", Typecho_Db::READ);
+        $existingFields = [];
+        
+        while ($row = $db->fetchRow($tableInfo)) {
+            $existingFields[] = $row['Field'];
+        }
+        
+        // 添加缺失的字段
+        foreach ($requiredFields as $field) {
+            if (!in_array($field, $existingFields)) {
+                $db->query("ALTER TABLE `{$prefix}contents` ADD `{$field}` INT DEFAULT 0;");
+            }
+        }
+    } catch (Exception $e) {
+        Typecho_Log::write('主题配置错误: ' . $e->getMessage(), Typecho_Log::ERROR);
+    }
+}
+
+/**
+ * 创建表单元素
+ * @param string $fieldName 字段名
+ * @param array $config 字段配置
+ * @return Typecho_Widget_Helper_Form_Element
+ */
+function createFormElement($fieldName, array $config)
+{
+    $className = "Typecho\\Widget\\Helper\\Form\\Element\\{$config['type']}";
+    
+    // 根据元素类型处理参数
+    if ($config['type'] === 'Select') {
+        $element = new $className(
+            $fieldName,
+            $config['options'],
+            $config['default'],
+            $config['label'],
+            $config['desc']
+        );
+    } else {
+        $element = new $className(
+            $fieldName,
+            null,
+            $config['default'],
+            $config['label'],
+            $config['desc']
+        );
+    }
+    
+    // 处理多值模式
+    if (!empty($config['multiMode'])) {
+        $element = $element->multiMode();
+    }
+    
+    return $element;
+}
+
+/**
+ * 获取全局设置字段
+ * @return array
+ */
+function getGlobalFields()
+{
+    return [
         'JAssetsURL' => [
             'type' => 'Text',
             'label' => _t('自定义静态资源CDN地址'),
-            'desc' => _t('介绍：自定义静态资源CDN地址，不填则走本地资源 <br />教程：<br />1. 将整个assets目录上传至你的CDN <br />2. 填写静态资源地址访问的前缀 <br />'),
+            'desc' => _t('介绍：自定义静态资源CDN地址，不填则走本地资源 <br />教程：<br />1. 将整个assets目录上传至你的CDN存储桶 <br />2. 填写静态资源地址访问的前缀 <br />3. 链接不要带有/assets'),
             'default' => null
         ],
         'ICPbeian' => [
@@ -96,19 +181,104 @@ function themeConfig($form)
             'default' => null
         ]
     ];
+}
 
-    // 图片设置组
-    $imageFields = [
+/**
+ * 获取图片设置字段
+ * @return array
+ */
+function getImageFields()
+{
+    return [
+        // favicon图标地址配置
         'favicon' => [
             'type' => 'Text',
             'label' => _t('站点 favicon 地址'),
-            'desc' => _t('在这里填入一个图片 URL 地址, 以在网站标题前加上一个 favicon 图标，支持Base64 地址'),
+            'desc' => _t('在这里填入一个图片 URL 地址, 以在网站标题前加上一个 favicon 图标'),
+            'default' => null
+        ],
+        // PC端背景图地址配置
+        'pcBackgroundUrl' => [
+            'type' => 'Text',
+            'label' => _t('PC端背景图地址'),
+            'desc' => _t('在这里填入PC端页面背景图的 URL 地址，留空则不显示'),
+            'default' => null
+        ],
+        // WAP端背景图地址配置
+        'wapBackgroundUrl' => [
+            'type' => 'Text',
+            'label' => _t('移动端背景图地址'),
+            'desc' => _t('在这里填入移动端背景图的 URL 地址，留空则不显示'),
             'default' => null
         ]
     ];
+}
 
-    // 评论设置组
-    $commentFields = [
+/**
+ * 获取文章设置字段
+ * @return array
+ */
+function getPostFields()
+{
+    return [
+        'stickyPosts' => [
+            'type' => 'Text',
+            'label' => _t('文章置顶ID'),
+            'desc' => _t('设置需要置顶的文章ID，多个ID用竖线「 | 」分隔（例如：1|3|5）<br>置顶文章仅在首页第一页显示，按填写顺序排列'),
+            'default' => ''
+        ],
+        'like' => [
+            'type' => 'Select',
+            'options' => [
+                'off' => _t('关闭（默认）'),
+                'on' => _t('开启')
+            ],
+            'label' => _t('文章点赞'),
+            'desc' => _t('开启后将在文章底部显示点赞按钮，默认关闭'),
+            'default' => 'off'
+        ],
+        'tip' => [
+            'type' => 'Select',
+            'options' => [
+                'off' => _t('关闭（默认）'),
+                'on' => _t('开启')
+            ],
+            'label' => _t('文章打赏'),
+            'desc' => _t('开启后将在文章底部显示打赏按钮，默认关闭'),
+            'default' => 'off'
+        ],
+        'weixin' => [
+            'type' => 'Text',
+            'label' => _t('微信收款码链接'),
+            'desc' => _t('在这里输入微信收款码链接,留空则不显示'),
+            'default' => null
+        ],
+        'zfb' => [
+            'type' => 'Text',
+            'label' => _t('支付宝收款码链接'),
+            'desc' => _t('在这里输入支付宝收款码链接,留空则不显示'),
+            'default' => null
+        ],
+        'copyright' => [
+            'type' => 'Select',
+            'options' => [
+                'off' => _t('关闭（默认）'),
+                'on' => _t('开启')
+            ],
+            'label' => _t('文章底部版权'),
+            'desc' => _t('开启后将在文章底部显示版权信息，默认关闭'),
+            'default' => 'off'
+        ]
+    ];
+}
+
+/**
+ * 获取评论设置字段
+ * @return array
+ */
+function getCommentFields()
+{
+    return [
         'JCommentStatus' => [
             'type' => 'Select',
             'options' => [
@@ -225,105 +395,4 @@ function themeConfig($form)
             'multiMode' => true
         ]
     ];
-
-    // 文章设置组
-    $postFields = [
-        'JEditor' => [
-            'type' => 'Select',
-            'options' => [
-                'on' => _t('开启（默认）'),
-                'off' => _t('关闭')
-            ],
-            'label' => _t('是否启用主题自带编辑器'),
-            'desc' => _t('介绍：开启后，文章编辑器将替换成主题自带编辑器 <br>其他：目前编辑器处于开发阶段，如果想继续使用原生编辑器，关闭此项即可'),
-            'default' => 'on',
-            'multiMode' => true
-        ],
-        'like' => [
-            'type' => 'Select',
-            'options' => [
-                'off' => _t('关闭（默认）'),
-                'on' => _t('开启')
-            ],
-            'label' => _t('文章点赞'),
-            'desc' => _t('开启后将在文章底部显示点赞按钮，默认关闭'),
-            'default' => 'off'
-        ],
-        'tip' => [
-            'type' => 'Select',
-            'options' => [
-                'off' => _t('关闭（默认）'),
-                'on' => _t('开启')
-            ],
-            'label' => _t('文章打赏'),
-            'desc' => _t('开启后将在文章底部显示打赏按钮，默认关闭'),
-            'default' => 'off'
-        ],
-        'weixin' => [
-            'type' => 'Text',
-            'label' => _t('微信收款码链接'),
-            'desc' => _t('在这里输入微信收款码链接,留空则不显示'),
-            'default' => null
-        ],
-        'zfb' => [
-            'type' => 'Text',
-            'label' => _t('支付宝收款码链接'),
-            'desc' => _t('在这里输入支付宝收款码链接,留空则不显示'),
-            'default' => null
-        ],
-        'copyright' => [
-            'type' => 'Select',
-            'options' => [
-                'off' => _t('关闭（默认）'),
-                'on' => _t('开启')
-            ],
-            'label' => _t('文章底部版权'),
-            'desc' => _t('开启后将在文章底部显示版权信息，默认关闭'),
-            'default' => 'off'
-        ]
-    ];
-    
-  // 批量添加表单字段
-  $fieldGroups = [
-    'buyu_global' => $globalFields,
-    'buyu_image' => $imageFields,
-    'buyu_comments' => $commentFields,
-    'buyu_post' => $postFields
-  ];
-
-  foreach ($fieldGroups as $groupClass => $fields) {
-    foreach ($fields as $fieldName => $config) {
-        $className = "Typecho\\Widget\\Helper\\Form\\Element\\{$config['type']}";
-        
-        // 处理不同类型元素的参数差异
-        if ($config['type'] === 'Select') {
-            // Select元素参数顺序：名称, 选项数组, 验证规则, 默认值, 标签, 描述
-            $element = new $className(
-                $fieldName,
-                $config['options'],
-                $config['default'],
-                $config['label'],
-                $config['desc']
-            );
-        } else {
-            // 其他元素(Text/Textarea)参数顺序：名称, 验证规则, 默认值, 标签, 描述
-            $element = new $className(
-                $fieldName,
-                null,
-                $config['default'],
-                $config['label'],
-                $config['desc']
-            );
-        }
-        
-        $element->setAttribute('class', "buyu_content {$groupClass}");
-        
-        // 处理multiMode
-        if (!empty($config['multiMode'])) {
-            $element = $element->multiMode();
-        }
-        
-        $form->addInput($element);
-    }
-  }
 }

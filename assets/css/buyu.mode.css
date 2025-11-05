@@ -1,0 +1,2561 @@
+/* ==========================================
+ * 全局变量定义
+ * ========================================== */
+:root,[data-bs-theme=light] {
+  /* 核心主题色 */
+  --color-primary: rgb(0, 123, 255);
+  --color-primary-light: rgb(51, 149, 255);
+  --color-primary-dark: rgb(0, 86, 210);
+  --color-primary-transparent: rgba(0, 123, 255, 0.15);
+  --color-primary-rgb: 0, 123, 255;
+
+  /* 辅色调 */
+  --color-secondary: rgb(68, 68, 68);
+  --color-secondary-light: rgb(102, 102, 102);
+  --color-secondary-dark: rgb(34, 34, 34);
+  --color-secondary-transparent: rgba(68, 68, 68, 0.1);
+
+  /* 背景系统 */
+  --color-background: rgba(255,255,255);
+  --color-background-alt: rgba(249, 250, 251);
+  --color-background-hover: rgba(243, 244, 246);
+  --color-background-active: rgba(229, 231, 235);
+  --color-background-disabled: rgba(243, 244, 246);
+  --color-background-card: rgba(255, 255, 255);
+  --color-background-modal: rgba(255, 255, 255);
+  --color-background-overlay: rgba(0, 0, 0, 0.5);
+  --color-background-gradient: linear-gradient(135deg, var(--color-background) 0%, var(--color-background-alt) 100%);
+
+  /* 文本系统 */
+  --color-text: rgb(0, 0, 0);
+  --color-text-light: rgb(55, 65, 81);
+  --color-text-lighter: rgb(107, 114, 128);
+  --color-text-muted: rgb(61, 61, 61);
+  --color-text-disabled: rgb(156, 163, 175);
+  --color-text-inverse: rgb(255, 255, 255);
+  --color-text-link: var(--color-link);
+
+  /* 链接系统 */
+  --color-link: rgb(100, 135, 173);
+  --color-link-hover: rgb(119, 48, 152);
+  --color-link-active: rgb(90, 36, 121);
+  --color-link-visited: rgb(139, 95, 191);
+  --color-link-focus: rgb(119, 48, 152);
+  --color-link-disabled: rgb(163, 163, 163);
+  --color-link-light: rgba(100, 135, 173, 0.8);
+  --color-link-dark: rgb(44, 62, 80);
+  --color-link-primary: var(--color-primary);
+  --color-link-success: var(--color-green-500);
+  --color-link-warning: var(--color-orange-500);
+  --color-link-danger: var(--color-red-500);
+  
+  --link-decoration: none;
+  --link-decoration-hover: underline;
+  --link-decoration-active: underline;
+  --link-decoration-visited: none;
+  --link-underline-offset: 2px;
+  --link-underline-thickness: 1px;
+  --link-transition: all var(--transition-normal);
+
+  /* 特殊元素色 */
+  --color-code: rgb(194, 17, 51);
+  --color-code-bg: rgb(245, 245, 245);
+  --color-code-border: rgb(229, 231, 235);
+  --color-code-keyword: rgb(215, 58, 73);
+  --color-code-string: rgb(3, 47, 98);
+  --color-code-comment: rgb(106, 115, 125);
+  
+  --color-blockquote-bg: rgb(228, 228, 228);
+  --color-blockquote-border: rgb(92, 92, 92);
+  --color-blockquote-text: rgb(75, 85, 99);
+  
+  --color-highlight: rgb(231, 76, 60);
+  --color-highlight-bg: rgba(231, 76, 60, 0.1);
+  
+  --color-placeholder: rgb(156, 163, 175);
+
+  /* 功能色扩展（状态色） */
+  --color-success: var(--color-green-500);
+  --color-success-light: var(--color-green-100);
+  --color-success-dark: var(--color-green-700);
+  --color-success-bg: rgba(82, 196, 26, 0.1);
+  
+  --color-warning: var(--color-orange-500);
+  --color-warning-light: var(--color-orange-100);
+  --color-warning-dark: var(--color-orange-700);
+  --color-warning-bg: rgba(250, 140, 22, 0.1);
+  
+  --color-danger: var(--color-red-500);
+  --color-danger-light: var(--color-red-100);
+  --color-danger-dark: var(--color-red-700);
+  --color-danger-bg: rgba(255, 77, 79, 0.1);
+  
+  --color-info: var(--color-blue-500);
+  --color-info-light: var(--color-blue-100);
+  --color-info-dark: var(--color-blue-700);
+  --color-info-bg: rgba(64, 150, 255, 0.1);
+
+  /* 中性色系 */
+  --color-neutral-50: rgb(250, 250, 250);
+  --color-neutral-100: rgb(245, 245, 245);
+  --color-neutral-200: rgb(229, 229, 229);
+  --color-neutral-300: rgb(212, 212, 212);
+  --color-neutral-400: rgb(163, 163, 163);
+  --color-neutral-500: rgb(115, 115, 115);
+  --color-neutral-600: rgb(82, 82, 82);
+  --color-neutral-700: rgb(64, 64, 64);
+  --color-neutral-800: rgb(38, 38, 38);
+  --color-neutral-900: rgb(23, 23, 23);
+  --color-neutral-950: rgb(10, 10, 10);
+
+  /* 七色调全色系 */
+  --color-red-50: rgb(255, 245, 245);
+  --color-red-100: rgb(255, 227, 227);
+  --color-red-200: rgb(255, 201, 201);
+  --color-red-300: rgb(255, 168, 168);
+  --color-red-400: rgb(255, 122, 122);
+  --color-red-500: rgb(255, 77, 79);
+  --color-red-600: rgb(245, 34, 45);
+  --color-red-700: rgb(224, 32, 32);
+  --color-red-800: rgb(196, 30, 58);
+  --color-red-900: rgb(158, 28, 32);
+  --color-red-950: rgb(92, 13, 18);
+  
+  --color-orange-50: rgb(255, 248, 240);
+  --color-orange-100: rgb(255, 241, 224);
+  --color-orange-200: rgb(255, 227, 204);
+  --color-orange-300: rgb(255, 201, 153);
+  --color-orange-400: rgb(255, 169, 77);
+  --color-orange-500: rgb(250, 140, 22);
+  --color-orange-600: rgb(250, 122, 22);
+  --color-orange-700: rgb(221, 107, 32);
+  --color-orange-800: rgb(192, 86, 33);
+  --color-orange-900: rgb(156, 66, 33);
+  --color-orange-950: rgb(90, 34, 14);
+  
+  --color-yellow-50: rgb(255, 251, 240);
+  --color-yellow-100: rgb(255, 243, 196);
+  --color-yellow-200: rgb(252, 232, 162);
+  --color-yellow-300: rgb(250, 219, 127);
+  --color-yellow-400: rgb(247, 197, 72);
+  --color-yellow-500: rgb(250, 173, 20);
+  --color-yellow-600: rgb(212, 136, 6);
+  --color-yellow-700: rgb(173, 104, 0);
+  --color-yellow-800: rgb(135, 77, 0);
+  --color-yellow-900: rgb(97, 52, 0);
+  --color-yellow-950: rgb(59, 31, 0);
+  
+  --color-green-50: rgb(246, 255, 237);
+  --color-green-100: rgb(217, 247, 190);
+  --color-green-200: rgb(183, 235, 143);
+  --color-green-300: rgb(149, 222, 100);
+  --color-green-400: rgb(115, 209, 61);
+  --color-green-500: rgb(82, 196, 26);
+  --color-green-600: rgb(56, 158, 13);
+  --color-green-700: rgb(35, 131, 21);
+  --color-green-800: rgb(19, 102, 10);
+  --color-green-900: rgb(9, 80, 7);
+  --color-green-950: rgb(3, 45, 2);
+  
+  --color-cyan-50: rgb(230, 255, 251);
+  --color-cyan-100: rgb(181, 245, 236);
+  --color-cyan-200: rgb(135, 232, 222);
+  --color-cyan-300: rgb(92, 219, 211);
+  --color-cyan-400: rgb(54, 207, 201);
+  --color-cyan-500: rgb(19, 194, 194);
+  --color-cyan-600: rgb(8, 151, 156);
+  --color-cyan-700: rgb(0, 134, 139);
+  --color-cyan-800: rgb(0, 109, 117);
+  --color-cyan-900: rgb(0, 71, 79);
+  --color-cyan-950: rgb(0, 35, 41);
+  
+  --color-blue-50: rgb(240, 247, 255);
+  --color-blue-100: rgb(230, 240, 255);
+  --color-blue-200: rgb(186, 224, 255);
+  --color-blue-300: rgb(145, 197, 255);
+  --color-blue-400: rgb(105, 177, 255);
+  --color-blue-500: rgb(64, 150, 255);
+  --color-blue-600: rgb(24, 144, 255);
+  --color-blue-700: rgb(9, 109, 217);
+  --color-blue-800: rgb(0, 80, 179);
+  --color-blue-900: rgb(0, 58, 140);
+  --color-blue-950: rgb(0, 30, 92);
+  
+  --color-purple-50: rgb(249, 240, 255);
+  --color-purple-100: rgb(239, 219, 255);
+  --color-purple-200: rgb(211, 173, 247);
+  --color-purple-300: rgb(179, 127, 235);
+  --color-purple-400: rgb(146, 84, 222);
+  --color-purple-500: rgb(114, 46, 209);
+  --color-purple-600: rgb(98, 0, 238);
+  --color-purple-700: rgb(83, 29, 171);
+  --color-purple-800: rgb(69, 26, 139);
+  --color-purple-900: rgb(50, 18, 107);
+  --color-purple-950: rgb(30, 10, 71);
+  
+  /* 字体系统 */
+  --font-family-main: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Source Han Sans CN', Arial, sans-serif;
+  --font-family-mono: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', -apple-system, system-ui, monospace;
+  --font-family-display: var(--font-family-main);
+  
+  --font-size-xs: 0.625rem; /* 10px */
+  --font-size-sm: 0.75rem; /* 12px */
+  --font-size-md: 0.8125rem; /* 13px */
+  --font-size-lg: 0.875rem; /* 14px */
+  --font-size-xl: 1rem; /* 16px */
+  --font-size-2xl: 1.125rem; /* 18px */
+  --font-size-3xl: 1.375rem; /* 22px */
+  --font-size-4xl: 1.625rem; /* 26px */
+  --font-size-5xl: 2rem; /* 32px */
+  --font-size-6xl: 2.5rem; /* 40px */
+  
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  
+  --line-height-xs: 1.2;
+  --line-height-sm: 1.3;
+  --line-height-md: 1.5;
+  --line-height-lg: 1.6;
+  --line-height-xl: 1.8;
+
+  /* 边框系统 */
+  /* 边框宽度 */
+  --border-width-xs: 0.5px;  /* 超细边框（适合精细分割） */
+  --border-width-sm: 1px;   /* 细边框（默认基础款） */
+  --border-width-md: 2px;   /* 中等边框（强调区域） */
+  --border-width-lg: 3px;   /* 粗边框（突出重要元素） */
+
+  /* 边框圆角 */
+  --border-radius-xs: 2px;   /* 微圆角（紧凑组件：按钮/输入框） */
+  --border-radius-sm: 4px;   /* 小圆角（默认通用） */
+  --border-radius-md: 6px;   /* 中等圆角（卡片/面板） */
+  --border-radius-lg: 8px;   /* 大圆角化（弹窗/模态框） */
+  --border-radius-xl: 12px;  /* 超大圆角（特殊容器） */
+  --border-radius-full: 9999px;  /* 全圆角（圆形组件：头像/徽章） */
+
+  /* 边框颜色 */
+  --color-border: rgb(204, 204, 204); /* 基础边框（默认灰） */
+  --color-border-light: rgb(229, 231, 235); /* 浅色边框（弱化分割） */
+  --color-border-dark: rgb(156, 163, 175); /* 深色边框（强化分割） */
+  --color-border-primary: var(--color-primary); /* 主色边框（强调关联） */
+  --color-border-success: var(--color-green-500); /* 成功态边框 */
+  --color-border-warning: var(--color-orange-500); /* 警告态边框 */
+  --color-border-danger: var(--color-red-500); /* 危险态边框 */
+  --color-border-disabled: rgb(226, 232, 240); /* 禁用态边框（适配不可交互场景） */
+
+  /* 复合边框 */
+  /* 基础样式 */
+  --border: var(--border-width-sm) solid var(--color-border); /* 默认边框（关联默认宽度） */
+  --border-light: var(--border-width-sm) solid var(--color-border-light);
+  --border-dark: var(--border-width-sm) solid var(--color-border-dark);
+
+  /* 功能样式 */
+  --border-primary: var(--border-width-sm) solid var(--color-border-primary);
+  --border-success: var(--border-width-sm) solid var(--color-border-success); /* 成功态完整边框 */
+  --border-warning: var(--border-width-sm) solid var(--color-border-warning); /* 警告态完整边框 */
+  --border-danger: var(--border-width-sm) solid var(--color-border-danger); /* 危险态完整边框 */
+  --border-disabled: var(--border-width-sm) solid var(--color-border-disabled); /* 禁用态完整边框 */
+
+  /* 特殊样式 */
+  --border-dashed: var(--border-width-sm) dashed var(--color-border); /* 虚线边框（默认宽度） */
+  --border-dashed-light: var(--border-width-sm) dashed var(--color-border-light); /* 浅色虚线（适配弱分割） */
+
+  /* 方向边框：适配单边/多边边框场景 */
+  --border-top: var(--border-width-sm) solid var(--color-border);
+  --border-right: var(--border-width-sm) solid var(--color-border);
+  --border-bottom: var(--border-width-sm) solid var(--color-border);
+  --border-left: var(--border-width-sm) solid var(--color-border);
+  
+  /* 阴影系统 */
+  --shadow-none: none;
+  --shadow-top: 0 -2px 6px rgba(0, 0, 0, 0.08), 0 -1px 4px rgba(0, 0, 0, 0.06);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.05);
+  --shadow-3xl: 0 30px 60px rgba(0, 0, 0, 0.2), 0 15px 15px rgba(0, 0, 0, 0.07);
+  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.12);
+  --shadow-primary: 0 4px 12px rgba(var(--color-primary-rgb), 0.2);
+  --shadow-success: 0 4px 12px rgba(82, 196, 26, 0.2);
+  --shadow-danger: 0 4px 12px rgba(255, 77, 79, 0.2);
+  
+  /* 阴影设置映射 */
+  --bs-box-shadow: var(--shadow-md);
+  --bs-box-shadow-sm: var(--shadow-xs);
+  --bs-box-shadow-lg: var(--shadow-lg);
+  --bs-box-shadow-inset: var(--shadow-inner);
+
+  /* 间距系统 */
+  --spacing-0: 0;
+  --spacing-xxs: 0.125rem; /* 2px */
+  --spacing-xs: 0.25rem; /* 4px */
+  --spacing-sm: 0.3125rem; /* 5px */
+  --spacing-md: 0.625rem; /* 10px */
+  --spacing-lg: 1.25rem; /* 20px */
+  --spacing-xl: 1.5625rem; /* 25px */
+  --spacing-2xl: 2rem; /* 32px */
+  --spacing-3xl: 2.5rem; /* 40px */
+  --spacing-4xl: 3.5rem; /* 56px */
+  --spacing-5xl: 4.5rem; /* 72px */
+  
+  /* 容器内边距预设 */
+  --container-padding-sm: var(--spacing-xs) var(--spacing-sm);
+  --container-padding-md: var(--spacing-sm) var(--spacing-md);
+  --container-padding-lg: var(--spacing-md) var(--spacing-lg);
+
+  /* 大小系统 */
+  --size-0: 0;
+  --size-xxs: 1rem; /* 16px */
+  --size-xs: 1.5rem; /* 24px */
+  --size-sm: 2rem; /* 32px */
+  --size-md: 3rem; /* 48px */
+  --size-lg: 4rem; /* 64px */
+  --size-xl: 5rem; /* 80px */
+  --size-2xl: 6rem; /* 96px */
+  --size-3xl: 8rem; /* 128px */
+  --size-4xl: 10rem; /* 160px */
+  --size-5xl: 12.5rem; /* 200px */
+  --size-6xl: 15rem; /* 240px */
+  
+  /* 特殊尺寸 */
+  --size-icon-xs: 1rem; /* 16px */
+  --size-icon-sm: 1.25rem; /* 20px */
+  --size-icon-md: 1.5rem; /* 24px */
+  --size-icon-lg: 2rem; /* 32px */
+  --size-avatar-sm: 2rem; /* 32px */
+  --size-avatar-md: 3rem; /* 48px */
+  --size-avatar-lg: 4rem; /* 64px */
+
+  /* 过渡系统 */
+  --transition-none: none;
+  --transition-fast: 150ms ease;
+  --transition-normal: 300ms ease;
+  --transition-slow: 500ms ease;
+  --transition-snail: 800ms ease;
+  --transition-ultra: 1200ms ease;
+  
+  --transition-linear: 300ms linear;
+  --transition-ease-in: 300ms ease-in;
+  --transition-ease-out: 300ms ease-out;
+  --transition-ease-in-out: 300ms ease-in-out;
+  --transition-bounce: 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --transition-elastic: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  --transition-color: color var(--transition-normal);
+  --transition-bg: background-color var(--transition-normal);
+  --transition-border: border-color var(--transition-normal);
+  --transition-transform: transform var(--transition-normal);
+  --transition-shadow: box-shadow var(--transition-normal);
+  --transition-opacity: opacity var(--transition-normal);
+  --transition-all: all var(--transition-normal);
+  --transition-size: width var(--transition-normal), height var(--transition-normal);
+  --transition-position: top var(--transition-normal), left var(--transition-normal), right var(--transition-normal), bottom var(--transition-normal);
+
+  /* 动画系统 */
+  --animation-duration-xs: 150ms;
+  --animation-duration-sm: 300ms;
+  --animation-duration-md: 500ms;
+  --animation-duration-lg: 800ms;
+  --animation-duration-xl: 1000ms;
+  --animation-duration-xxl: 1500ms;
+  
+  --animation-delay-xs: 100ms;
+  --animation-delay-sm: 200ms;
+  --animation-delay-md: 300ms;
+  --animation-delay-lg: 500ms;
+  --animation-delay-xl: 800ms;
+  
+  --animation-timing-linear: linear;
+  --animation-timing-ease: ease;
+  --animation-timing-ease-in: ease-in;
+  --animation-timing-ease-out: ease-out;
+  --animation-timing-ease-in-out: ease-in-out;
+  --animation-timing-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --animation-timing-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --animation-timing-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* 预设动画变量 */
+  --animation-fade-in: fadeIn var(--animation-duration-md) var(--animation-timing-ease-out) forwards;
+  --animation-fade-out: fadeOut var(--animation-duration-md) var(--animation-timing-ease-in) forwards;
+  --animation-fade-in-fast: fadeIn var(--animation-duration-xs) var(--animation-timing-ease-out) forwards;
+  --animation-fade-out-fast: fadeOut var(--animation-duration-xs) var(--animation-timing-ease-in) forwards;
+  
+  --animation-slide-up: slideUp var(--animation-duration-md) var(--animation-timing-ease-out) forwards;
+  --animation-slide-down: slideDown var(--animation-duration-md) var(--animation-timing-ease-out) forwards;
+  --animation-slide-left: slideLeft var(--animation-duration-md) var(--animation-timing-ease-out) forwards;
+  --animation-slide-right: slideRight var(--animation-duration-md) var(--animation-timing-ease-out) forwards;
+  
+  --animation-bounce: bounce var(--animation-duration-lg) var(--animation-timing-bounce) infinite;
+  --animation-pulse: pulse var(--animation-duration-lg) var(--animation-timing-ease-in-out) infinite;
+  --animation-pulse-slow: pulse var(--animation-duration-xl) var(--animation-timing-ease-in-out) infinite;
+  --animation-shake: shake var(--animation-duration-sm) var(--animation-timing-ease-in-out) forwards;
+  --animation-spin: spin var(--animation-duration-xl) var(--animation-timing-linear) infinite;
+  --animation-zoom-in: zoomIn var(--animation-duration-md) var(--animation-timing-ease-out) forwards;
+  --animation-zoom-out: zoomOut var(--animation-duration-md) var(--animation-timing-ease-in) forwards;
+
+  /* 网格配置 */
+  --grid-columns: 12;
+  --grid-gutter: 16px;
+  --grid-gutter-sm: 8px;
+  --grid-gutter-lg: 24px;
+  
+  /* 断点系统 */
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-xxl: 1400px;
+}
+
+/* 深色模式 */
+[data-bs-theme=dark] {
+  /* 核心主题色 */
+  --color-primary: rgb(64, 150, 255);
+  --color-primary-light: rgb(105, 177, 255);
+  --color-primary-dark: rgb(24, 144, 255);
+  --color-primary-transparent: rgba(64, 150, 255, 0.2);
+  --color-primary-rgb: 64, 150, 255;
+
+  /* 辅色调（加深以适配深色背景） */
+  --color-secondary: rgb(187, 187, 187);
+  --color-secondary-light: rgb(221, 221, 221);
+  --color-secondary-dark: rgb(153, 153, 153);
+  --color-secondary-transparent: rgba(187, 187, 187, 0.1);
+
+  /* 背景系统（深色基调） */
+  --color-background: rgba(30, 30, 30);
+  --color-background-alt: rgba(38, 38, 38);
+  --color-background-hover: rgba(45, 45, 45);
+  --color-background-active: rgba(50, 50, 50);
+  --color-background-disabled: rgba(35, 35, 35);
+  --color-background-card: rgba(30, 30, 30);
+  --color-background-modal: rgba(32, 32, 32);
+  --color-background-overlay: rgba(0, 0, 0, 0.8); 
+  --color-background-gradient: linear-gradient(135deg, var(--color-background) 0%, var(--color-background-alt) 100%);
+
+  /* 文本系统（浅色文字，确保可读性） */
+  --color-text: rgb(255, 255, 255);
+  --color-text-light: rgb(224, 224, 224);
+  --color-text-lighter: rgb(187, 187, 187);
+  --color-text-muted: rgb(158, 158, 158);
+  --color-text-disabled: rgb(110, 110, 110);
+  --color-text-inverse: rgb(0, 0, 0);
+  --color-text-link: var(--color-link);
+
+  /* 链接系统（调整对比度） */
+  --color-link: rgb(145, 197, 255);
+  --color-link-hover: rgb(186, 224, 255);
+  --color-link-active: rgb(105, 177, 255);
+  --color-link-visited: rgb(179, 127, 235);
+  --color-link-focus: rgb(186, 224, 255);
+  --color-link-disabled: rgb(110, 110, 110);
+  --color-link-light: rgba(145, 197, 255, 0.8);
+  --color-link-dark: rgb(145, 197, 255);
+  --link-underline-offset: 2px;
+  --link-underline-thickness: 1px;
+
+  /* 特殊元素色（适配深色背景） */
+  --color-code: rgb(255, 107, 107);
+  --color-code-bg: rgb(45, 45, 45);
+  --color-code-border: rgb(56, 56, 56);
+  --color-code-keyword: rgb(255, 135, 135);
+  --color-code-string: rgb(140, 200, 255);
+  --color-code-comment: rgb(141, 141, 141);
+  
+  --color-blockquote-bg: rgb(45, 45, 45);
+  --color-blockquote-border: rgb(78, 78, 78);
+  --color-blockquote-text: rgb(208, 208, 208);
+  
+  --color-highlight: rgb(255, 107, 107);
+  --color-highlight-bg: rgba(255, 107, 107, 0.15);
+  
+  --color-placeholder: rgb(110, 110, 110);
+
+  /* 功能色扩展（调整亮度以适配深色） */
+  --color-success: rgb(115, 209, 61);
+  --color-success-light: rgb(149, 222, 100);
+  --color-success-dark: rgb(82, 196, 26);
+  --color-success-bg: rgba(115, 209, 61, 0.15);
+  
+  --color-warning: rgb(255, 169, 77);
+  --color-warning-light: rgb(255, 201, 153);
+  --color-warning-dark: rgb(250, 140, 22);
+  --color-warning-bg: rgba(255, 169, 77, 0.15);
+  
+  --color-danger: rgb(255, 122, 122);
+  --color-danger-light: rgb(255, 168, 168);
+  --color-danger-dark: rgb(255, 77, 79);
+  --color-danger-bg: rgba(255, 122, 122, 0.15);
+  
+  --color-info: rgb(105, 177, 255);
+  --color-info-light: rgb(145, 197, 255);
+  --color-info-dark: rgb(64, 150, 255);
+  --color-info-bg: rgba(105, 177, 255, 0.15);
+
+  /* 中性色系（深色模式适配） */
+  --color-neutral-50: rgb(50, 50, 50);
+  --color-neutral-100: rgb(70, 70, 70);
+  --color-neutral-200: rgb(90, 90, 90);
+  --color-neutral-300: rgb(110, 110, 110);
+  --color-neutral-400: rgb(130, 130, 130);
+  --color-neutral-500: rgb(150, 150, 150);
+  --color-neutral-600: rgb(170, 170, 170);
+  --color-neutral-700: rgb(190, 190, 190);
+  --color-neutral-800: rgb(210, 210, 210);
+  --color-neutral-900: rgb(230, 230, 230);
+  --color-neutral-950: rgb(240, 240, 240);
+
+  /* 七色调全色系（深色模式适配） */
+  --color-red-50: rgb(60, 20, 20);
+  --color-red-100: rgb(80, 25, 25);
+  --color-red-200: rgb(100, 30, 30);
+  --color-red-300: rgb(130, 40, 40);
+  --color-red-400: rgb(160, 50, 50);
+  --color-red-500: rgb(190, 60, 60);
+  --color-red-600: rgb(220, 70, 70);
+  --color-red-700: rgb(230, 80, 80);
+  --color-red-800: rgb(240, 90, 90);
+  --color-red-900: rgb(250, 100, 100);
+  --color-red-950: rgb(255, 110, 110);
+  
+  --color-orange-50: rgb(70, 40, 10);
+  --color-orange-100: rgb(90, 50, 15);
+  --color-orange-200: rgb(110, 60, 20);
+  --color-orange-300: rgb(140, 80, 30);
+  --color-orange-400: rgb(170, 100, 40);
+  --color-orange-500: rgb(200, 120, 50);
+  --color-orange-600: rgb(220, 130, 55);
+  --color-orange-700: rgb(230, 140, 60);
+  --color-orange-800: rgb(240, 150, 65);
+  --color-orange-900: rgb(250, 160, 70);
+  --color-orange-950: rgb(255, 170, 75);
+  
+  --color-yellow-50: rgb(70, 60, 10);
+  --color-yellow-100: rgb(90, 75, 15);
+  --color-yellow-200: rgb(110, 90, 20);
+  --color-yellow-300: rgb(140, 110, 25);
+  --color-yellow-400: rgb(170, 130, 30);
+  --color-yellow-500: rgb(200, 150, 35);
+  --color-yellow-600: rgb(220, 165, 40);
+  --color-yellow-700: rgb(230, 175, 45);
+  --color-yellow-800: rgb(240, 185, 50);
+  --color-yellow-900: rgb(250, 195, 55);
+  --color-yellow-950: rgb(255, 205, 60);
+  
+  --color-green-50: rgb(20, 60, 20);
+  --color-green-100: rgb(30, 80, 30);
+  --color-green-200: rgb(40, 100, 40);
+  --color-green-300: rgb(50, 120, 50);
+  --color-green-400: rgb(60, 140, 60);
+  --color-green-500: rgb(70, 160, 70);
+  --color-green-600: rgb(80, 180, 80);
+  --color-green-700: rgb(90, 190, 90);
+  --color-green-800: rgb(100, 200, 100);
+  --color-green-900: rgb(110, 210, 110);
+  --color-green-950: rgb(120, 220, 120);
+  
+  --color-cyan-50: rgb(20, 70, 70);
+  --color-cyan-100: rgb(30, 90, 90);
+  --color-cyan-200: rgb(40, 110, 110);
+  --color-cyan-300: rgb(50, 130, 130);
+  --color-cyan-400: rgb(60, 150, 150);
+  --color-cyan-500: rgb(70, 170, 170);
+  --color-cyan-600: rgb(80, 185, 185);
+  --color-cyan-700: rgb(90, 195, 195);
+  --color-cyan-800: rgb(100, 205, 205);
+  --color-cyan-900: rgb(110, 215, 215);
+  --color-cyan-950: rgb(120, 225, 225);
+  
+  --color-blue-50: rgb(20, 50, 90);
+  --color-blue-100: rgb(30, 65, 110);
+  --color-blue-200: rgb(40, 80, 130);
+  --color-blue-300: rgb(50, 95, 150);
+  --color-blue-400: rgb(60, 110, 170);
+  --color-blue-500: rgb(70, 125, 190);
+  --color-blue-600: rgb(80, 140, 210);
+  --color-blue-700: rgb(90, 150, 220);
+  --color-blue-800: rgb(100, 160, 230);
+  --color-blue-900: rgb(110, 170, 240);
+  --color-blue-950: rgb(120, 180, 250);
+  
+  --color-purple-50: rgb(50, 20, 90);
+  --color-purple-100: rgb(65, 30, 110);
+  --color-purple-200: rgb(80, 40, 130);
+  --color-purple-300: rgb(95, 50, 150);
+  --color-purple-400: rgb(110, 60, 170);
+  --color-purple-500: rgb(125, 70, 190);
+  --color-purple-600: rgb(140, 80, 210);
+  --color-purple-700: rgb(150, 90, 220);
+  --color-purple-800: rgb(160, 100, 230);
+  --color-purple-900: rgb(170, 110, 240);
+  --color-purple-950: rgb(180, 120, 250);
+
+  /* 边框系统（深色模式适配） */
+  --color-border: rgb(70, 70, 70);
+  --color-border-light: rgb(60, 60, 60);
+  --color-border-dark: rgb(80, 80, 80);
+  --color-border-primary: var(--color-primary);
+  --color-border-success: var(--color-green-500);
+  --color-border-warning: var(--color-orange-500);
+  --color-border-danger: var(--color-red-500);
+  --color-border-disabled: rgb(50, 50, 50);
+
+  /* 复合边框（同步更新） */
+  --border: var(--border-width-sm) solid var(--color-border);
+  --border-light: var(--border-width-sm) solid var(--color-border-light);
+  --border-dark: var(--border-width-sm) solid var(--color-border-dark);
+  --border-primary: var(--border-width-sm) solid var(--color-border-primary);
+  --border-success: var(--border-width-sm) solid var(--color-border-success);
+  --border-warning: var(--border-width-sm) solid var(--color-border-warning);
+  --border-danger: var(--border-width-sm) solid var(--color-border-danger);
+  --border-disabled: var(--border-width-sm) solid var(--color-border-disabled);
+  --border-dashed: var(--border-width-sm) dashed var(--color-border);
+  --border-dashed-light: var(--border-width-sm) dashed var(--color-border-light);
+
+  /* 方向边框（同步更新） */
+  --border-top: var(--border-width-sm) solid var(--color-border);
+  --border-right: var(--border-width-sm) solid var(--color-border);
+  --border-bottom: var(--border-width-sm) solid var(--color-border);
+  --border-left: var(--border-width-sm) solid var(--color-border);
+
+  /* 阴影系统（深色模式适配） */
+  --shadow-none: none;
+  --shadow-top: 0 -2px 6px rgba(0, 0, 0, 0.2), 0 -1px 4px rgba(0, 0, 0, 0.15);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.15);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.25), 0 4px 6px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.3), 0 10px 10px rgba(0, 0, 0, 0.1);
+  --shadow-3xl: 0 30px 60px rgba(0, 0, 0, 0.35), 0 15px 15px rgba(0, 0, 0, 0.15);
+  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.25);
+  --shadow-primary: 0 4px 12px rgba(var(--color-primary-rgb), 0.3);
+  --shadow-success: 0 4px 12px rgba(115, 209, 61, 0.3);
+  --shadow-danger: 0 4px 12px rgba(255, 122, 122, 0.3);
+  
+  /* 阴影设置映射 */
+  --bs-box-shadow: var(--shadow-md);
+  --bs-box-shadow-sm: var(--shadow-xs);
+  --bs-box-shadow-lg: var(--shadow-lg);
+  --bs-box-shadow-inset: var(--shadow-inner);
+}
+
+/* ==========================================
+ * 基础样式重置
+ * ========================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-main);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+  margin: 1rem 0;
+  color: inherit;
+  background-color: currentColor;
+  border: 0;
+  opacity: 0.25;
+}
+
+pre {
+  font-family: var(--font-family-mono);
+  font-size: 1em;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+a {
+  color: var(--color-link);
+  text-decoration: var(--link-decoration);
+  transition: var(--link-transition);
+}
+
+a:hover {
+  color: var(--color-link);
+  text-decoration: var(--link-decoration-hover);
+}
+
+a:not([href]):not([class]), a:not([href]):not([class]):hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+abbr[title] {
+  border-bottom: none;
+  text-decoration: underline dotted;
+  cursor: help;
+  text-decoration-skip-ink: none;
+}
+
+b, strong {
+  font-weight: var(--font-weight-bold);
+}
+
+code, kbd, samp {
+  font-family: var(--font-family-mono);
+  font-size: 1em;
+}
+
+small {
+  font-size: 80%;
+}
+
+sub, sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub { bottom: -0.25em; }
+sup { top: -0.5em; }
+
+img, svg {
+  vertical-align: middle;
+  max-width: 100%;
+  height: auto;
+}
+
+table {
+  caption-side: bottom;
+  border-collapse: collapse;
+}
+
+caption {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  color: var(--color-text-light);
+  text-align: left;
+}
+
+th {
+  text-align: inherit;
+  text-align: -webkit-match-parent;
+}
+
+thead, tbody, tfoot, tr, td, th {
+  border-color: inherit;
+  border-style: solid;
+  border-width: 0;
+}
+
+button, input, optgroup, select, textarea {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+button, select {
+  text-transform: none;
+}
+
+[role="button"] {
+  cursor: pointer;
+}
+
+button, [type="button"], [type="reset"], [type="submit"] {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+}
+
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+  padding: 0;
+  border-style: none;
+}
+
+textarea {
+  resize: vertical;
+}
+
+fieldset {
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+legend {
+  float: left;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 0.5rem;
+  font-size: calc(1.275rem + 0.3vw);
+  line-height: inherit;
+  white-space: normal;
+}
+
+mark {
+  padding: 0.2em;
+  background-color: var(--color-highlight-bg);
+}
+
+output {
+  display: inline-block;
+}
+
+iframe {
+  border: 0;
+}
+
+summary {
+  display: list-item;
+  cursor: pointer;
+}
+
+progress {
+  vertical-align: baseline;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* ==========================================
+ * 公共工具类
+ * ========================================== */
+
+/* 显示状态工具类 */
+.hidden {
+  display: none !important;
+  visibility: hidden;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only.focusable:active,
+.sr-only.focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+.invisible {
+  visibility: hidden !important;
+}
+
+.visible {
+  visibility: visible !important;
+}
+
+/* 布局工具类 */
+.container,
+.container-sm,
+.container-md,
+.container-lg,
+.container-xl,
+.container-xxl,
+.container-fluid {
+  width: 100%;
+  padding-right: calc(var(--grid-gutter) / 2);
+  padding-left: calc(var(--grid-gutter) / 2);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.container {
+  max-width: 1200px;
+}
+
+.container-sm {
+  max-width: 540px;
+}
+
+.container-md {
+  max-width: 720px;
+}
+
+.container-lg {
+  max-width: 960px;
+}
+
+.container-xl {
+  max-width: 1140px;
+}
+
+.container-xxl {
+  max-width: 1320px;
+}
+
+.container-fluid {
+  max-width: 100% !important;
+}
+
+/* Flex 布局系统 */
+.flex {
+  display: flex;
+}
+
+.inline-flex {
+  display: inline-flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-col-reverse {
+  flex-direction: column-reverse;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-row-reverse {
+  flex-direction: row-reverse;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.flex-wrap-reverse {
+  flex-wrap: wrap-reverse;
+}
+
+/* 主轴对齐 */
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-around {
+  justify-content: space-around;
+}
+
+.justify-evenly {
+  justify-content: space-evenly;
+}
+
+/* 交叉轴对齐 */
+.items-start {
+  align-items: flex-start;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-baseline {
+  align-items: baseline;
+}
+
+.items-stretch {
+  align-items: stretch;
+}
+
+/* 内容对齐（多行） */
+.content-start {
+  align-content: flex-start;
+}
+
+.content-end {
+  align-content: flex-end;
+}
+
+.content-center {
+  align-content: center;
+}
+
+.content-between {
+  align-content: space-between;
+}
+
+.content-around {
+  align-content: space-around;
+}
+
+.content-stretch {
+  align-content: stretch;
+}
+
+/* Flex 项目属性 */
+.flex-1 {
+  flex: 1 1 0%;
+}
+
+.flex-auto {
+  flex: 1 1 auto;
+}
+
+.flex-none {
+  flex: none;
+}
+
+.self-auto {
+  align-self: auto;
+}
+
+.self-start {
+  align-self: flex-start;
+}
+
+.self-end {
+  align-self: flex-end;
+}
+
+.self-center {
+  align-self: center;
+}
+
+.self-baseline {
+  align-self: baseline;
+}
+
+.self-stretch {
+  align-self: stretch;
+}
+
+/* 网格布局 */
+.grid {
+  display: grid;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.grid-cols-auto {
+  grid-template-columns: auto;
+}
+
+.gap-0 {
+  gap: var(--spacing-0);
+}
+
+.gap-xxs {
+  gap: var(--spacing-xxs);
+}
+
+.gap-xs {
+  gap: var(--spacing-xs);
+}
+
+.gap-sm {
+  gap: var(--spacing-sm);
+}
+
+.gap-md {
+  gap: var(--spacing-md);
+}
+
+.gap-lg {
+  gap: var(--spacing-lg);
+}
+
+.gap-xl {
+  gap: var(--spacing-xl);
+}
+
+.gap-2xl {
+  gap: var(--spacing-2xl);
+}
+
+/* 间距工具类（全方向） */
+.m-0 { margin: var(--spacing-0); }
+.m-xxs { margin: var(--spacing-xxs); }
+.m-xs { margin: var(--spacing-xs); }
+.m-sm { margin: var(--spacing-sm); }
+.m-md { margin: var(--spacing-md); }
+.m-lg { margin: var(--spacing-lg); }
+.m-xl { margin: var(--spacing-xl); }
+.m-2xl { margin: var(--spacing-2xl); }
+
+.p-0 { padding: var(--spacing-0); }
+.p-xxs { padding: var(--spacing-xxs); }
+.p-xs { padding: var(--spacing-xs); }
+.p-sm { padding: var(--spacing-sm); }
+.p-md { padding: var(--spacing-md); }
+.p-lg { padding: var(--spacing-lg); }
+.p-xl { padding: var(--spacing-xl); }
+.p-2xl { padding: var(--spacing-2xl); }
+
+/* 水平方向间距 */
+.mx-0 { margin-left: var(--spacing-0); margin-right: var(--spacing-0); }
+.mx-xxs { margin-left: var(--spacing-xxs); margin-right: var(--spacing-xxs); }
+.mx-xs { margin-left: var(--spacing-xs); margin-right: var(--spacing-xs); }
+.mx-sm { margin-left: var(--spacing-sm); margin-right: var(--spacing-sm); }
+.mx-md { margin-left: var(--spacing-md); margin-right: var(--spacing-md); }
+.mx-lg { margin-left: var(--spacing-lg); margin-right: var(--spacing-lg); }
+.mx-xl { margin-left: var(--spacing-xl); margin-right: var(--spacing-xl); }
+.mx-2xl { margin-left: var(--spacing-2xl); margin-right: var(--spacing-2xl); }
+
+.px-0 { padding-left: var(--spacing-0); padding-right: var(--spacing-0); }
+.px-xxs { padding-left: var(--spacing-xxs); padding-right: var(--spacing-xxs); }
+.px-xs { padding-left: var(--spacing-xs); padding-right: var(--spacing-xs); }
+.px-sm { padding-left: var(--spacing-sm); padding-right: var(--spacing-sm); }
+.px-md { padding-left: var(--spacing-md); padding-right: var(--spacing-md); }
+.px-lg { padding-left: var(--spacing-lg); padding-right: var(--spacing-lg); }
+.px-xl { padding-left: var(--spacing-xl); padding-right: var(--spacing-xl); }
+.px-2xl { padding-left: var(--spacing-2xl); padding-right: var(--spacing-2xl); }
+
+/* 垂直方向间距 */
+.my-0 { margin-top: var(--spacing-0); margin-bottom: var(--spacing-0); }
+.my-xxs { margin-top: var(--spacing-xxs); margin-bottom: var(--spacing-xxs); }
+.my-xs { margin-top: var(--spacing-xs); margin-bottom: var(--spacing-xs); }
+.my-sm { margin-top: var(--spacing-sm); margin-bottom: var(--spacing-sm); }
+.my-md { margin-top: var(--spacing-md); margin-bottom: var(--spacing-md); }
+.my-lg { margin-top: var(--spacing-lg); margin-bottom: var(--spacing-lg); }
+.my-xl { margin-top: var(--spacing-xl); margin-bottom: var(--spacing-xl); }
+.my-2xl { margin-top: var(--spacing-2xl); margin-bottom: var(--spacing-2xl); }
+
+.py-0 { padding-top: var(--spacing-0); padding-bottom: var(--spacing-0); }
+.py-xxs { padding-top: var(--spacing-xxs); padding-bottom: var(--spacing-xxs); }
+.py-xs { padding-top: var(--spacing-xs); padding-bottom: var(--spacing-xs); }
+.py-sm { padding-top: var(--spacing-sm); padding-bottom: var(--spacing-sm); }
+.py-md { padding-top: var(--spacing-md); padding-bottom: var(--spacing-md); }
+.py-lg { padding-top: var(--spacing-lg); padding-bottom: var(--spacing-lg); }
+.py-xl { padding-top: var(--spacing-xl); padding-bottom: var(--spacing-xl); }
+.py-2xl { padding-top: var(--spacing-2xl); padding-bottom: var(--spacing-2xl); }
+
+/* 单方向间距 */
+.mt-0 { margin-top: var(--spacing-0); }
+.mt-xxs { margin-top: var(--spacing-xxs); }
+.mt-xs { margin-top: var(--spacing-xs); }
+.mt-sm { margin-top: var(--spacing-sm); }
+.mt-md { margin-top: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }
+.mt-xl { margin-top: var(--spacing-xl); }
+.mt-2xl { margin-top: var(--spacing-2xl); }
+
+.mb-0 { margin-bottom: var(--spacing-0); }
+.mb-xxs { margin-bottom: var(--spacing-xxs); }
+.mb-xs { margin-bottom: var(--spacing-xs); }
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+.mb-xl { margin-bottom: var(--spacing-xl); }
+.mb-2xl { margin-bottom: var(--spacing-2xl); }
+
+.ml-0 { margin-left: var(--spacing-0); }
+.ml-xxs { margin-left: var(--spacing-xxs); }
+.ml-xs { margin-left: var(--spacing-xs); }
+.ml-sm { margin-left: var(--spacing-sm); }
+.ml-md { margin-left: var(--spacing-md); }
+.ml-lg { margin-left: var(--spacing-lg); }
+.ml-xl { margin-left: var(--spacing-xl); }
+.ml-2xl { margin-left: var(--spacing-2xl); }
+
+.mr-0 { margin-right: var(--spacing-0); }
+.mr-xxs { margin-right: var(--spacing-xxs); }
+.mr-xs { margin-right: var(--spacing-xs); }
+.mr-sm { margin-right: var(--spacing-sm); }
+.mr-md { margin-right: var(--spacing-md); }
+.mr-lg { margin-right: var(--spacing-lg); }
+.mr-xl { margin-right: var(--spacing-xl); }
+.mr-2xl { margin-right: var(--spacing-2xl); }
+
+.pt-0 { padding-top: var(--spacing-0); }
+.pt-xxs { padding-top: var(--spacing-xxs); }
+.pt-xs { padding-top: var(--spacing-xs); }
+.pt-sm { padding-top: var(--spacing-sm); }
+.pt-md { padding-top: var(--spacing-md); }
+.pt-lg { padding-top: var(--spacing-lg); }
+.pt-xl { padding-top: var(--spacing-xl); }
+.pt-2xl { padding-top: var(--spacing-2xl); }
+
+.pb-0 { padding-bottom: var(--spacing-0); }
+.pb-xxs { padding-bottom: var(--spacing-xxs); }
+.pb-xs { padding-bottom: var(--spacing-xs); }
+.pb-sm { padding-bottom: var(--spacing-sm); }
+.pb-md { padding-bottom: var(--spacing-md); }
+.pb-lg { padding-bottom: var(--spacing-lg); }
+.pb-xl { padding-bottom: var(--spacing-xl); }
+.pb-2xl { padding-bottom: var(--spacing-2xl); }
+
+.pl-0 { padding-left: var(--spacing-0); }
+.pl-xxs { padding-left: var(--spacing-xxs); }
+.pl-xs { padding-left: var(--spacing-xs); }
+.pl-sm { padding-left: var(--spacing-sm); }
+.pl-md { padding-left: var(--spacing-md); }
+.pl-lg { padding-left: var(--spacing-lg); }
+.pl-xl { padding-left: var(--spacing-xl); }
+.pl-2xl { padding-left: var(--spacing-2xl); }
+
+.pr-0 { padding-right: var(--spacing-0); }
+.pr-xxs { padding-right: var(--spacing-xxs); }
+.pr-xs { padding-right: var(--spacing-xs); }
+.pr-sm { padding-right: var(--spacing-sm); }
+.pr-md { padding-right: var(--spacing-md); }
+.pr-lg { padding-right: var(--spacing-lg); }
+.pr-xl { padding-right: var(--spacing-xl); }
+.pr-2xl { padding-right: var(--spacing-2xl); }
+
+/* 边框工具类 */
+.border {
+  border: var(--border);
+}
+
+.border-0 {
+  border: 0 !important;
+}
+
+.border-sm {
+  border: var(--border-width-sm) solid var(--color-border);
+}
+
+.border-lg {
+  border: var(--border-width-lg) solid var(--color-border);
+}
+
+.border-dashed {
+  border: var(--border-dashed);
+}
+
+.border-primary {
+  border: var(--border-primary);
+}
+
+.border-success {
+  border-color: var(--color-border-success) !important;
+}
+
+.border-warning {
+  border-color: var(--color-border-warning) !important;
+}
+
+.border-danger {
+  border-color: var(--color-border-danger) !important;
+}
+
+.border-light {
+  border: var(--border-light);
+}
+
+.border-dark {
+  border: var(--border-dark);
+}
+
+/* 单方向边框 */
+.border-t {
+  border-top: var(--border);
+}
+
+.border-r {
+  border-right: var(--border);
+}
+
+.border-b {
+  border-bottom: var(--border);
+}
+
+.border-l {
+  border-left: var(--border);
+}
+
+.border-t-0 {
+  border-top: 0 !important;
+}
+
+.border-r-0 {
+  border-right: 0 !important;
+}
+
+.border-b-0 {
+  border-bottom: 0 !important;
+}
+
+.border-l-0 {
+  border-left: 0 !important;
+}
+
+/* 圆角工具类 */
+.rounded {
+  border-radius: var(--border-radius);
+}
+
+.rounded-0 {
+  border-radius: 0 !important;
+}
+
+.rounded-sm {
+  border-radius: var(--border-radius-sm);
+}
+
+.rounded-lg {
+  border-radius: var(--border-radius-lg);
+}
+
+.rounded-xl {
+  border-radius: var(--border-radius-xl);
+}
+
+.rounded-full {
+  border-radius: var(--border-radius-full);
+}
+
+/* 单方向圆角 */
+.rounded-t {
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+}
+
+.rounded-r {
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+}
+
+.rounded-b {
+  border-bottom-right-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
+}
+
+.rounded-l {
+  border-top-left-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
+}
+
+/* 阴影工具类 */
+.shadow-none {
+  box-shadow: var(--shadow-none) !important;
+}
+
+.shadow {
+  box-shadow: var(--bs-box-shadow);
+}
+
+.shadow-sm {
+  box-shadow: var(--shadow-xs);
+}
+
+.shadow-md {
+  box-shadow: var(--shadow-md);
+}
+
+.shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+.shadow-xl {
+  box-shadow: var(--shadow-xl);
+}
+
+.shadow-2xl {
+  box-shadow: var(--shadow-2xl);
+}
+
+.shadow-3xl {
+  box-shadow: var(--shadow-3xl);
+}
+
+.shadow-inner {
+  box-shadow: var(--shadow-inner);
+}
+
+.shadow-top {
+  box-shadow: var(--shadow-top);
+}
+
+.shadow-primary {
+  box-shadow: var(--shadow-primary);
+}
+
+.shadow-success {
+  box-shadow: var(--shadow-success);
+}
+
+.shadow-danger {
+  box-shadow: var(--shadow-danger);
+}
+
+.shadow-hover {
+  transition: var(--transition-shadow);
+}
+
+.shadow-hover:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* 文本工具类 */
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+/* 文本颜色 */
+.text-primary {
+  color: var(--color-primary) !important;
+}
+
+.text-secondary {
+  color: var(--color-secondary) !important;
+}
+
+.text-text {
+  color: var(--color-text) !important;
+}
+
+.text-text-light {
+  color: var(--color-text-light) !important;
+}
+
+.text-text-lighter {
+  color: var(--color-text-lighter) !important;
+}
+
+.text-muted {
+  color: var(--color-text-muted) !important;
+}
+
+.text-disabled {
+  color: var(--color-text-disabled) !important;
+}
+
+.text-inverse {
+  color: var(--color-text-inverse) !important;
+}
+
+.text-success {
+  color: var(--color-success) !important;
+}
+
+.text-warning {
+  color: var(--color-warning) !important;
+}
+
+.text-danger {
+  color: var(--color-danger) !important;
+}
+
+.text-info {
+  color: var(--color-info) !important;
+}
+
+/* 文本大小 */
+.text-xs {
+  font-size: var(--font-size-xs) !important;
+}
+
+.text-sm {
+  font-size: var(--font-size-sm) !important;
+}
+
+.text-md {
+  font-size: var(--font-size-md) !important;
+}
+
+.text-lg {
+  font-size: var(--font-size-lg) !important;
+}
+
+.text-xl {
+  font-size: var(--font-size-xl) !important;
+}
+
+.text-2xl {
+  font-size: var(--font-size-2xl) !important;
+}
+
+.text-3xl {
+  font-size: var(--font-size-3xl) !important;
+}
+
+.text-4xl {
+  font-size: var(--font-size-4xl) !important;
+}
+
+.text-5xl {
+  font-size: var(--font-size-5xl) !important;
+}
+
+/* 字体权重 */
+.font-light {
+  font-weight: var(--font-weight-light) !important;
+}
+
+.font-normal {
+  font-weight: var(--font-weight-normal) !important;
+}
+
+.font-medium {
+  font-weight: var(--font-weight-medium) !important;
+}
+
+.font-semibold {
+  font-weight: var(--font-weight-semibold) !important;
+}
+
+.font-bold {
+  font-weight: var(--font-weight-bold) !important;
+}
+
+.font-extrabold {
+  font-weight: var(--font-weight-extrabold) !important;
+}
+
+/* 行高 */
+.line-height-xs {
+  line-height: var(--line-height-xs) !important;
+}
+
+.line-height-sm {
+  line-height: var(--line-height-sm) !important;
+}
+
+.line-height-md {
+  line-height: var(--line-height-md) !important;
+}
+
+.line-height-lg {
+  line-height: var(--line-height-lg) !important;
+}
+
+.line-height-xl {
+  line-height: var(--line-height-xl) !important;
+}
+
+/* 文本装饰 */
+.text-underline {
+  text-decoration: underline !important;
+  text-underline-offset: var(--link-underline-offset);
+  text-decoration-thickness: var(--link-underline-thickness);
+}
+
+.text-underline-hover:hover {
+  text-decoration: underline !important;
+  text-underline-offset: var(--link-underline-offset);
+  text-decoration-thickness: var(--link-underline-thickness);
+}
+
+.text-no-underline {
+  text-decoration: none !important;
+}
+
+/* 文本转换 */
+.text-uppercase {
+  text-transform: uppercase !important;
+}
+
+.text-lowercase {
+  text-transform: lowercase !important;
+}
+
+.text-capitalize {
+  text-transform: capitalize !important;
+}
+
+/* 背景工具类 */
+.bg-primary {
+  background-color: var(--color-primary) !important;
+}
+
+.bg-primary-light {
+  background-color: var(--color-primary-light) !important;
+}
+
+.bg-primary-dark {
+  background-color: var(--color-primary-dark) !important;
+}
+
+.bg-primary-transparent {
+  background-color: var(--color-primary-transparent) !important;
+}
+
+.bg-secondary {
+  background-color: var(--color-secondary) !important;
+}
+
+.bg-secondary-light {
+  background-color: var(--color-secondary-light) !important;
+}
+
+.bg-secondary-dark {
+  background-color: var(--color-secondary-dark) !important;
+}
+
+.bg-background {
+  background-color: var(--color-background) !important;
+}
+
+.bg-background-alt {
+  background-color: var(--color-background-alt) !important;
+}
+
+.bg-background-hover {
+  background-color: var(--color-background-hover) !important;
+}
+
+.bg-background-active {
+  background-color: var(--color-background-active) !important;
+}
+
+.bg-background-disabled {
+  background-color: var(--color-background-disabled) !important;
+}
+
+.bg-background-card {
+  background-color: var(--color-background-card) !important;
+}
+
+.bg-background-modal {
+  background-color: var(--color-background-modal) !important;
+}
+
+.bg-background-overlay {
+  background-color: var(--color-background-overlay) !important;
+}
+
+.bg-success {
+  background-color: var(--color-success) !important;
+}
+
+.bg-success-light {
+  background-color: var(--color-success-light) !important;
+}
+
+.bg-success-bg {
+  background-color: var(--color-success-bg) !important;
+}
+
+.bg-warning {
+  background-color: var(--color-warning) !important;
+}
+
+.bg-warning-light {
+  background-color: var(--color-warning-light) !important;
+}
+
+.bg-warning-bg {
+  background-color: var(--color-warning-bg) !important;
+}
+
+.bg-danger {
+  background-color: var(--color-danger) !important;
+}
+
+.bg-danger-light {
+  background-color: var(--color-danger-light) !important;
+}
+
+.bg-danger-bg {
+  background-color: var(--color-danger-bg) !important;
+}
+
+.bg-info {
+  background-color: var(--color-info) !important;
+}
+
+.bg-info-light {
+  background-color: var(--color-info-light) !important;
+}
+
+.bg-info-bg {
+  background-color: var(--color-info-bg) !important;
+}
+
+/* 中性色背景 */
+.bg-neutral-50 {
+  background-color: var(--color-neutral-50) !important;
+}
+
+.bg-neutral-100 {
+  background-color: var(--color-neutral-100) !important;
+}
+
+.bg-neutral-200 {
+  background-color: var(--color-neutral-200) !important;
+}
+
+.bg-neutral-300 {
+  background-color: var(--color-neutral-300) !important;
+}
+
+.bg-neutral-400 {
+  background-color: var(--color-neutral-400) !important;
+}
+
+.bg-neutral-500 {
+  background-color: var(--color-neutral-500) !important;
+}
+
+.bg-neutral-600 {
+  background-color: var(--color-neutral-600) !important;
+}
+
+.bg-neutral-700 {
+  background-color: var(--color-neutral-700) !important;
+}
+
+.bg-neutral-800 {
+  background-color: var(--color-neutral-800) !important;
+}
+
+.bg-neutral-900 {
+  background-color: var(--color-neutral-900) !important;
+}
+
+/* 过渡工具类 */
+.transition {
+  transition: var(--transition-all);
+}
+
+.transition-none {
+  transition: var(--transition-none);
+}
+
+.transition-fast {
+  transition: var(--transition-fast);
+}
+
+.transition-normal {
+  transition: var(--transition-normal);
+}
+
+.transition-slow {
+  transition: var(--transition-slow);
+}
+
+.transition-snail {
+  transition: var(--transition-snail);
+}
+
+.transition-ultra {
+  transition: var(--transition-ultra);
+}
+
+.transition-color {
+  transition: var(--transition-color);
+}
+
+.transition-bg {
+  transition: var(--transition-bg);
+}
+
+.transition-border {
+  transition: var(--transition-border);
+}
+
+.transition-transform {
+  transition: var(--transition-transform);
+}
+
+.transition-shadow {
+  transition: var(--transition-shadow);
+}
+
+.transition-opacity {
+  transition: var(--transition-opacity);
+}
+
+.transition-size {
+  transition: var(--transition-size);
+}
+
+.transition-position {
+  transition: var(--transition-position);
+}
+
+/* 动画工具类 */
+.animate-fade-in {
+  animation: var(--animation-fade-in);
+}
+
+.animate-fade-out {
+  animation: var(--animation-fade-out);
+}
+
+.animate-fade-in-fast {
+  animation: var(--animation-fade-in-fast);
+}
+
+.animate-fade-out-fast {
+  animation: var(--animation-fade-out-fast);
+}
+
+.animate-slide-up {
+  animation: var(--animation-slide-up);
+}
+
+.animate-slide-down {
+  animation: var(--animation-slide-down);
+}
+
+.animate-slide-left {
+  animation: var(--animation-slide-left);
+}
+
+.animate-slide-right {
+  animation: var(--animation-slide-right);
+}
+
+.animate-bounce {
+  animation: var(--animation-bounce);
+}
+
+.animate-pulse {
+  animation: var(--animation-pulse);
+}
+
+.animate-pulse-slow {
+  animation: var(--animation-pulse-slow);
+}
+
+.animate-shake {
+  animation: var(--animation-shake);
+}
+
+.animate-spin {
+  animation: var(--animation-spin);
+}
+
+.animate-zoom-in {
+  animation: var(--animation-zoom-in);
+}
+
+.animate-zoom-out {
+  animation: var(--animation-zoom-out);
+}
+
+/* 尺寸工具类 */
+.w-100 {
+  width: 100% !important;
+}
+
+.w-auto {
+  width: auto !important;
+}
+
+.h-100 {
+  height: 100% !important;
+}
+
+.h-auto {
+  height: auto !important;
+}
+
+.min-h-100 {
+  min-height: 100% !important;
+}
+
+.max-w-100 {
+  max-width: 100% !important;
+}
+
+.max-h-100 {
+  max-height: 100% !important;
+}
+
+/* 光标工具类 */
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+.cursor-default {
+  cursor: default !important;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed !important;
+}
+
+.cursor-help {
+  cursor: help !important;
+}
+
+.cursor-text {
+  cursor: text !important;
+}
+
+/* 定位工具类 */
+.position-static {
+  position: static !important;
+}
+
+.position-relative {
+  position: relative !important;
+}
+
+.position-absolute {
+  position: absolute !important;
+}
+
+.position-fixed {
+  position: fixed !important;
+}
+
+.position-sticky {
+  position: sticky !important;
+}
+
+.top-0 {
+  top: 0 !important;
+}
+
+.right-0 {
+  right: 0 !important;
+}
+
+.bottom-0 {
+  bottom: 0 !important;
+}
+
+.left-0 {
+  left: 0 !important;
+}
+
+/* 溢出控制 */
+.overflow-hidden {
+  overflow: hidden !important;
+}
+
+.overflow-auto {
+  overflow: auto !important;
+}
+
+.overflow-x-auto {
+  overflow-x: auto !important;
+}
+
+.overflow-y-auto {
+  overflow-y: auto !important;
+}
+
+/* 其他工具类 */
+.vertical-align-middle {
+  vertical-align: middle !important;
+}
+
+.vertical-align-top {
+  vertical-align: top !important;
+}
+
+.vertical-align-bottom {
+  vertical-align: bottom !important;
+}
+
+.zoom-hover {
+  transition: var(--transition-transform);
+}
+
+.zoom-hover:hover {
+  transform: scale(1.03);
+}
+
+.opacity-0 {
+  opacity: 0 !important;
+}
+
+.opacity-50 {
+  opacity: 0.5 !important;
+}
+
+.opacity-75 {
+  opacity: 0.75 !important;
+}
+
+.opacity-100 {
+  opacity: 1 !important;
+}
+
+/* ==========================================
+ * 网格系统
+ * ========================================== */
+
+/* 行系统 */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: calc(-1 * var(--grid-gutter) / 2);
+  margin-left: calc(-1 * var(--grid-gutter) / 2);
+}
+
+/* 行间距变体 */
+.row-gutter-sm {
+  --grid-gutter: var(--grid-gutter-sm);
+}
+
+.row-gutter-lg {
+  --grid-gutter: var(--grid-gutter-lg);
+}
+
+/* 列系统核心 */
+.col,
+[class*="col-"] {
+  position: relative;
+  width: 100%;
+  min-height: 1px;
+  padding-right: calc(var(--grid-gutter) / 2);
+  padding-left: calc(var(--grid-gutter) / 2);
+}
+
+/* 基础列宽 (12列系统) */
+.col {
+  flex-basis: 0;
+  flex-grow: 1;
+  max-width: 100%;
+}
+
+.col-auto {
+  flex: 0 0 auto;
+  width: auto;
+  max-width: 100%;
+}
+
+/* 1-12列宽类 */
+.col-1 { flex: 0 0 calc(100% / 12 * 1); max-width: calc(100% / 12 * 1); }
+.col-2 { flex: 0 0 calc(100% / 12 * 2); max-width: calc(100% / 12 * 2); }
+.col-3 { flex: 0 0 calc(100% / 12 * 3); max-width: calc(100% / 12 * 3); }
+.col-4 { flex: 0 0 calc(100% / 12 * 4); max-width: calc(100% / 12 * 4); }
+.col-5 { flex: 0 0 calc(100% / 12 * 5); max-width: calc(100% / 12 * 5); }
+.col-6 { flex: 0 0 calc(100% / 12 * 6); max-width: calc(100% / 12 * 6); }
+.col-7 { flex: 0 0 calc(100% / 12 * 7); max-width: calc(100% / 12 * 7); }
+.col-8 { flex: 0 0 calc(100% / 12 * 8); max-width: calc(100% / 12 * 8); }
+.col-9 { flex: 0 0 calc(100% / 12 * 9); max-width: calc(100% / 12 * 9); }
+.col-10 { flex: 0 0 calc(100% / 12 * 10); max-width: calc(100% / 12 * 10); }
+.col-11 { flex: 0 0 calc(100% / 12 * 11); max-width: calc(100% / 12 * 11); }
+.col-12 { flex: 0 0 calc(100% / 12 * 12); max-width: calc(100% / 12 * 12); }
+
+/* 偏移类 */
+.offset-0 { margin-left: calc(100% / 12 * 0); }
+.offset-1 { margin-left: calc(100% / 12 * 1); }
+.offset-2 { margin-left: calc(100% / 12 * 2); }
+.offset-3 { margin-left: calc(100% / 12 * 3); }
+.offset-4 { margin-left: calc(100% / 12 * 4); }
+.offset-5 { margin-left: calc(100% / 12 * 5); }
+.offset-6 { margin-left: calc(100% / 12 * 6); }
+.offset-7 { margin-left: calc(100% / 12 * 7); }
+.offset-8 { margin-left: calc(100% / 12 * 8); }
+.offset-9 { margin-left: calc(100% / 12 * 9); }
+.offset-10 { margin-left: calc(100% / 12 * 10); }
+.offset-11 { margin-left: calc(100% / 12 * 11); }
+.offset-12 { margin-left: calc(100% / 12 * 12); }
+
+/* 响应式列系统 -  xs 断点 (默认) */
+.col-xs-1 { flex: 0 0 calc(100% / 12 * 1); max-width: calc(100% / 12 * 1); }
+.col-xs-2 { flex: 0 0 calc(100% / 12 * 2); max-width: calc(100% / 12 * 2); }
+.col-xs-3 { flex: 0 0 calc(100% / 12 * 3); max-width: calc(100% / 12 * 3); }
+.col-xs-4 { flex: 0 0 calc(100% / 12 * 4); max-width: calc(100% / 12 * 4); }
+.col-xs-5 { flex: 0 0 calc(100% / 12 * 5); max-width: calc(100% / 12 * 5); }
+.col-xs-6 { flex: 0 0 calc(100% / 12 * 6); max-width: calc(100% / 12 * 6); }
+.col-xs-7 { flex: 0 0 calc(100% / 12 * 7); max-width: calc(100% / 12 * 7); }
+.col-xs-8 { flex: 0 0 calc(100% / 12 * 8); max-width: calc(100% / 12 * 8); }
+.col-xs-9 { flex: 0 0 calc(100% / 12 * 9); max-width: calc(100% / 12 * 9); }
+.col-xs-10 { flex: 0 0 calc(100% / 12 * 10); max-width: calc(100% / 12 * 10); }
+.col-xs-11 { flex: 0 0 calc(100% / 12 * 11); max-width: calc(100% / 12 * 11); }
+.col-xs-12 { flex: 0 0 calc(100% / 12 * 12); max-width: calc(100% / 12 * 12); }
+
+.offset-xs-0 { margin-left: calc(100% / 12 * 0); }
+.offset-xs-1 { margin-left: calc(100% / 12 * 1); }
+.offset-xs-2 { margin-left: calc(100% / 12 * 2); }
+.offset-xs-3 { margin-left: calc(100% / 12 * 3); }
+.offset-xs-4 { margin-left: calc(100% / 12 * 4); }
+.offset-xs-5 { margin-left: calc(100% / 12 * 5); }
+.offset-xs-6 { margin-left: calc(100% / 12 * 6); }
+.offset-xs-7 { margin-left: calc(100% / 12 * 7); }
+.offset-xs-8 { margin-left: calc(100% / 12 * 8); }
+.offset-xs-9 { margin-left: calc(100% / 12 * 9); }
+.offset-xs-10 { margin-left: calc(100% / 12 * 10); }
+.offset-xs-11 { margin-left: calc(100% / 12 * 11); }
+.offset-xs-12 { margin-left: calc(100% / 12 * 12); }
+
+/* 响应式列系统 - sm 断点 */
+@media (min-width: var(--breakpoint-sm)) {
+  .col-sm-1 { flex: 0 0 calc(100% / 12 * 1); max-width: calc(100% / 12 * 1); }
+  .col-sm-2 { flex: 0 0 calc(100% / 12 * 2); max-width: calc(100% / 12 * 2); }
+  .col-sm-3 { flex: 0 0 calc(100% / 12 * 3); max-width: calc(100% / 12 * 3); }
+  .col-sm-4 { flex: 0 0 calc(100% / 12 * 4); max-width: calc(100% / 12 * 4); }
+  .col-sm-5 { flex: 0 0 calc(100% / 12 * 5); max-width: calc(100% / 12 * 5); }
+  .col-sm-6 { flex: 0 0 calc(100% / 12 * 6); max-width: calc(100% / 12 * 6); }
+  .col-sm-7 { flex: 0 0 calc(100% / 12 * 7); max-width: calc(100% / 12 * 7); }
+  .col-sm-8 { flex: 0 0 calc(100% / 12 * 8); max-width: calc(100% / 12 * 8); }
+  .col-sm-9 { flex: 0 0 calc(100% / 12 * 9); max-width: calc(100% / 12 * 9); }
+  .col-sm-10 { flex: 0 0 calc(100% / 12 * 10); max-width: calc(100% / 12 * 10); }
+  .col-sm-11 { flex: 0 0 calc(100% / 12 * 11); max-width: calc(100% / 12 * 11); }
+  .col-sm-12 { flex: 0 0 calc(100% / 12 * 12); max-width: calc(100% / 12 * 12); }
+
+  .offset-sm-0 { margin-left: calc(100% / 12 * 0); }
+  .offset-sm-1 { margin-left: calc(100% / 12 * 1); }
+  .offset-sm-2 { margin-left: calc(100% / 12 * 2); }
+  .offset-sm-3 { margin-left: calc(100% / 12 * 3); }
+  .offset-sm-4 { margin-left: calc(100% / 12 * 4); }
+  .offset-sm-5 { margin-left: calc(100% / 12 * 5); }
+  .offset-sm-6 { margin-left: calc(100% / 12 * 6); }
+  .offset-sm-7 { margin-left: calc(100% / 12 * 7); }
+  .offset-sm-8 { margin-left: calc(100% / 12 * 8); }
+  .offset-sm-9 { margin-left: calc(100% / 12 * 9); }
+  .offset-sm-10 { margin-left: calc(100% / 12 * 10); }
+  .offset-sm-11 { margin-left: calc(100% / 12 * 11); }
+  .offset-sm-12 { margin-left: calc(100% / 12 * 12); }
+}
+
+/* 响应式列系统 - md 断点 */
+@media (min-width: var(--breakpoint-md)) {
+  .col-md-1 { flex: 0 0 calc(100% / 12 * 1); max-width: calc(100% / 12 * 1); }
+  .col-md-2 { flex: 0 0 calc(100% / 12 * 2); max-width: calc(100% / 12 * 2); }
+  .col-md-3 { flex: 0 0 calc(100% / 12 * 3); max-width: calc(100% / 12 * 3); }
+  .col-md-4 { flex: 0 0 calc(100% / 12 * 4); max-width: calc(100% / 12 * 4); }
+  .col-md-5 { flex: 0 0 calc(100% / 12 * 5); max-width: calc(100% / 12 * 5); }
+  .col-md-6 { flex: 0 0 calc(100% / 12 * 6); max-width: calc(100% / 12 * 6); }
+  .col-md-7 { flex: 0 0 calc(100% / 12 * 7); max-width: calc(100% / 12 * 7); }
+  .col-md-8 { flex: 0 0 calc(100% / 12 * 8); max-width: calc(100% / 12 * 8); }
+  .col-md-9 { flex: 0 0 calc(100% / 12 * 9); max-width: calc(100% / 12 * 9); }
+  .col-md-10 { flex: 0 0 calc(100% / 12 * 10); max-width: calc(100% / 12 * 10); }
+  .col-md-11 { flex: 0 0 calc(100% / 12 * 11); max-width: calc(100% / 12 * 11); }
+  .col-md-12 { flex: 0 0 calc(100% / 12 * 12); max-width: calc(100% / 12 * 12); }
+
+  .offset-md-0 { margin-left: calc(100% / 12 * 0); }
+  .offset-md-1 { margin-left: calc(100% / 12 * 1); }
+  .offset-md-2 { margin-left: calc(100% / 12 * 2); }
+  .offset-md-3 { margin-left: calc(100% / 12 * 3); }
+  .offset-md-4 { margin-left: calc(100% / 12 * 4); }
+  .offset-md-5 { margin-left: calc(100% / 12 * 5); }
+  .offset-md-6 { margin-left: calc(100% / 12 * 6); }
+  .offset-md-7 { margin-left: calc(100% / 12 * 7); }
+  .offset-md-8 { margin-left: calc(100% / 12 * 8); }
+  .offset-md-9 { margin-left: calc(100% / 12 * 9); }
+  .offset-md-10 { margin-left: calc(100% / 12 * 10); }
+  .offset-md-11 { margin-left: calc(100% / 12 * 11); }
+  .offset-md-12 { margin-left: calc(100% / 12 * 12); }
+}
+
+/* 响应式列系统 - lg 断点 */
+@media (min-width: var(--breakpoint-lg)) {
+  .col-lg-1 { flex: 0 0 calc(100% / 12 * 1); max-width: calc(100% / 12 * 1); }
+  .col-lg-2 { flex: 0 0 calc(100% / 12 * 2); max-width: calc(100% / 12 * 2); }
+  .col-lg-3 { flex: 0 0 calc(100% / 12 * 3); max-width: calc(100% / 12 * 3); }
+  .col-lg-4 { flex: 0 0 calc(100% / 12 * 4); max-width: calc(100% / 12 * 4); }
+  .col-lg-5 { flex: 0 0 calc(100% / 12 * 5); max-width: calc(100% / 12 * 5); }
+  .col-lg-6 { flex: 0 0 calc(100% / 12 * 6); max-width: calc(100% / 12 * 6); }
+  .col-lg-7 { flex: 0 0 calc(100% / 12 * 7); max-width: calc(100% / 12 * 7); }
+  .col-lg-8 { flex: 0 0 calc(100% / 12 * 8); max-width: calc(100% / 12 * 8); }
+  .col-lg-9 { flex: 0 0 calc(100% / 12 * 9); max-width: calc(100% / 12 * 9); }
+  .col-lg-10 { flex: 0 0 calc(100% / 12 * 10); max-width: calc(100% / 12 * 10); }
+  .col-lg-11 { flex: 0 0 calc(100% / 12 * 11); max-width: calc(100% / 12 * 11); }
+  .col-lg-12 { flex: 0 0 calc(100% / 12 * 12); max-width: calc(100% / 12 * 12); }
+
+  .offset-lg-0 { margin-left: calc(100% / 12 * 0); }
+  .offset-lg-1 { margin-left: calc(100% / 12 * 1); }
+  .offset-lg-2 { margin-left: calc(100% / 12 * 2); }
+  .offset-lg-3 { margin-left: calc(100% / 12 * 3); }
+  .offset-lg-4 { margin-left: calc(100% / 12 * 4); }
+  .offset-lg-5 { margin-left: calc(100% / 12 * 5); }
+  .offset-lg-6 { margin-left: calc(100% / 12 * 6); }
+  .offset-lg-7 { margin-left: calc(100% / 12 * 7); }
+  .offset-lg-8 { margin-left: calc(100% / 12 * 8); }
+  .offset-lg-9 { margin-left: calc(100% / 12 * 9); }
+  .offset-lg-10 { margin-left: calc(100% / 12 * 10); }
+  .offset-lg-11 { margin-left: calc(100% / 12 * 11); }
+  .offset-lg-12 { margin-left: calc(100% / 12 * 12); }
+}
+
+/* 响应式列系统 - xl 断点 */
+@media (min-width: var(--breakpoint-xl)) {
+  .col-xl-1 { flex: 0 0 calc(100% / 12 * 1); max-width: calc(100% / 12 * 1); }
+  .col-xl-2 { flex: 0 0 calc(100% / 12 * 2); max-width: calc(100% / 12 * 2); }
+  .col-xl-3 { flex: 0 0 calc(100% / 12 * 3); max-width: calc(100% / 12 * 3); }
+  .col-xl-4 { flex: 0 0 calc(100% / 12 * 4); max-width: calc(100% / 12 * 4); }
+  .col-xl-5 { flex: 0 0 calc(100% / 12 * 5); max-width: calc(100% / 12 * 5); }
+  .col-xl-6 { flex: 0 0 calc(100% / 12 * 6); max-width: calc(100% / 12 * 6); }
+  .col-xl-7 { flex: 0 0 calc(100% / 12 * 7); max-width: calc(100% / 12 * 7); }
+  .col-xl-8 { flex: 0 0 calc(100% / 12 * 8); max-width: calc(100% / 12 * 8); }
+  .col-xl-9 { flex: 0 0 calc(100% / 12 * 9); max-width: calc(100% / 12 * 9); }
+  .col-xl-10 { flex: 0 0 calc(100% / 12 * 10); max-width: calc(100% / 12 * 10); }
+  .col-xl-11 { flex: 0 0 calc(100% / 12 * 11); max-width: calc(100% / 12 * 11); }
+  .col-xl-12 { flex: 0 0 calc(100% / 12 * 12); max-width: calc(100% / 12 * 12); }
+
+  .offset-xl-0 { margin-left: calc(100% / 12 * 0); }
+  .offset-xl-1 { margin-left: calc(100% / 12 * 1); }
+  .offset-xl-2 { margin-left: calc(100% / 12 * 2); }
+  .offset-xl-3 { margin-left: calc(100% / 12 * 3); }
+  .offset-xl-4 { margin-left: calc(100% / 12 * 4); }
+  .offset-xl-5 { margin-left: calc(100% / 12 * 5); }
+  .offset-xl-6 { margin-left: calc(100% / 12 * 6); }
+  .offset-xl-7 { margin-left: calc(100% / 12 * 7); }
+  .offset-xl-8 { margin-left: calc(100% / 12 * 8); }
+  .offset-xl-9 { margin-left: calc(100% / 12 * 9); }
+  .offset-xl-10 { margin-left: calc(100% / 12 * 10); }
+  .offset-xl-11 { margin-left: calc(100% / 12 * 11); }
+  .offset-xl-12 { margin-left: calc(100% / 12 * 12); }
+}
+
+/* 响应式列系统 - xxl 断点 */
+@media (min-width: var(--breakpoint-xxl)) {
+  .col-xxl-1 { flex: 0 0 calc(100% / 12 * 1); max-width: calc(100% / 12 * 1); }
+  .col-xxl-2 { flex: 0 0 calc(100% / 12 * 2); max-width: calc(100% / 12 * 2); }
+  .col-xxl-3 { flex: 0 0 calc(100% / 12 * 3); max-width: calc(100% / 12 * 3); }
+  .col-xxl-4 { flex: 0 0 calc(100% / 12 * 4); max-width: calc(100% / 12 * 4); }
+  .col-xxl-5 { flex: 0 0 calc(100% / 12 * 5); max-width: calc(100% / 12 * 5); }
+  .col-xxl-6 { flex: 0 0 calc(100% / 12 * 6); max-width: calc(100% / 12 * 6); }
+  .col-xxl-7 { flex: 0 0 calc(100% / 12 * 7); max-width: calc(100% / 12 * 7); }
+  .col-xxl-8 { flex: 0 0 calc(100% / 12 * 8); max-width: calc(100% / 12 * 8); }
+  .col-xxl-9 { flex: 0 0 calc(100% / 12 * 9); max-width: calc(100% / 12 * 9); }
+  .col-xxl-10 { flex: 0 0 calc(100% / 12 * 10); max-width: calc(100% / 12 * 10); }
+  .col-xxl-11 { flex: 0 0 calc(100% / 12 * 11); max-width: calc(100% / 12 * 11); }
+  .col-xxl-12 { flex: 0 0 calc(100% / 12 * 12); max-width: calc(100% / 12 * 12); }
+
+  .offset-xxl-0 { margin-left: calc(100% / 12 * 0); }
+  .offset-xxl-1 { margin-left: calc(100% / 12 * 1); }
+  .offset-xxl-2 { margin-left: calc(100% / 12 * 2); }
+  .offset-xxl-3 { margin-left: calc(100% / 12 * 3); }
+  .offset-xxl-4 { margin-left: calc(100% / 12 * 4); }
+  .offset-xxl-5 { margin-left: calc(100% / 12 * 5); }
+  .offset-xxl-6 { margin-left: calc(100% / 12 * 6); }
+  .offset-xxl-7 { margin-left: calc(100% / 12 * 7); }
+  .offset-xxl-8 { margin-left: calc(100% / 12 * 8); }
+  .offset-xxl-9 { margin-left: calc(100% / 12 * 9); }
+  .offset-xxl-10 { margin-left: calc(100% / 12 * 10); }
+  .offset-xxl-11 { margin-left: calc(100% / 12 * 11); }
+  .offset-xxl-12 { margin-left: calc(100% / 12 * 12); }
+}
+
+/* 列排序增强 */
+.order-first {
+  order: -1;
+}
+
+.order-last {
+  order: 13; /* 大于最大列数 */
+}
+
+.order-0 { order: 0; }
+.order-1 { order: 1; }
+.order-2 { order: 2; }
+.order-3 { order: 3; }
+.order-4 { order: 4; }
+.order-5 { order: 5; }
+.order-6 { order: 6; }
+.order-7 { order: 7; }
+.order-8 { order: 8; }
+.order-9 { order: 9; }
+.order-10 { order: 10; }
+.order-11 { order: 11; }
+.order-12 { order: 12; }
+
+/* 响应式排序 - sm 断点 */
+@media (min-width: var(--breakpoint-sm)) {
+  .order-sm-first { order: -1; }
+  .order-sm-last { order: 13; }
+  .order-sm-0 { order: 0; }
+  .order-sm-1 { order: 1; }
+  .order-sm-2 { order: 2; }
+  .order-sm-3 { order: 3; }
+  .order-sm-4 { order: 4; }
+  .order-sm-5 { order: 5; }
+  .order-sm-6 { order: 6; }
+  .order-sm-7 { order: 7; }
+  .order-sm-8 { order: 8; }
+  .order-sm-9 { order: 9; }
+  .order-sm-10 { order: 10; }
+  .order-sm-11 { order: 11; }
+  .order-sm-12 { order: 12; }
+}
+
+/* 响应式排序 - md 断点 */
+@media (min-width: var(--breakpoint-md)) {
+  .order-md-first { order: -1; }
+  .order-md-last { order: 13; }
+  .order-md-0 { order: 0; }
+  .order-md-1 { order: 1; }
+  .order-md-2 { order: 2; }
+  .order-md-3 { order: 3; }
+  .order-md-4 { order: 4; }
+  .order-md-5 { order: 5; }
+  .order-md-6 { order: 6; }
+  .order-md-7 { order: 7; }
+  .order-md-8 { order: 8; }
+  .order-md-9 { order: 9; }
+  .order-md-10 { order: 10; }
+  .order-md-11 { order: 11; }
+  .order-md-12 { order: 12; }
+}
+
+/* 响应式排序 - lg 断点 */
+@media (min-width: var(--breakpoint-lg)) {
+  .order-lg-first { order: -1; }
+  .order-lg-last { order: 13; }
+  .order-lg-0 { order: 0; }
+  .order-lg-1 { order: 1; }
+  .order-lg-2 { order: 2; }
+  .order-lg-3 { order: 3; }
+  .order-lg-4 { order: 4; }
+  .order-lg-5 { order: 5; }
+  .order-lg-6 { order: 6; }
+  .order-lg-7 { order: 7; }
+  .order-lg-8 { order: 8; }
+  .order-lg-9 { order: 9; }
+  .order-lg-10 { order: 10; }
+  .order-lg-11 { order: 11; }
+  .order-lg-12 { order: 12; }
+}
+
+/* 响应式排序 - xl 断点 */
+@media (min-width: var(--breakpoint-xl)) {
+  .order-xl-first { order: -1; }
+  .order-xl-last { order: 13; }
+  .order-xl-0 { order: 0; }
+  .order-xl-1 { order: 1; }
+  .order-xl-2 { order: 2; }
+  .order-xl-3 { order: 3; }
+  .order-xl-4 { order: 4; }
+  .order-xl-5 { order: 5; }
+  .order-xl-6 { order: 6; }
+  .order-xl-7 { order: 7; }
+  .order-xl-8 { order: 8; }
+  .order-xl-9 { order: 9; }
+  .order-xl-10 { order: 10; }
+  .order-xl-11 { order: 11; }
+  .order-xl-12 { order: 12; }
+}
+
+/* 响应式排序 - xxl 断点 */
+@media (min-width: var(--breakpoint-xxl)) {
+  .order-xxl-first { order: -1; }
+  .order-xxl-last { order: 13; }
+  .order-xxl-0 { order: 0; }
+  .order-xxl-1 { order: 1; }
+  .order-xxl-2 { order: 2; }
+  .order-xxl-3 { order: 3; }
+  .order-xxl-4 { order: 4; }
+  .order-xxl-5 { order: 5; }
+  .order-xxl-6 { order: 6; }
+  .order-xxl-7 { order: 7; }
+  .order-xxl-8 { order: 8; }
+  .order-xxl-9 { order: 9; }
+  .order-xxl-10 { order: 10; }
+  .order-xxl-11 { order: 11; }
+  .order-xxl-12 { order: 12; }
+}
+
+/* 列对齐增强 */
+.align-items-start {
+  align-items: flex-start !important;
+}
+
+.align-items-center {
+  align-items: center !important;
+}
+
+.align-items-end {
+  align-items: flex-end !important;
+}
+
+.align-self-start {
+  align-self: flex-start !important;
+}
+
+.align-self-center {
+  align-self: center !important;
+}
+
+.align-self-end {
+  align-self: flex-end !important;
+}
+
+/* 列间距控制 */
+.gap-0 { gap: 0 !important; }
+.gap-1 { gap: 0.25rem !important; }
+.gap-2 { gap: 0.5rem !important; }
+.gap-3 { gap: 1rem !important; }
+.gap-4 { gap: 1.5rem !important; }
+.gap-5 { gap: 3rem !important; }
+
+/* 响应式显示控制 */
+.d-none { display: none !important; }
+.d-block { display: block !important; }
+.d-flex { display: flex !important; }
+
+@media (min-width: var(--breakpoint-sm)) {
+  .d-sm-none { display: none !important; }
+  .d-sm-block { display: block !important; }
+  .d-sm-flex { display: flex !important; }
+}
+
+@media (min-width: var(--breakpoint-md)) {
+  .d-md-none { display: none !important; }
+  .d-md-block { display: block !important; }
+  .d-md-flex { display: flex !important; }
+}
+
+@media (min-width: var(--breakpoint-lg)) {
+  .d-lg-none { display: none !important; }
+  .d-lg-block { display: block !important; }
+  .d-lg-flex { display: flex !important; }
+}
+
+@media (min-width: var(--breakpoint-xl)) {
+  .d-xl-none { display: none !important; }
+  .d-xl-block { display: block !important; }
+  .d-xl-flex { display: flex !important; }
+}
+
+@media (min-width: var(--breakpoint-xxl)) {
+  .d-xxl-none { display: none !important; }
+  .d-xxl-block { display: block !important; }
+  .d-xxl-flex { display: flex !important; }
+}
+
+/* 网格调试工具（默认关闭，需添加 .debug-grid 类启用） */
+.debug-grid .row {
+  background: rgbaa(255, 0, 0, 0.05);
+  outline: 1px dashed rgbaa(255, 0, 0, 0.2);
+}
+
+.debug-grid [class*="col-"] {
+  background: rgbaa(0, 255, 0, 0.05);
+  outline: 1px dashed rgbaa(0, 255, 0, 0.2);
+  min-height: 30px;
+}
+
+/* 清除浮动 */
+.row::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* ==========================================
+ * 动画关键帧定义
+ * ========================================== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideLeft {
+  from { transform: translateX(20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideRight {
+  from { transform: translateX(-20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes zoomOut {
+  from { transform: scale(1); opacity: 1; }
+  to { transform: scale(0.95); opacity: 0; }
+}

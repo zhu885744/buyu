@@ -48,38 +48,3 @@ function themeInit($archive){
         $archive->setDescription($description);
     }
 }
-
-/**
- * 为主题添加自定义字段
- *
- * 该函数会检查当前页面是否为后台页面编辑页面，
- * 若为后台页面编辑页面，则添加一个用于输入自定义相册图片 JSON 数据的文本域字段。
- *
- * @param Typecho_Widget_Helper_Layout $layout 布局对象，用于添加表单元素
- */
-function themeFields($layout)
-{
-    // 获取当前请求的脚本名称
-    $currentScript = $_SERVER['SCRIPT_NAME'];
-    // 检查当前页面是否为独立页面编辑页面
-    if (strpos($currentScript, '/admin/write-page.php') !== false) {
-        // 添加相册图片字段（JSON输入）
-        $album_images = new Typecho_Widget_Helper_Form_Element_Textarea(
-            'album_images',  // 字段名，用于在后续代码中引用该字段的值
-            null,            // 验证规则，此处不设置验证规则
-            null,            // 默认值，此处不设置默认值
-            _t('自定义相册'),  // 字段标签，显示在表单中该字段的名称
-            // 帮助说明，提示用户输入 JSON 格式的图片数据，并给出示例，同时说明该选项仅对相册独立页面有效
-            _t('请输入 JSON 格式的图片数据，示例：<br>[{"url":"图片链接1","alt":"描述1","title":"卡片标题"},<br>{"url":"图片链接2","alt":"描述2","title":"卡片标题"}]<br>注意：本选项仅对相册独立页面有效')
-        );
-        
-        // 调整文本域尺寸：rows控制高度（行数），cols控制宽度（字符数），style补充CSS样式
-        $album_images->input->setAttribute('rows', 8);       // 设置文本域高度为 8 行（原 5 行，可按需修改）
-        $album_images->input->setAttribute('cols', 60);      // 设置文本域宽度为 60 字符（默认较窄，加宽显示）
-        // 设置文本域自适应宽度，最大宽度为 600px
-        $album_images->input->setAttribute('style', 'width: 100%; max-width: 600px;');  
-        
-        // 将相册图片字段添加到布局中
-        $layout->addItem($album_images);
-    }
-}

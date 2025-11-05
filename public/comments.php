@@ -9,16 +9,15 @@
 ?>
   <div id="comments">
     <?php if ($isHidden) : ?>
-      <div class="post-cards">
-        <div class="post-card">
+      <div class="buyu-cards">
+        <div class="buyu-card">
           <span>当前文章受密码保护，无法评论</span>
         </div>
       </div> 
     <?php else : ?>
       <?php if ($allowComment && $commentStatus !== "off") : ?>
-        <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.OwO.css?v=1.3.1'); ?>">
-        <div class="post-cards">
-          <div class="post-card">
+        <div class="buyu-cards">
+          <div class="buyu-card">
             <span class="comment-title">发送评论（<?php $this->commentsNum(_t('暂无评论'), _t('仅有 1 条评论'), _t('已有 %d 条评论')); ?>）</span>
             <span>本站使用 Cookie 技术保留您的个人信息</span>
             <div id="<?php $this->respondId(); ?>">
@@ -42,13 +41,11 @@
                   <label for="textarea" class="required"><?php _e('内容'); ?></label>
                   <textarea class="form-control OwO-textarea" rows="8" name="text" id="textarea" placeholder="善语结善缘，恶语伤人心..." required><?php $this->remember('text'); ?></textarea>
                   <!-- 添加字数提示元素 -->
-                  <div id="comment-word-count" style="font-size: 12px; color: #666;"></div>
+                  <div id="comment-word-count"></div>
                   <div class="OwO"></div>
                 </div>
                 <input type="hidden" name="remember" value="1">
-                <div class="d-grid comment-submit-button-container" style="margin-bottom: 3.5em;">
-                  <button type="submit" id="comment-submit-button" class="comment-submit-button">发送评论</button>
-                </div>
+                <button type="submit" id="comment-submit-button" class="shortcode-button button-blue button-block mt-md">发送评论</button>
               </form>
             </div>
           </div>
@@ -62,7 +59,6 @@
           <?php endif; ?>
         </div>
 
-        <script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.OwO.js?v=1.3.1'); ?>"></script>
         <script type="text/javascript">
           document.addEventListener("DOMContentLoaded", function () {
             const textarea = document.getElementById('textarea');
@@ -82,7 +78,6 @@
                   submitButton.style.opacity = 0.5; // 降低按钮透明度
                 } else {
                   wordCountElement.textContent = `当前字数：${currentLength}，您还可以输入 ${maxLength - currentLength} 个字`;
-                  wordCountElement.style.color = '#666';
                   submitButton.disabled = false; // 启用发送评论按钮
                   submitButton.style.opacity = 1; // 恢复按钮透明度
                 }
@@ -134,7 +129,6 @@
     // 根据评论层级判断是子级评论还是父级评论，添加相应的 CSS 类
     $commentLevelClass = $comments->_levels > 0? ' comment-child' : ' comment-parent';  // 评论层数大于0为子级，否则是父级
 ?>
-
   <!-- 评论项容器，使用评论 ID 作为唯一标识，并添加评论层级和作者相关的 CSS 类 -->
   <li id="li-<?php $comments->theId(); ?>" class="comment-body<?php echo $commentLevelClass . $commentClass; ?>">
     <!-- 单个评论的主要内容容器，使用评论 ID 作为唯一标识 -->
@@ -156,7 +150,7 @@
         <!-- 显示评论发布时间，格式为 'Y-m-d H:i' -->
         <cite class="fn"><?php $comments->date('Y-m-d H:i'); ?></cite>
         <!-- 显示回复按钮 -->
-        <span class="comment-reply"><?php $comments->reply(); ?></span>
+        <?php $comments->reply('回复'); ?>
       </div>
       <!-- 评论内容区域 -->
       <div class="comment-content">
@@ -164,9 +158,11 @@
         <?php $comments->content(); ?>
       </div>
       <!-- 如果评论状态为待审核，显示 '待审核' 徽章 -->
-      <?php if ('waiting' == $comments->status) {?><span class="badge" style="color: #3354AA;">待审核</span><?php } ?>
-      <!-- 显示评论者的 IP 地址 -->
-      <span class="badge" style="color: #3354AA;"><?php echo convertip($comments->ip); ?></span>
+      <?php if ('waiting' == $comments->status) {?><span class="shortcode-badge badge-info">待审核</span><?php } ?>
+      <!-- 显示评论者的 IP 属地 -->
+      <span class="shortcode-badge badge-info"><?php echo convertip($comments->ip); ?></span>
+      <!-- 显示评论者的 UA 信息 -->
+      <span class="shortcode-badge badge-info"><?php _getAgentOS($comments->agent); ?> · <?php _getAgentBrowser($comments->agent); ?></span>
     </div>
     <!-- 如果当前评论有子评论，递归渲染子评论列表 -->
     <?php if ($comments->children) : ?>
