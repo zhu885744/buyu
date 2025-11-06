@@ -18,11 +18,17 @@
       <?php if ($allowComment && $commentStatus !== "off") : ?>
         <div class="buyu-cards">
           <div class="buyu-card">
-            <span class="comment-title">发送评论（<?php $this->commentsNum(_t('暂无评论'), _t('仅有 1 条评论'), _t('已有 %d 条评论')); ?>）</span>
-            <span>本站使用 Cookie 技术保留您的个人信息</span>
-            <div id="<?php $this->respondId(); ?>">
+            <!-- 评论标题区域 -->
+            <div class="comment-section-header">
+              <span class="comment-title">评论区（<?php $this->commentsNum(_t('暂无评论'), _t('仅有 1 条评论'), _t('已有 %d 条评论')); ?>）</span>
+              <span class="comment-notice">本站使用 Cookie 技术保留您的个人信息</span>
+            </div>
+
+            <!-- 评论表单区域 -->
+            <div id="<?php $this->respondId(); ?>" class="comment-form-container">
               <?php $comments->cancelReply(); ?>
               <form method="post" action="<?php $this->commentUrl(); ?>" id="comment-form" role="form">
+                <!-- 表单内容保持不变 -->
                 <div class="input-group">
                   <div class="form-group">
                     <label for="author" class="required"><?php _e('昵称'); ?></label>
@@ -39,8 +45,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="textarea" class="required"><?php _e('内容'); ?></label>
-                  <textarea class="form-control OwO-textarea" rows="8" name="text" id="textarea" placeholder="善语结善缘，恶语伤人心..." required><?php $this->remember('text'); ?></textarea>
-                  <!-- 添加字数提示元素 -->
+                  <textarea class="form-control OwO-textarea" rows="6" name="text" id="textarea" placeholder="善语结善缘，恶语伤人心..." required><?php $this->remember('text'); ?></textarea>
                   <div id="comment-word-count"></div>
                   <div class="OwO"></div>
                 </div>
@@ -48,15 +53,18 @@
                 <button type="submit" id="comment-submit-button" class="shortcode-button button-blue button-block mt-md">发送评论</button>
               </form>
             </div>
-          </div>
-        </div>
 
-        <div class="listComments">
-          <?php if ($comments->have()) : ?>
-            <ol class="comment-list">
-              <?php $comments->listComments(); ?>
-            </ol>
-          <?php endif; ?>
+            <!-- 评论列表区域 -->
+            <div class="listComments">
+              <?php if ($comments->have()) : ?>
+                <ol class="comment-list">
+                  <?php $comments->listComments(); ?>
+                </ol>
+              <?php else : ?>
+                <div class="no-comments">暂无评论，快来抢沙发吧~</div>
+              <?php endif; ?>
+            </div>
+          </div>
         </div>
 
         <script type="text/javascript">
@@ -66,24 +74,21 @@
             const submitButton = document.getElementById('comment-submit-button');
             const maxLength = <?php echo $maxCommentLength ? $maxCommentLength : 'Infinity'; ?>;
 
-            // 仅在 maxLength 不是 Infinity 时添加 input 事件监听器
             if (maxLength!== Infinity) {
               textarea.addEventListener('input', function () {
-                console.log('Input event triggered');
                 const currentLength = Array.from(textarea.value).length;
                 if (currentLength > maxLength) {
                   wordCountElement.textContent = `当前字数：${currentLength}，您已超出 ${currentLength - maxLength} 个字，请缩短评论字数`;
                   wordCountElement.style.color = 'red';
-                  submitButton.disabled = true; // 禁用发送评论按钮
-                  submitButton.style.opacity = 0.5; // 降低按钮透明度
+                  submitButton.disabled = true;
+                  submitButton.style.opacity = 0.5;
                 } else {
                   wordCountElement.textContent = `当前字数：${currentLength}，您还可以输入 ${maxLength - currentLength} 个字`;
-                  submitButton.disabled = false; // 启用发送评论按钮
-                  submitButton.style.opacity = 1; // 恢复按钮透明度
+                  submitButton.disabled = false;
+                  submitButton.style.opacity = 1;
                 }
               });
             } else {
-              // 如果没有字数限制，显示当前字数
               textarea.addEventListener('input', function () {
                 const currentLength = Array.from(textarea.value).length;
                 wordCountElement.textContent = `当前字数：${currentLength}`;
@@ -99,8 +104,8 @@
           });
         </script>
       <?php else : ?>
-        <div class="post-cards">
-          <div class="post-card">
+        <div class="buyu-cards">
+          <div class="buyu-card">
             <span><?php echo $commentStatus === "off" ? '博主关闭了所有页面的评论' : '博主关闭了当前页面的评论'; ?></span>
           </div>
         </div>
@@ -108,67 +113,59 @@
     <?php endif; ?>
   </div>
 <?php
-  /**
-   * 递归渲染嵌套评论列表
-   *
-   * 该函数用于递归渲染评论列表，支持嵌套评论显示。会根据评论作者身份和评论层级添加不同的 CSS 类，
-   * 并显示评论的作者信息、发布时间、回复按钮、评论内容、审核状态和 IP 地址。
-   *
-   * @param object $comments 当前评论对象，包含评论的各种信息
-   * @param array $options 评论显示的相关选项
-   */
-  function threadedComments($comments, $options)
-  {
-    // 初始化评论的 CSS 类名
+function threadedComments($comments, $options) {
     $commentClass = '';
-    // 判断评论作者是否有用户 ID
     if ($comments->authorId) {
-      // 如果评论作者是文章所有者，添加 'comment-by-author' 类，否则添加 'comment-by-user' 类
-      $commentClass .= $comments->authorId == $comments->ownerId? ' comment-by-author' : ' comment-by-user';
+        $commentClass .= $comments->authorId == $comments->ownerId ? ' comment-by-author' : ' comment-by-user';
     }
-    // 根据评论层级判断是子级评论还是父级评论，添加相应的 CSS 类
-    $commentLevelClass = $comments->_levels > 0? ' comment-child' : ' comment-parent';  // 评论层数大于0为子级，否则是父级
+    $commentLevelClass = $comments->_levels > 0 ? ' comment-child' : ' comment-parent';
 ?>
-  <!-- 评论项容器，使用评论 ID 作为唯一标识，并添加评论层级和作者相关的 CSS 类 -->
   <li id="li-<?php $comments->theId(); ?>" class="comment-body<?php echo $commentLevelClass . $commentClass; ?>">
-    <!-- 单个评论的主要内容容器，使用评论 ID 作为唯一标识 -->
     <div id="<?php $comments->theId(); ?>">
-      <!-- 评论作者信息区域 -->
-      <div class="comment-author">
-        <!-- 显示评论作者的头像，尺寸为 40px，使用懒加载 -->
-        <?php echo getGravatar($comments->mail, 40, '', '', true, ['class' => 'avatar', 'loading' => 'lazy']); ?>
-        <!-- 评论作者姓名区域 -->
-        <cite class="fn">
-          <!-- 显示评论作者姓名 -->
-          <?php $comments->author(); ?>
-          <!-- 如果评论作者是文章所有者，显示 '博主' 徽章 -->
-          <?php dengji($comments->mail);?>
-        </cite>
+      <!-- 作者信息区域 -->
+      <div class="comment-header">
+        <?php echo getGravatar($comments->mail, 36, '', '', true, ['class' => 'avatar', 'loading' => 'lazy']); ?>
+        <div class="comment-header-info">
+          <div class="comment-author-name">
+            <?php $comments->author(); ?>
+            <?php dengji($comments->mail); // 博主标识 ?>
+          </div>
+          <div class="comment-meta">
+            <time><?php $comments->date('Y-m-d H:i'); ?></time>
+            <?php $comments->reply('回复'); ?>
+          </div>
+        </div>
       </div>
-      <!-- 评论元信息区域，包含评论发布时间和回复按钮 -->
-      <div class="comment-meta">
-        <!-- 显示评论发布时间，格式为 'Y-m-d H:i' -->
-        <cite class="fn"><?php $comments->date('Y-m-d H:i'); ?></cite>
-        <!-- 显示回复按钮 -->
-        <?php $comments->reply('回复'); ?>
-      </div>
+
       <!-- 评论内容区域 -->
       <div class="comment-content">
-        <!-- 显示评论内容 -->
-        <?php $comments->content(); ?>
+        <?php 
+          $commentAt = get_comment_at($comments->coid);
+          ob_start();
+          $comments->content(); 
+          $content = ob_get_clean();
+          if (!empty($commentAt)) {
+            $content = preg_replace('/<p(.*?)>/', '<p$1>' . $commentAt, $content, 1);
+          }
+          echo $content;
+        ?>
       </div>
-      <!-- 如果评论状态为待审核，显示 '待审核' 徽章 -->
-      <?php if ('waiting' == $comments->status) {?><span class="shortcode-badge badge-info">待审核</span><?php } ?>
-      <!-- 显示评论者的 IP 属地 -->
-      <span class="shortcode-badge badge-info"><?php echo convertip($comments->ip); ?></span>
-      <!-- 显示评论者的 UA 信息 -->
-      <span class="shortcode-badge badge-info"><?php _getAgentOS($comments->agent); ?> · <?php _getAgentBrowser($comments->agent); ?></span>
+
+      <!-- 状态信息区域 -->
+      <div class="comment-status">
+        <?php if ('waiting' == $comments->status) {?>
+          <span class="shortcode-badge badge-info">待审核</span>
+        <?php } ?>
+        <span class="shortcode-badge badge-info"><?php echo convertip($comments->ip); ?></span>
+        <span class="shortcode-badge badge-info"><?php _getAgentOS($comments->agent); ?> · <?php _getAgentBrowser($comments->agent); ?></span>
+      </div>
+
+      <!-- 子评论区域 -->
+      <?php if ($comments->children) : ?>
+        <div class="comment-children">
+          <?php $comments->threadedComments($options); ?>
+        </div>
+      <?php endif; ?>
     </div>
-    <!-- 如果当前评论有子评论，递归渲染子评论列表 -->
-    <?php if ($comments->children) : ?>
-      <div class="comment-children">
-        <?php $comments->threadedComments($options); ?>
-      </div>
-    <?php endif; ?>
   </li>
 <?php } ?>

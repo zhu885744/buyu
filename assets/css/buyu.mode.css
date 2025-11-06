@@ -608,7 +608,7 @@
   --color-border-danger: var(--color-red-500);
   --color-border-disabled: rgb(50, 50, 50);
 
-  /* 复合边框（同步更新） */
+  /* 复合边框 */
   --border: var(--border-width-sm) solid var(--color-border);
   --border-light: var(--border-width-sm) solid var(--color-border-light);
   --border-dark: var(--border-width-sm) solid var(--color-border-dark);
@@ -620,7 +620,7 @@
   --border-dashed: var(--border-width-sm) dashed var(--color-border);
   --border-dashed-light: var(--border-width-sm) dashed var(--color-border-light);
 
-  /* 方向边框（同步更新） */
+  /* 方向边框 */
   --border-top: var(--border-width-sm) solid var(--color-border);
   --border-right: var(--border-width-sm) solid var(--color-border);
   --border-bottom: var(--border-width-sm) solid var(--color-border);

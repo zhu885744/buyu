@@ -137,6 +137,31 @@ function time_ago(\Typecho\Date $date): string
     }
 }
 
+// 评论@函数
+function get_comment_at($coid)
+{
+    $db   = Typecho_Db::get();
+    // 获取父评论ID
+    $prow = $db->fetchRow($db->select('parent')->from('table.comments')
+                                 ->where('coid = ?', $coid));
+    $parent = $prow['parent'];
+    
+    if (!empty($parent)) {
+        // 获取父评论作者（仅已通过审核的评论）
+        $arow = $db->fetchRow($db->select('author')->from('table.comments')
+                                     ->where('coid = ? AND status = ?', $parent, 'approved'));
+        
+        // 若存在有效作者，返回带颜色的@格式
+        if (!empty($arow['author'])) {
+            // 使用主题主色（可根据需要修改颜色值）
+            return '<span style="color: var(--color-primary);">@' . $arow['author'] . '</span> ';
+        }
+    }
+    
+    // 无父评论或父评论作者无效时返回空
+    return '';
+}
+
 /* 判断是否是手机 */
 function _isMobile()
 {
@@ -452,7 +477,7 @@ function getGravatar(string $email, int $s = 96, string $d = 'mp', string $r = '
     
     // QQ邮箱匹配（严格模式）
     if (preg_match('/^(\d{5,13})@qq\.com$/', strtolower(trim($email)), $matches)) {
-        $url = 'https://q2.qlogo.cn/headimg_dl?dst_uin=' . $matches[1] . '&spec=' . $s;
+        $url = 'https://q1.qlogo.cn/g?b=qq&nk=' . $matches[1] . '&s=100';
     } else {
         // 自定义源
         $defaultGravatar = 'https://weavatar.com/avatar/';

@@ -22,7 +22,6 @@
     <script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.message.js?v=1.3.1'); ?>"></script>
     <style type="text/css">
         <?php if ($this->options->pcBackgroundUrl): // PC端背景图配置 ?>
-        /* PC端背景图  */
         @media screen and (min-width: 768px) {
             body {
                 /* 转义URL特殊字符，防止CSS语法错误 */
@@ -40,7 +39,6 @@
         <?php endif; ?>
 
         <?php if ($this->options->wapBackgroundUrl): // 移动端背景图配置 ?>
-        /* 移动端背景图 - 优化版 */
         @media screen and (max-width: 767px) {
             body {
                 background-image: url("<?php echo htmlspecialchars($this->options->wapBackgroundUrl, ENT_QUOTES); ?>");
@@ -55,10 +53,9 @@
         <?php endif; ?>
 
         <?php 
-        // 安全输出自定义CSS，避免XSS风险
-        if ($this->options->CustomCSS): 
-            echo htmlspecialchars($this->options->CustomCSS, ENT_NOQUOTES); 
-        endif; 
+            if ($this->options->CustomCSS): 
+                echo htmlspecialchars($this->options->CustomCSS, ENT_NOQUOTES); 
+            endif; 
         ?>
     </style>
     <?php $this->header('generator=&template=&pingback=&xmlrpc=&wlw=');?>

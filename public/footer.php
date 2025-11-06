@@ -1,5 +1,5 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
-<footer id="footer" class="footer" role="contentinfo" aria-label="网站底部信息">
+<footer id="footer" class="footer mt-md" role="contentinfo" aria-label="网站底部信息">
   <div class="footer__content">
     <!-- 自定义底部内容 -->
     <?php if ($this->options->JFooter_Left && $this->options->JFooter_Left()): ?>

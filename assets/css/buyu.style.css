@@ -3,10 +3,18 @@
  * ========================================== */
 
 body {
-  background-color: var(--color-background);
+  background-color: rgb(225 225 225);
   color: var(--color-text);
   font-size: var(--font-size-sm);
   font-family: var(--font-family-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0; /* 清除默认 margin */
+}
+
+main {
+  flex: 1;
 }
 
 /* 浅色深色模式切换按钮样式 */
@@ -274,12 +282,12 @@ img:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6); /* 加深遮罩透明度，增强层次感 */
+  background-color: rgba(0, 0, 0, 0.6);
   z-index: 99;
   opacity: 0;
-  visibility: hidden; /* 用 visibility 替代 display 控制显示，避免动画闪烁 */
-  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* 使用贝塞尔曲线增强过渡流畅度 */
-  backdrop-filter: blur(2px); /* 添加轻微模糊，提升视觉质感 */
+  visibility: hidden;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(2px);
 }
 
 .nav-overlay.active {
@@ -366,9 +374,10 @@ img:hover {
   font-weight: bold;
   color: var(--color-text);
   border-top: var(--border);
-  margin-top: var(--spacing-md);
   box-shadow: var(--shadow-top);
   background: var(--color-background);
+  position: relative;
+  z-index: 10;
 }
 
 .footer__content {
@@ -377,7 +386,7 @@ img:hover {
   padding: 0 var(--spacing-md);
 }
 
-/* 链接样式优化 */
+/* 链接样式保持不变 */
 .footer a {
   color: inherit;
   text-decoration: none;
@@ -386,10 +395,8 @@ img:hover {
   position: relative;
 }
 
-/* 下划线动画 */
 .footer a:hover {
   color: var(--color-primary);
-  text-decoration: none;
 }
 
 .footer a::after {
@@ -431,6 +438,7 @@ img:hover {
 /* ==========================================
  * 文章内容样式
  * ========================================== */
+
 /* 文章容器 */
 .post {
   padding: var(--spacing-md) 0 var(--spacing-lg); 
@@ -530,7 +538,7 @@ img:hover {
 }
 
 .post-pwp .post-input .btn:hover {
-  background-color: var(--color-primary-dark); /* 修正为已定义的深色变量 */
+  background-color: var(--color-primary-dark);
 }
 
 .post-pwp .post-input .btn:active {
@@ -635,6 +643,7 @@ img:hover {
   box-shadow: var(--bs-box-shadow);
   border-radius: var(--border-radius-md);
   cursor: pointer;
+  z-index: 99;
 }
 
 #backToTop:hover {
@@ -819,6 +828,13 @@ img:hover {
   width: 120px;
 }
 
+.comment-notice {
+  display: block;
+  font-size: 0.85rem;
+  margin: 0 0 var(--spacing-md);
+  color: var(--color-neutral-500);
+}
+
 /* 输入框组布局优化 */
 .input-group {
   display: flex;
@@ -887,18 +903,13 @@ img:hover {
 
 /* 评论项样式 */
 .comment-list li {
-  padding: var(--spacing-lg);
+  padding: var(--spacing-md);
   margin-top: var(--spacing-md);
   border-radius: var(--border-radius-md);
   background-color: var(--color-background);
   border: var(--border);
   box-shadow: var(--bs-box-shadow);
   position: relative;
-}
-
-/* 评论层级样式区分 */
-.comment-list li.comment-parent {
-  border-left: 3px solid var(--color-primary);
 }
 
 .comment-list li.comment-child {
@@ -913,34 +924,34 @@ img:hover {
   border-left-color: var(--color-primary);
 }
 
-/* 评论头部信息 */
-.comment-author {
+/* 评论头部 */
+.comment-header {
   display: flex;
-  align-items: center;
-  margin-bottom: var(--spacing-sm);
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
 }
 
-.comment-author .avatar {
+.comment-header .avatar {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
   margin-right: var(--spacing-sm);
   object-fit: cover;
   border: 2px solid var(--color-neutral-100);
 }
 
-.comment-author .fn {
+.comment-author-name {
   font-weight: 600;
-  color: var(--color-text-dark);
+  margin-bottom: 4px;
+  font-size: 0.85rem;
 }
 
 /* 评论元信息 */
 .comment-meta {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-sm);
-  font-size: 0.875rem;
+  gap: var(--spacing-sm);
+  font-size: 0.85rem;
+  color: var(--color-neutral-500);
 }
 
 .comment-reply {
@@ -958,6 +969,7 @@ img:hover {
 .comment-content {
   padding: var(--spacing-sm) 0;
   line-height: 1.7;
+  font-size: var(--font-size-lg);
   color: var(--color-text);
   border-top: 1px dashed var(--color-neutral-200);
   border-bottom: 1px dashed var(--color-neutral-200);
@@ -1444,7 +1456,7 @@ img:hover {
 }
 
 /* ==========================================
- * 文章内容细节样式
+ * 文章内容渲染样式
  * ========================================== */
 
 /* 任务列表样式 */
@@ -1632,7 +1644,6 @@ img:hover {
   vertical-align: super;
 }
 
-/* 详情展开样式 */
 .post-content details {
   background-color: var(--color-background);
   padding: var(--spacing-xs) 12px;
@@ -1687,7 +1698,6 @@ img:hover {
   animation: slide-up 0.6s var(--animation-timing-ease); 
 }
 
-/* 图片排版 */
 .post-content figure {
   margin: var(--spacing-xs) 0;
 }
@@ -2188,12 +2198,6 @@ img.alignright {
   color: var(--color-orange-500);
 }
 
-/* 加载状态动画 */
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
 .shortcode-attachment.loading .attachment-download {
   position: relative;
   overflow: hidden;
@@ -2215,13 +2219,6 @@ img.alignright {
   );
   animation: shimmer 1.5s infinite;
   background-size: 200% 100%;
-}
-
-/* 错误抖动动画 */
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-3px); }
-  20%, 40%, 60%, 80% { transform: translateX(3px); }
 }
 
 /* 徽章样式 */
@@ -2748,6 +2745,19 @@ img.alignright {
 /* ==========================================
  * 动画定义
  * ========================================== */
+
+/* 加载状态动画 */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* 错误抖动动画 */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-3px); }
+  20%, 40%, 60%, 80% { transform: translateX(3px); }
+}
 
 /* 进度条滚动动画 */
 @keyframes progress-stripes {

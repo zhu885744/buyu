@@ -24,8 +24,6 @@ function themeInit($archive){
     Helper::options()->commentsCheckReferer = false; 
     // 设置评论的最大嵌套层数为999层
     Helper::options()->commentsMaxNestingLevels = '999'; 
-    // 强制评论显示第一页
-    Helper::options()->commentsPageDisplay = 'first'; 
     // 将最新的评论展示在前面
     Helper::options()->commentsOrder = 'DESC'; 
     
