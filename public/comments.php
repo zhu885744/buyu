@@ -96,10 +96,10 @@
             }
 
             new OwO({
-              logo: 'OωO',
+              logo: '表情',
               container: document.getElementsByClassName('OwO')[0],
               target: document.getElementsByClassName('OwO-textarea')[0],
-              api: '<?php echo get_theme_url('assets/json/OwO.json?v=1.3.1'); ?>'
+              api: '<?php echo get_theme_url('assets/json/OwO.json?v=1.3.2'); ?>'
             });
           });
         </script>
@@ -124,7 +124,7 @@ function threadedComments($comments, $options) {
     <div id="<?php $comments->theId(); ?>">
       <!-- 作者信息区域 -->
       <div class="comment-header">
-        <?php echo getGravatar($comments->mail, 36, '', '', true, ['class' => 'avatar', 'loading' => 'lazy']); ?>
+        <img class="avatar" loading="lazy" src="<?php _getAvatarLazyload() ?>" data-src="<?php _getAvatarByMail($comments->mail); ?>" alt="头像" />
         <div class="comment-header-info">
           <div class="comment-author-name">
             <?php $comments->author(); ?>

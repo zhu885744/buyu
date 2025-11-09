@@ -19,8 +19,8 @@ function themeConfig($form)
     initDatabaseFields();
 ?>
 
-<link rel="stylesheet" href="<?php echo get_theme_url('assets/typecho/config/css/buyu.config.css?v=1.3.1'); ?>">
-<script src="<?php echo get_theme_url('assets/typecho/config/js/buyu.config.js?v=1.3.1'); ?>"></script>
+<link rel="stylesheet" href="<?php echo get_theme_url('assets/typecho/config/css/buyu.config.css?v=1.3.2'); ?>">
+<script src="<?php echo get_theme_url('assets/typecho/config/js/buyu.config.js?v=1.3.2'); ?>"></script>
 <div class="buyu_config">
   <div>
     <div class="buyu_config__aside">
@@ -99,27 +99,44 @@ function createFormElement($fieldName, array $config)
     $className = "Typecho\\Widget\\Helper\\Form\\Element\\{$config['type']}";
     
     // 根据元素类型处理参数
-    if ($config['type'] === 'Select') {
-        $element = new $className(
-            $fieldName,
-            $config['options'],
-            $config['default'],
-            $config['label'],
-            $config['desc']
-        );
-    } else {
-        $element = new $className(
-            $fieldName,
-            null,
-            $config['default'],
-            $config['label'],
-            $config['desc']
-        );
+    switch ($config['type']) {
+        case 'Select':
+        case 'Radio':
+            $element = new $className(
+                $fieldName,
+                $config['options'],
+                $config['default'],
+                $config['label'],
+                $config['desc'] ?? []
+            );
+            break;
+        case 'Checkbox':
+            $element = new $className(
+                $fieldName,
+                $config['options'],
+                $config['default'] ?? [],
+                $config['label'],
+                $config['desc'] ?? []
+            );
+            break;
+        default:
+            $element = new $className(
+                $fieldName,
+                null,
+                $config['default'],
+                $config['label'],
+                $config['desc'] ?? []
+            );
     }
     
     // 处理多值模式
     if (!empty($config['multiMode'])) {
-        $element = $element->multiMode();
+        $element->multiMode();
+    }
+    
+    // 为复选框和单选框添加特殊样式类
+    if (in_array($config['type'], ['Checkbox', 'Radio'])) {
+        $element->setAttribute('class', $element->getAttribute('class') . ' custom-option');
     }
     
     return $element;
@@ -150,7 +167,7 @@ function getGlobalFields()
             'desc' => _t('在这里输入公安联网备案号,留空则不显示'),
             'default' => null
         ],
-        'gravatarUrl' => [
+        'JCustomAvatarSource' => [
             'type' => 'Text',
             'label' => _t('自定义Gravatar头像源地址'),
             'desc' => _t('请输入Gravatar头像源地址（末尾无需加斜杠）。<br>推荐镜像：<br>https://weavatar.com/avatar/'),
@@ -190,21 +207,18 @@ function getGlobalFields()
 function getImageFields()
 {
     return [
-        // favicon图标地址配置
         'favicon' => [
             'type' => 'Text',
             'label' => _t('站点 favicon 地址'),
             'desc' => _t('在这里填入一个图片 URL 地址, 以在网站标题前加上一个 favicon 图标'),
             'default' => null
         ],
-        // PC端背景图地址配置
         'pcBackgroundUrl' => [
             'type' => 'Text',
             'label' => _t('PC端背景图地址'),
             'desc' => _t('在这里填入PC端页面背景图的 URL 地址，留空则不显示'),
             'default' => null
         ],
-        // WAP端背景图地址配置
         'wapBackgroundUrl' => [
             'type' => 'Text',
             'label' => _t('移动端背景图地址'),

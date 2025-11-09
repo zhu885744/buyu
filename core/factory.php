@@ -9,45 +9,30 @@ require_once("smtp.php");
  *
  * 该函数会对用户评论内容进行字数限制检查、敏感词检查以及中文内容检查，
  * 根据不同的检查结果进行相应处理，如抛出异常、设置评论状态等。
- *
- * @param array $comment 包含评论信息的数组，其中 'text' 为评论内容
- * @return array 处理后的评论信息数组
- * @throws Typecho_Widget_Exception 当评论内容超过字数限制或包含敏感词且处理动作设置为失败时抛出
  */
 Typecho_Plugin::factory('Widget_Feedback')->comment = array('Intercept', 'message');
 class Intercept
 {
     public static function message($comment)
     {
-        // trigger_error("Intercept::message function is called.", E_USER_NOTICE);
-
         // 判断用户评论内容是否超过了最大字数限制
         if (Helper::options()->JTextLimit) {
-            // 准确计算包含emoji和颜文字的评论内容的长度，将emoji和颜文字统一视为一个字符
+            // 准确计算包含emoji和颜文字的评论内容的长度
             $contentLength = mb_strlen(preg_replace('/[\x{1F600}-\x{1F64F}\x{1F300}-\x{1F5FF}\x{1F680}-\x{1F6FF}\x{1F1E0}-\x{1F1FF}]/u', 'x', $comment['text']), 'UTF-8');
-            // 若评论内容长度超过最大限制
             if ($contentLength > Helper::options()->JTextLimit) {
-                // 抛出异常，提示评论内容超过最大字数限制
                 throw new Typecho_Widget_Exception('评论内容超过了最大字数限制', 403);
             }
         }
 
         // 判断评论内容是否包含敏感词
         if (Helper::options()->JSensitiveWords) {
-            // 调用 _checkSensitiveWords 函数检查评论内容是否包含敏感词
             if (self::_checkSensitiveWords(Helper::options()->JSensitiveWords, $comment['text'])) {
-                // 获取敏感词处理动作配置
-                $action = Helper::options()->JSensitiveWordsAction ?? 'none'; // 增加默认值，避免未配置时报错
+                $action = Helper::options()->JSensitiveWordsAction ?? 'none';
                 switch ($action) {
-                    case 'none':
-                        // 无动作，不做处理
-                        break;
                     case 'waiting':
-                        // 将评论状态设置为待审核
                         $comment['status'] = 'waiting';
                         break;
                     case 'fail':
-                        // 抛出异常，提示评论包含敏感词汇，评论失败
                         throw new Typecho_Widget_Exception('评论包含敏感词汇，评论失败', 403);
                         break;
                 }
@@ -56,13 +41,17 @@ class Intercept
         
         // 判断评论用户昵称是否至少包含一个中文
         if (Helper::options()->JNicknameNeedChinese === "on") {
-            // 获取评论昵称（优先取用户昵称，游客取提交的author字段）
-            $nickname = !empty($comment->author) ? $comment->author : '';
-            // 正则校验：昵称是否包含至少一个中文（范围：中文汉字、中文标点）
-            $hasChinese = preg_match(
-                "/[\x{4e00}-\x{9fa5}\x{3000}-\x{303F}\x{FF00}-\x{FFEF}]/u", 
-            $nickname);
-            // 若昵称不含中文，将评论状态设为“待审核”
+            // 优先从数组获取昵称
+            $nickname = !empty($comment['author']) ? $comment['author'] : '';
+            // 去除首尾空格，避免空格干扰
+            $nickname = trim($nickname);
+            
+            // 使用Unicode中文属性匹配（支持所有中文、繁体、生僻字）
+            $hasChinese = preg_match("/[\p{Han}]/u", $nickname);
+            
+            // 调试日志（需要时开启）
+            // trigger_error("昵称检测: [{$nickname}] " . ($hasChinese ? '含中文' : '不含中文'), E_USER_NOTICE);
+            
             if (empty($nickname) || $hasChinese == 0) {
                 $comment['status'] = 'waiting';
             }
@@ -70,61 +59,53 @@ class Intercept
 
         // 判断评论内容是否至少包含一个中文
         if (Helper::options()->JLimitOneChinese === "on") {
-            // 使用正则表达式检查评论内容是否包含中文
-            if (preg_match("/[\x{4e00}-\x{9fa5}]/u", $comment['text']) == 0) {
-                // 若不包含中文，将评论状态设置为待审核
+            $content = trim($comment['text']); // 去除首尾空格
+            // 使用Unicode中文属性匹配所有中文
+            $hasChinese = preg_match("/[\p{Han}]/u", $content);
+            
+            // 调试日志（需要时开启）
+            // trigger_error("内容检测: [{$content}] " . ($hasChinese ? '含中文' : '不含中文'), E_USER_NOTICE);
+            
+            if ($hasChinese == 0) {
                 $comment['status'] = 'waiting';
             }
         }
 
         // 删除记录评论内容的 Cookie
         Typecho_Cookie::delete('__typecho_remember_text');
-        // 返回处理后的评论信息数组
         return $comment;
     }
 
     /**
-    * 敏感词检查函数（增强版）
-    * @param string $sensitiveWords 敏感词列表（逗号分隔）
-    * @param string $content 评论内容
-    * @return bool 是否包含敏感词
+    * 敏感词检查函数
     */
     private static function _checkSensitiveWords($sensitiveWords, $content)
     {
-    // 调试：记录原始配置和评论
-    //trigger_error("敏感词原始配置: [{$sensitiveWords}] | 评论内容: [{$content}]", E_USER_NOTICE);
-    
-    if (empty($sensitiveWords)) {
-        return false;
-    }
-    
-    // 支持多种分隔符（逗号、||），统一转为逗号后分割
-    $sensitiveWords = str_replace('||', ',', $sensitiveWords);
-    $words = array_map('trim', explode(',', $sensitiveWords));
-    $words = array_filter($words); // 过滤空值
-    
-    // 调试：记录分割后的敏感词列表
-    //trigger_error("分割后敏感词列表: " . print_r($words, true), E_USER_NOTICE);
-    
-    // 预处理评论内容（小写、全角转半角）
-    $content = mb_strtolower($content);
-    $content = self::convertFullWidthToHalfWidth($content);
-    
-    foreach ($words as $word) {
-        if (empty($word)) continue;
-        
-        // 预处理敏感词
-        $word = mb_strtolower($word);
-        $word = self::convertFullWidthToHalfWidth($word);
-        
-        // 正则匹配（支持部分匹配，如"广告"匹配"小广告"）
-        if (preg_match('/' . preg_quote($word, '/') . '/ui', $content)) {
-            trigger_error("匹配到敏感词: [{$word}]", E_USER_NOTICE);
-            return true;
+        if (empty($sensitiveWords)) {
+            return false;
         }
-    }
-    
-    return false;
+        
+        // 支持多种分隔符，统一转为逗号后分割
+        $sensitiveWords = str_replace('||', ',', $sensitiveWords);
+        $words = array_map('trim', explode(',', $sensitiveWords));
+        $words = array_filter($words);
+        
+        // 预处理评论内容
+        $content = mb_strtolower($content);
+        $content = self::convertFullWidthToHalfWidth($content);
+        
+        foreach ($words as $word) {
+            if (empty($word)) continue;
+            
+            $word = mb_strtolower($word);
+            $word = self::convertFullWidthToHalfWidth($word);
+            
+            if (preg_match('/' . preg_quote($word, '/') . '/ui', $content)) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     /**
@@ -132,29 +113,29 @@ class Intercept
     */
     private static function convertFullWidthToHalfWidth($str)
     {
-    $fullWidthChars = array(
-        '０' => '0', '１' => '1', '２' => '2', '３' => '3', '４' => '4',
-        '５' => '5', '６' => '6', '７' => '7', '８' => '8', '９' => '9',
-        'Ａ' => 'A', 'Ｂ' => 'B', 'Ｃ' => 'C', 'Ｄ' => 'D', 'Ｅ' => 'E',
-        'Ｆ' => 'F', 'Ｇ' => 'G', 'Ｈ' => 'H', 'Ｉ' => 'I', 'Ｊ' => 'J',
-        'Ｋ' => 'K', 'Ｌ' => 'L', 'Ｍ' => 'M', 'Ｎ' => 'N', 'Ｏ' => 'O',
-        'Ｐ' => 'P', 'Ｑ' => 'Q', 'Ｒ' => 'R', 'Ｓ' => 'S', 'Ｔ' => 'T',
-        'Ｕ' => 'U', 'Ｖ' => 'V', 'Ｗ' => 'W', 'Ｘ' => 'X', 'Ｙ' => 'Y',
-        'Ｚ' => 'Z', 'ａ' => 'a', 'ｂ' => 'b', 'ｃ' => 'c', 'ｄ' => 'd',
-        'ｅ' => 'e', 'ｆ' => 'f', 'ｇ' => 'g', 'ｈ' => 'h', 'ｉ' => 'i',
-        'ｊ' => 'j', 'ｋ' => 'k', 'ｌ' => 'l', 'ｍ' => 'm', 'ｎ' => 'n',
-        'ｏ' => 'o', 'ｐ' => 'p', 'ｑ' => 'q', 'ｒ' => 'r', 'ｓ' => 's',
-        'ｔ' => 't', 'ｕ' => 'u', 'ｖ' => 'v', 'ｗ' => 'w', 'ｘ' => 'x',
-        'ｙ' => 'y', 'ｚ' => 'z', '！' => '!', '？' => '?', '＝' => '=',
-        '＋' => '+', '－' => '-', '＊' => '*', '／' => '/', '（' => '(',
-        '）' => ')', '＜' => '<', '＞' => '>', '，' => ',', '．' => '.',
-        '；' => ';', '：' => ':', '＂' => '"', '＇' => '\'', '［' => '[',
-        '］' => ']', '｛' => '{', '｝' => '}', '＼' => '\\', '｜' => '|',
-        '％' => '%', '＠' => '@', '＃' => '#', '＄' => '$', '＆' => '&',
-        '＿' => '_', '～' => '~', '`' => '`', '^' => '^'
-    );
-    
-    return strtr($str, $fullWidthChars);
+        $fullWidthChars = array(
+            '０' => '0', '１' => '1', '２' => '2', '３' => '3', '４' => '4',
+            '５' => '5', '６' => '6', '７' => '7', '８' => '8', '９' => '9',
+            'Ａ' => 'A', 'Ｂ' => 'B', 'Ｃ' => 'C', 'Ｄ' => 'D', 'Ｅ' => 'E',
+            'Ｆ' => 'F', 'Ｇ' => 'G', 'Ｈ' => 'H', 'Ｉ' => 'I', 'Ｊ' => 'J',
+            'Ｋ' => 'K', 'Ｌ' => 'L', 'Ｍ' => 'M', 'Ｎ' => 'N', 'Ｏ' => 'O',
+            'Ｐ' => 'P', 'Ｑ' => 'Q', 'Ｒ' => 'R', 'Ｓ' => 'S', 'Ｔ' => 'T',
+            'Ｕ' => 'U', 'Ｖ' => 'V', 'Ｗ' => 'W', 'Ｘ' => 'X', 'Ｙ' => 'Y',
+            'Ｚ' => 'Z', 'ａ' => 'a', 'ｂ' => 'b', 'ｃ' => 'c', 'ｄ' => 'd',
+            'ｅ' => 'e', 'ｆ' => 'f', 'ｇ' => 'g', 'ｈ' => 'h', 'ｉ' => 'i',
+            'ｊ' => 'j', 'ｋ' => 'k', 'ｌ' => 'l', 'ｍ' => 'm', 'ｎ' => 'n',
+            'ｏ' => 'o', 'ｐ' => 'p', 'ｑ' => 'q', 'ｒ' => 'r', 'ｓ' => 's',
+            'ｔ' => 't', 'ｕ' => 'u', 'ｖ' => 'v', 'ｗ' => 'w', 'ｘ' => 'x',
+            'ｙ' => 'y', 'ｚ' => 'z', '！' => '!', '？' => '?', '＝' => '=',
+            '＋' => '+', '－' => '-', '＊' => '*', '／' => '/', '（' => '(',
+            '）' => ')', '＜' => '<', '＞' => '>', '，' => ',', '．' => '.',
+            '；' => ';', '：' => ':', '＂' => '"', '＇' => '\'', '［' => '[',
+            '］' => ']', '｛' => '{', '｝' => '}', '＼' => '\\', '｜' => '|',
+            '％' => '%', '＠' => '@', '＃' => '#', '＄' => '$', '＆' => '&',
+            '＿' => '_', '～' => '~', '`' => '`', '^' => '^'
+        );
+        
+        return strtr($str, $fullWidthChars);
     }
 }
 

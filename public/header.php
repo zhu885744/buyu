@@ -15,16 +15,15 @@
         ), '', ' - ');
         if($this->getCurrentPage() > 1) _e("第 %d 页-", $this->getCurrentPage());$this->options->title();?>
     </title>
-    <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.mode.css?v=1.3.1');?>">
-    <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.style.css?v=1.3.1');?>">
-    <link rel="stylesheet" href="<?php echo get_theme_url('assets/font-awesome/font-awesome.min.css?v=1.3.1');?>">
-    <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.fancybox.css?v=1.3.1'); ?>"defer>
-    <script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.message.js?v=1.3.1'); ?>"></script>
+    <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.mode.css?v=1.3.2');?>">
+    <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.style.css?v=1.3.2');?>">
+    <link rel="stylesheet" href="<?php echo get_theme_url('assets/font-awesome/font-awesome.min.css?v=1.3.2');?>">
+    <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.fancybox.css?v=1.3.2'); ?>"defer>
+    <script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.message.js?v=1.3.2'); ?>"></script>
     <style type="text/css">
         <?php if ($this->options->pcBackgroundUrl): // PC端背景图配置 ?>
         @media screen and (min-width: 768px) {
             body {
-                /* 转义URL特殊字符，防止CSS语法错误 */
                 background-image: url("<?php echo htmlspecialchars($this->options->pcBackgroundUrl, ENT_QUOTES); ?>");
                 background-size: cover;
                 background-position: center top;

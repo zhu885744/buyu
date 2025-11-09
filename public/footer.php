@@ -44,8 +44,8 @@
   </div>
 </footer>
 
-<script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.style.js?v=1.3.1'); ?>"defer></script>
-<script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.fancybox.js?v=1.3.1'); ?>"defer></script>
+<script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.style.js?v=1.3.2'); ?>"defer></script>
+<script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.fancybox.js?v=1.3.2'); ?>"defer></script>
 <script type="text/javascript" defer>
   <?php echo $this->options->JCustomScript(); ?>
 </script>

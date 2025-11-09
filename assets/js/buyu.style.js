@@ -1,6 +1,6 @@
 // 开源不易，请请尊重作者版权，保留本信息
 function showConsoleInfo() {
-    const version = 'v1.3.1';
+    const version = 'v1.3.2';
     const copyright = 'buyu 主题';
     console.log('\n' + ' %c ' + copyright + ' ' + version + ' %c https://zhuxu.asia/  ' + '\n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;');
     console.log('开源不易，请尊重作者版权，保留基本的版权信息。');
@@ -428,7 +428,7 @@ function initBackToTopButton() {
     document.body.appendChild(backToTopButton);
 
     // 配置参数
-    const scrollThreshold = 200; // 滚动超过200px显示按钮
+    const scrollThreshold = 100; // 滚动超过200px显示按钮
     backToTopButton.classList.remove('visible'); // 初始隐藏
 
     // 监听滚动事件：控制按钮显示/隐藏
@@ -702,114 +702,175 @@ function initRewardModal() {
 
 // 评论表情相关
 "use strict";
-function _classCallCheck(e, t) {
-    if (!(e instanceof t))
-        throw new TypeError("Cannot call a class as a function")
-}
-var _createClass = function() {
-    function e(e, t) {
-        for (var a = 0; a < t.length; a++) {
-            var s = t[a];
-            s.enumerable = s.enumerable || !1,
-            s.configurable = !0,
-            "value"in s && (s.writable = !0),
-            Object.defineProperty(e, s.key, s)
+class OwO {
+    constructor(options) {
+        // 基础配置
+        const defaults = {
+            logo: "表情",
+            container: document.querySelector(".OwO"),
+            target: document.querySelector("textarea"),
+            position: "down",
+            width: "100%",
+            maxHeight: "200px"
+        };
+
+        // 合并配置并校验API必填项
+        this.config = { ...defaults, ...options };
+        if (!this.config.api) {
+            throw new Error("OwO 初始化失败：必须传入 api 配置项");
         }
-    }
-    return function(t, a, s) {
-        return a && e(t.prototype, a),
-        s && e(t, s),
-        t
-    }
-}();
-!function() {
-    var e = function() {
-        function e(t) {
-            var a = this;
-            _classCallCheck(this, e);
-            var s = {
-                logo: "OwO",
-                container: document.getElementsByClassName("OwO")[0],
-                target: document.getElementsByTagName("textarea")[0],
-                position: "down",
-                width: "100%",
-                maxHeight: "250px",
-                api: "https://cdn.zhuxu.asia/OwO.json"
-            };
-            for (var n in s)
-                s.hasOwnProperty(n) && !t.hasOwnProperty(n) && (t[n] = s[n]);
-            this.container = t.container,
-            this.target = t.target,
-            "up" === t.position && this.container.classList.add("OwO-up");
-            var i = new XMLHttpRequest;
-            i.onreadystatechange = function() {
-                4 === i.readyState && (i.status >= 200 && i.status < 300 || 304 === i.status ? (a.odata = JSON.parse(i.responseText),
-                a.init(t)) : console.log("OwO data request was unsuccessful: " + i.status))
-            }
-            ,
-            i.open("get", t.api, !0),
-            i.send(null)
+
+        // 初始化容器和位置
+        this.container = this.config.container;
+        this.target = this.config.target;
+        if (!this.container || !this.target) {
+            throw new Error("OwO 初始化失败：未找到容器或目标输入框");
         }
-        return _createClass(e, [{
-            key: "init",
-            value: function(e) {
-                var t = this;
-                this.area = e.target,
-                this.packages = Object.keys(this.odata);
-                for (var a = '\n            <div class="OwO-logo"><span>' + e.logo + '</span></div>\n            <div class="OwO-body" style="width: ' + e.width + '">', s = 0; s < this.packages.length; s++) {
-                    a += '\n                <ul class="OwO-items OwO-items-' + this.odata[this.packages[s]].type + '" style="max-height: ' + (parseInt(e.maxHeight) - 53 + "px") + ';">';
-                    for (var n = this.odata[this.packages[s]].container, i = 0; i < n.length; i++)
-                        a += '\n                    <li class="OwO-item" title="' + n[i].text + '">' + n[i].icon + "</li>";
-                    a += "\n                </ul>"
-                }
-                a += '\n                <div class="OwO-bar">\n                    <ul class="OwO-packages">';
-                for (var o = 0; o < this.packages.length; o++)
-                    a += "\n                        <li><span>" + this.packages[o] + "</span></li>";
-                a += "\n                    </ul>\n                </div>\n            </div>\n            ",
-                this.container.innerHTML = a,
-                this.logo = this.container.getElementsByClassName("OwO-logo")[0],
-                this.logo.addEventListener("click", function() {
-                    t.toggle()
-                }),
-                this.container.getElementsByClassName("OwO-body")[0].addEventListener("click", function(e) {
-                    var a = null;
-                    if (e.target.classList.contains("OwO-item") ? a = e.target : e.target.parentNode.classList.contains("OwO-item") && (a = e.target.parentNode),
-                    a) {
-                        var s = t.area.selectionEnd
-                          , n = t.area.value;
-                        t.area.value = n.slice(0, s) + a.innerHTML + n.slice(s),
-                        t.area.focus(),
-                        t.toggle()
+        if (this.config.position === "up") {
+            this.container.classList.add("OwO-up");
+        }
+
+        // 加载表情数据
+        this.loadData();
+    }
+
+    // 加载表情配置数据
+    loadData() {
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
+                    try {
+                        this.odata = JSON.parse(xhr.responseText);
+                        this.init(); // 数据加载成功后初始化UI
+                    } catch (err) {
+                        console.error("OwO 数据解析失败：", err);
                     }
-                }),
-                this.packagesEle = this.container.getElementsByClassName("OwO-packages")[0];
-                for (var c = function(e) {
-                    !function(a) {
-                        t.packagesEle.children[e].addEventListener("click", function() {
-                            t.tab(a)
-                        })
-                    }(e)
-                }, l = 0; l < this.packagesEle.children.length; l++)
-                    c(l);
-                this.tab(0)
+                } else {
+                    console.error("OwO 数据加载失败，状态码：", xhr.status);
+                }
             }
-        }, {
-            key: "toggle",
-            value: function() {
-                this.container.classList.contains("OwO-open") ? this.container.classList.remove("OwO-open") : this.container.classList.add("OwO-open")
+        };
+        xhr.open("GET", this.config.api, true);
+        xhr.send();
+    }
+
+    // 初始化UI和事件
+    init() {
+        this.packages = Object.keys(this.odata);
+        this.renderUI();
+        this.bindEvents();
+        this.tab(0); // 默认显示第一个分类
+        
+        // 添加点击空白处关闭面板的全局事件
+        this.bindGlobalCloseEvent();
+    }
+
+    // 渲染表情面板UI
+    renderUI() {
+        const { logo, width, maxHeight } = this.config;
+        const itemMaxHeight = parseInt(maxHeight) - 53 + "px";
+
+        let html = `
+            <div class="OwO-logo">${logo}</div>
+            <div class="OwO-body" style="width: ${width}">
+        `;
+
+        // 渲染表情分类内容
+        this.packages.forEach(pkgName => {
+            const pkg = this.odata[pkgName];
+            html += `<ul class="OwO-items OwO-items-${pkg.type}" style="max-height: ${itemMaxHeight}">`;
+            pkg.container.forEach(item => {
+                html += `<li class="OwO-item" title="${item.text}">${item.icon}</li>`;
+            });
+            html += `</ul>`;
+        });
+
+        // 渲染分类标签栏
+        html += `<div class="OwO-bar"><ul class="OwO-packages">`;
+        this.packages.forEach(pkgName => {
+            html += `<li><span>${pkgName}</span></li>`;
+        });
+        html += `</ul></div></div>`;
+
+        this.container.innerHTML = html;
+        this.logo = this.container.querySelector(".OwO-logo");
+        this.packagesEle = this.container.querySelector(".OwO-packages");
+    }
+
+    // 绑定事件
+    bindEvents() {
+        // 切换表情面板显示/隐藏
+        this.logo.addEventListener("click", (e) => {
+            e.stopPropagation(); // 阻止事件冒泡到document
+            this.toggle();
+        });
+
+        // 点击表情插入到输入框
+        this.container.querySelector(".OwO-body").addEventListener("click", (e) => {
+            e.stopPropagation(); // 阻止事件冒泡到document
+            const item = e.target.closest(".OwO-item");
+            if (!item) return;
+
+            // 插入表情到光标位置
+            const { selectionEnd: pos } = this.target;
+            const val = this.target.value;
+            this.target.value = val.slice(0, pos) + item.innerHTML + val.slice(pos);
+            this.target.focus();
+            this.toggle(); // 插入后关闭面板
+        });
+
+        // 绑定分类标签切换事件
+        Array.from(this.packagesEle.children).forEach((li, index) => {
+            li.addEventListener("click", (e) => {
+                e.stopPropagation(); // 阻止事件冒泡到document
+                this.tab(index);
+            });
+        });
+    }
+
+    // 绑定全局点击事件（点击空白处关闭面板）
+    bindGlobalCloseEvent() {
+        // 使用箭头函数确保this指向当前实例
+        this.globalCloseHandler = (e) => {
+            // 检查点击是否在表情容器外部且面板处于打开状态
+            if (
+                !this.container.contains(e.target) && 
+                this.container.classList.contains("OwO-open")
+            ) {
+                this.toggle(); // 关闭面板
             }
-        }, {
-            key: "tab",
-            value: function(e) {
-                var t = this.container.getElementsByClassName("OwO-items-show")[0];
-                t && t.classList.remove("OwO-items-show"),
-                this.container.getElementsByClassName("OwO-items")[e].classList.add("OwO-items-show");
-                var a = this.container.getElementsByClassName("OwO-package-active")[0];
-                a && a.classList.remove("OwO-package-active"),
-                this.packagesEle.getElementsByTagName("li")[e].classList.add("OwO-package-active")
-            }
-        }]),
-        e
-    }();
-    "undefined" != typeof module && "undefined" != typeof module.exports ? module.exports = e : window.OwO = e
-}();
+        };
+
+        // 添加全局事件监听
+        document.addEventListener("click", this.globalCloseHandler);
+    }
+
+    // 切换面板显示状态
+    toggle() {
+        this.container.classList.toggle("OwO-open");
+    }
+
+    // 切换表情分类
+    tab(index) {
+        // 移除之前的激活状态
+        this.container.querySelector(".OwO-items-show")?.classList.remove("OwO-items-show");
+        this.container.querySelector(".OwO-package-active")?.classList.remove("OwO-package-active");
+        
+        // 激活当前分类
+        this.container.querySelectorAll(".OwO-items")[index].classList.add("OwO-items-show");
+        this.packagesEle.children[index].classList.add("OwO-package-active");
+    }
+
+    // 销毁实例时移除全局事件
+    destroy() {
+        document.removeEventListener("click", this.globalCloseHandler);
+    }
+}
+
+// 暴露到全局
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports = OwO;
+} else {
+    window.OwO = OwO;
+}

@@ -1,5 +1,4 @@
 <?php if ($this->is('index')) : ?> 
-<!-- 首页文章列表 -->
 <main id="main" class="transition-all">
   <div class="container">
     <div class="row">
@@ -97,9 +96,9 @@
 <main id="main" class="transition-all">
   <div class="container">
     <div class="row">
-      <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.APlayer.css?v=1.3.1'); ?>">
-      <script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.APlayer.js?v=1.3.1'); ?>"></script>
-      <script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.DPlayer.js?v=1.3.1'); ?>"></script>
+      <link rel="stylesheet" href="<?php echo get_theme_url('assets/css/buyu.APlayer.css?v=1.3.2'); ?>">
+      <script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.APlayer.js?v=1.3.2'); ?>"></script>
+      <script type="text/javascript" src="<?php echo get_theme_url('assets/js/buyu.DPlayer.js?v=1.3.2'); ?>"></script>
       <div class="col-mb-12 col-12">
         <div class="buyu-cards gap-md mt-md">
           <article class="buyu-card p-lg border rounded shadow-sm">
