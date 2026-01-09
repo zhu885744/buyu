@@ -1,4 +1,47 @@
 /* ==========================================
+ * 全局入场动画
+ * ========================================== */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) translateZ(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateZ(0);
+  }
+}
+
+header {
+  animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+  opacity: 0;
+  transform: translateY(20px) translateZ(0);
+  backface-visibility: hidden;
+  will-change: opacity, transform; /* 告诉浏览器提前准备动画属性，减少卡顿 */
+  perspective: 1000px; /* 配合 backface-visibility 消除锯齿 */
+  transform-origin: top center; /* 动画原点改为顶部居中，更符合视觉逻辑 */
+  transition: none; /* 清空默认过渡，避免和动画冲突 */
+}
+
+/* 主体内容延迟入场（向下偏移入场） */
+main {
+  opacity: 0;
+  transform: translateY(20px) translateZ(0);
+  animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+  backface-visibility: hidden;
+  will-change: opacity, transform;
+}
+
+/* 页脚最后入场 */
+footer {
+  opacity: 0;
+  transform: translateY(20px) translateZ(0);
+  animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+  backface-visibility: hidden;
+  will-change: opacity, transform;
+}
+
+/* ==========================================
  * 基础样式
  * ========================================== */
 
@@ -371,13 +414,11 @@ img:hover {
   padding: 1em 0;
   line-height: 1.6;
   text-align: center;
-  font-weight: bold;
   color: var(--color-text);
   border-top: var(--border);
   box-shadow: var(--shadow-top);
   background: var(--color-background);
   position: relative;
-  z-index: 10;
 }
 
 .footer__content {
@@ -479,6 +520,42 @@ img:hover {
 
 .post .tags {
   clear: both;
+}
+
+/* 代码框样式 */
+.post-content pre {
+  overflow: auto;
+  position: relative;
+  line-height: 1.6;
+  padding: 0;
+  border-radius: 6px;
+}
+
+.post-content code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--color-code);
+  padding: 1.5px 3px;
+  border: var(--border); 
+  border-radius: var(--border-radius-md);
+  word-break: break-word;
+  overflow-x: auto;
+  background-color: transparent;
+}
+
+.post-content pre>code {
+  display: block;
+  font-weight: normal;
+  font-size: 1em;
+  padding: 14px var(--spacing-md); 
+  margin: 0;
+  color: var(--color-secondary);
+  background: var(--color-code-bg);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: normal;
+  scroll-behavior: smooth;
 }
 
 /* 文章密码保护样式 */
@@ -926,7 +1003,15 @@ img:hover {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  z-index: var(--z-index-dropdown);
+  display: inline-block;
+  width: 100%;
+}
+
+.OwO-wrapper {
+  position: relative;
+  height: auto !important; /* 强制自适应高度 */
+  overflow: visible !important; /* 禁止父容器裁剪面板 */
+  transition: height var(--transition-normal); /* 高度过渡动画 */
 }
 
 /* 打开状态样式 */
@@ -940,13 +1025,20 @@ img:hover {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+  position: relative;
+  top: 0;
+  left: 0;
+  margin-top: var(--spacing-xs);
+  width: 100%;
+  box-sizing: border-box;
 }
 
+
 .OwO.OwO-up .OwO-body {
-  top: auto;
-  bottom: 100%;
-  margin-bottom: var(--spacing-xs);
-  margin-top: 0;
+  top: 0;
+  bottom: auto;
+  margin-bottom: 0;
+  margin-top: calc(-100% - var(--spacing-xs));
   border-radius: var(--border-radius-sm);
 }
 
@@ -986,11 +1078,11 @@ img:hover {
 /* 表情面板主体 */
 .OwO .OwO-body {
   display: none;
-  position: absolute;
+  position: relative;
   width: 400px;
+  max-width: 100%;
   background: var(--color-background-card);
   border: var(--border);
-  z-index: 9999;
   top: 100%;
   border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow-md);
@@ -999,6 +1091,7 @@ img:hover {
   transform: translateY(5px);
   transition: opacity var(--transition-normal), transform var(--transition-normal), visibility var(--transition-normal);
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 /* 表情列表容器 */
@@ -1227,42 +1320,6 @@ img:hover {
   border-right: none;
   margin-top: var(--spacing-xl);
   margin-bottom: var(--spacing-xl);
-}
-
-/* 代码框样式 */
-.post-content pre {
-  overflow: auto;
-  position: relative;
-  line-height: 1.6;
-  padding: 0;
-  border-radius: 6px;
-}
-
-.post-content code {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-md);
-  font-weight: 600;
-  color: var(--color-code);
-  padding: 1.5px 3px;
-  border: var(--border); 
-  border-radius: var(--border-radius-md);
-  word-break: break-word;
-  overflow-x: auto;
-  background-color: transparent;
-}
-
-.post-content pre>code {
-  display: block;
-  font-weight: normal;
-  font-size: 1em;
-  padding: 14px var(--spacing-md); 
-  margin: 0;
-  color: var(--color-secondary);
-  background: var(--color-code-bg);
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  word-break: normal;
-  scroll-behavior: smooth;
 }
 
 /* 表格样式 */
@@ -2293,16 +2350,16 @@ img.alignright {
   padding: 0;
   list-style: none;
   position: fixed;
-  top: 16px;
+  top: var(--spacing-lg); 
   left: 0;
   z-index: 1010;
   width: 100%;
-  pointer-events: none; /* 允许穿透点击 */
+  pointer-events: none;
 }
 
 /* 消息项容器 */
 .qmsg-item {
-  padding: 8px;
+  padding: var(--spacing-xs); 
   text-align: center;
   animation-duration: var(--animation-duration-sm);
   position: relative;
@@ -2310,22 +2367,23 @@ img.alignright {
 
 /* 消息项首项调整 */
 .qmsg-item:first-child {
-  margin-top: -8px;
+  margin-top: calc(-1 * var(--spacing-xs)); 
 }
 
 /* 消息内容主体 */
 .qmsg-content {
   position: relative;
   display: inline-block;
-  padding: 10px 16px;
-  background: #fff;
-  border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: var(--spacing-md) var(--spacing-lg); 
+  background: var(--color-background-card);
+  border-radius: var(--border-radius-sm);
+  box-shadow: var(--shadow-md);
   pointer-events: auto;
   max-width: 80%;
   min-width: 80px;
   text-align: left;
   transition: transform var(--transition-normal), opacity var(--transition-normal);
+  color: var(--color-text);
 }
 
 /* 内容区域通用样式 */
@@ -2333,21 +2391,21 @@ img.alignright {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  line-height: 1.5; /* 与图标高度协调 */
-  display: inline-flex; /* 启用弹性布局辅助对齐 */
-  align-items: center; /* 垂直居中内容 */
+  line-height: var(--line-height-md);
+  display: inline-flex;
+  align-items: center;
 }
 
 /* 带关闭按钮的内容区域 */
 .qmsg-content-with-close {
-  padding-right: 28px;
+  padding-right: calc(var(--spacing-lg) + 8px);
 }
 
 /* 图标通用样式 */
 .qmsg-icon {
   display: inline-block;
-  margin-right: 8px;
-  font-size: 16px;
+  margin-right: var(--spacing-xs); 
+  font-size: var(--font-size-lg);
   line-height: 0;
   user-select: none;
   vertical-align: middle;
@@ -2363,34 +2421,34 @@ img.alignright {
 
 /* 类型化图标样式 */
 .qmsg-content-info .qmsg-icon {
-  color: var(--color-blue-600);
+  color: var(--color-info);
 }
 
 .qmsg-content-warning .qmsg-icon {
-  color: var(--color-orange-500);
+  color: var(--color-warning);
 }
 
 .qmsg-content-success .qmsg-icon {
-  color: var(--color-green-500);
+  color: var(--color-success);
 }
 
 .qmsg-content-error .qmsg-icon {
-  color: var(--color-red-500);
+  color: var(--color-danger);
 }
 
 .qmsg-content-loading .qmsg-icon {
-  color: var(--color-blue-500);
+  color: var(--color-primary);
 }
 
 /* 关闭按钮 */
 .qmsg-icon-close {
   position: absolute;
   top: 50%;
-  right: 10px;
-  transform: translateY(-50%); /* 垂直居中 */
-  padding: 4px;
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.45);
+  right: var(--spacing-xs); 
+  transform: translateY(-50%);
+  padding: calc(var(--spacing-xxs) * 2); 
+  font-size: var(--font-size-sm);
+  color: var(--color-text-disabled);
   background: transparent;
   border: none;
   outline: none;
@@ -2399,47 +2457,46 @@ img.alignright {
 }
 
 .qmsg-icon-close:hover {
-  color: var(--color-neutral-700);
+  color: var(--color-text);
 }
 
 /* 消息计数标记 */
 .qmsg-count {
   position: absolute;
-  left: -4px;
-  top: -4px;
+  left: calc(-1 * var(--spacing-xs)); 
+  top: calc(-1 * var(--spacing-xs)); 
   min-width: 16px;
   height: 16px;
   padding: 0 3px;
-  background-color: var(--color-red-500);
+  background-color: var(--color-danger);
   color: var(--color-background);
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   line-height: 16px;
   text-align: center;
-  border-radius: 8px; /* 圆形更美观 */
+  border-radius: var(--border-radius-full);
   animation-duration: var(--animation-duration-sm);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-xs);
 }
 
 .animate-turn {
-  animation: MessageTurn 1.5s linear infinite; /* 1.5秒一圈，匀速循环 */
-  -webkit-animation: MessageTurn 1.5s linear infinite; /* 兼容webkit内核 */
+  animation: var(--animation-spin);
+  -webkit-animation: var(--animation-spin);
 }
 
 /* 深色模式适配 */
-[data-bs-theme="dark"] 
-  .qmsg-content {
-    background: var(--color-neutral-800);
-    color: var(--color-neutral-200);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  }
+[data-bs-theme="dark"] .qmsg-content {
+  background: #ffffff;
+  color: #000000;
+  box-shadow: var(--shadow-lg);
+}
 
-  .qmsg-icon-close {
-    color: rgba(255, 255, 255, 0.6);
-  }
+[data-bs-theme="dark"] .qmsg-icon-close {
+  color: var(--color-text-disabled);
+}
 
-  .qmsg-icon-close:hover {
-    color: var(--color-white);
-  }
+[data-bs-theme="dark"] .qmsg-icon-close:hover {
+  color: var(--color-text);
+}
 
 /* ==========================================
  * 动画定义
@@ -2483,10 +2540,10 @@ img.alignright {
 @keyframes MessageMoveOut {
   0% {
     max-height: 150px;
-    padding: 8px;
-    margin: 0; /* 补充边距动画 */
+    padding: var(--spacing-xs); 
+    margin: 0;
     opacity: 1;
-    transform: scale(1); /* 增加缩放效果 */
+    transform: scale(1);
   }
   to {
     max-height: 0;
@@ -2500,7 +2557,7 @@ img.alignright {
 @-webkit-keyframes MessageMoveOut {
   0% {
     max-height: 150px;
-    padding: 8px;
+    padding: var(--spacing-xs); 
     margin: 0;
     opacity: 1;
     -webkit-transform: scale(1);
@@ -2517,11 +2574,11 @@ img.alignright {
 /* 消息进入动画 */
 @keyframes MessageMoveIn {
   0% {
-    transform: translateY(-20px) scale(0.9);
+    transform: translateY(calc(-1 * var(--spacing-lg))) scale(0.9); 
     opacity: 0;
   }
   70% {
-    transform: translateY(4px) scale(1.02); /* 增加弹性效果 */
+    transform: translateY(4px) scale(1.02);
   }
   100% {
     transform: translateY(0) scale(1);
@@ -2531,7 +2588,7 @@ img.alignright {
 
 @-webkit-keyframes MessageMoveIn {
   0% {
-    -webkit-transform: translateY(-20px) scale(0.9);
+    -webkit-transform: translateY(calc(-1 * var(--spacing-lg))) scale(0.9); 
     opacity: 0;
   }
   70% {
@@ -2574,10 +2631,11 @@ img.alignright {
   }
 }
 
+/* 复用主题定义的动画 */
 @keyframes fadeIn {
   from { 
     opacity: 0; 
-    transform: translateY(10px);
+    transform: translateY(var(--spacing-xs)); 
   }
   to { 
     opacity: 1; 
@@ -2588,7 +2646,7 @@ img.alignright {
 @keyframes slide-down {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(calc(-1 * var(--spacing-xs))); 
   }
   to {
     opacity: 1;
@@ -2603,7 +2661,7 @@ img.alignright {
   }
   to {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(calc(-1 * var(--spacing-xs))); 
   }
 }
 
@@ -2850,6 +2908,6 @@ img.alignright {
 /* 大屏幕设备（≥ 1200px） */
 @media (min-width: 1200px) {
   .container {
-    max-width: 1000px;
+    max-width: 950px;
   }
 }

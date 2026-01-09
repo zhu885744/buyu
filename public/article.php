@@ -93,6 +93,9 @@
 <?php endif; ?>
 
 <?php if ($this->is('page') || $this->is('post')) : ?>
+<?php if ($this->options->tip !== 'off' && !empty($this->options->tip)) :?>
+  <?php $this->need('public/Modal.php'); ?>
+<?php endif; ?>
 <main id="main" class="transition-all">
   <div class="container">
     <div class="row">
@@ -146,7 +149,6 @@
                 <button class="post-bth p-sm border rounded transition hover:bg-neutral-100" onclick="showReward()">
                   <i class="fa fa-heart"></i>&nbsp;打赏
                 </button>
-                <?php $this->need('public/Modal.php'); ?>
               <?php endif; ?>
               <button class="post-bth p-sm border rounded transition hover:bg-neutral-100" id="share" data-title="<?php echo htmlspecialchars($this->title); ?>" data-url="<?php echo htmlspecialchars($this->permalink); ?>">
                <i class="fa fa-share-alt mr-1"></i>&nbsp;分享

@@ -67,7 +67,7 @@
         <!-- 导航容器 -->
         <nav class="nav-wrapper">
             <!-- 汉堡菜单：移动端触发按钮，优先加载 -->
-            <button class="menu-toggle" id="menuToggle">
+            <button class="menu-toggle" id="menuToggle" aria-label="侧边导航" title="侧边导航">
                 <i class="fa fa-bars" aria-hidden="true"></i>
             </button>
             <!-- 站点Logo -->
@@ -90,7 +90,7 @@
                 <!-- 分类下拉菜单：动态获取分类 -->
                 <li class="site-nav__item has-dropdown">
                     <a href="#" class="site-nav__link" title="<?php _e('分类'); ?>">
-                        <?php _e('分类'); ?>
+                        <?php _e('分类'); ?> <i class="fa fa-angle-down" aria-hidden="true"></i>
                     </a>
                     <!-- 分类下拉列表 -->
                     <ul class="dropdown site-nav__dropdown" aria-label="分类列表">

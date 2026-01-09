@@ -2,7 +2,7 @@
 function showConsoleInfo() {
     const version = 'v1.3.2';
     const copyright = 'buyu 主题';
-    console.log('\n' + ' %c ' + copyright + ' ' + version + ' %c https://zhuxu.asia/  ' + '\n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;');
+    console.log('\n' + ' %c ' + copyright + ' ' + version + ' %c https://zhuxu.asia/  ' + '\n', 'color: #c3ff63ff; background: #000000ff; padding:5px 0;', 'background: #a3befaff; padding:5px 0;');
     console.log('开源不易，请尊重作者版权，保留基本的版权信息。');
 }
 showConsoleInfo();
@@ -64,7 +64,7 @@ function initThemeToggle() {
 
         // 显示通知
         if (showNotification) {
-            Qmsg.info(`已切换至${isDark ? '深色' : '浅色'}模式`);
+            Qmsg.info(`已切换至${isDark ? '[ 深色 ]' : '[ 浅色 ]'}模式`);
         }
         
         // 触发全局主题变化事件
@@ -152,6 +152,91 @@ function initThemeToggle() {
     initTheme();
 }
 
+// 初始化代码块复制按钮
+function initCodeCopyButtons() {
+    // 检查Qmsg是否存在，做兼容降级
+    if (typeof Qmsg === 'undefined') {
+        console.warn('Qmsg消息库未加载，将使用原生文本提示');
+    }
+
+    $$('pre').forEach(codeBlock => {
+        // 避免重复添加按钮
+        if ($('.copy-btn', codeBlock)) return;
+
+        // 设置代码块定位
+        codeBlock.style.position = 'relative';
+        
+        // 创建复制按钮
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'copy-btn';
+        copyBtn.textContent = '复制';
+        copyBtn.style.cssText = `
+            position: absolute; 
+            right: 6px; top: 6px;
+            cursor: pointer; 
+            z-index: 9999;
+            background: rgba(0,0,0,0.5); 
+            color: white;
+            border: none; 
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 11px;
+            transition: background 0.2s;
+        `;
+        codeBlock.appendChild(copyBtn);
+
+        // 复制逻辑
+        copyBtn.addEventListener('click', async () => {
+            try {
+                const codeElement = $('.code', codeBlock) || codeBlock.firstElementChild;
+                const textToCopy = codeElement?.textContent || '';
+                if (!textToCopy) throw new Error('无代码内容');
+
+                await navigator.clipboard.writeText(textToCopy);
+                
+                // 提示复制成功
+                if (typeof Qmsg !== 'undefined') {
+                    Qmsg.success('代码复制成功', {
+                        timeout: 1500,    // 1.5秒后自动关闭
+                        position: 'top-right', // 右上角显示
+                        showClose: false, // 不显示关闭按钮
+                        zIndex: 10000     // 层级高于复制按钮
+                    });
+                } else {
+                    copyBtn.textContent = '复制成功'; // 降级处理
+                }
+            } catch (err) {
+                console.error('复制失败:', err);
+                
+                // 提示复制失败
+                if (typeof Qmsg !== 'undefined') {
+                    Qmsg.error('代码复制失败', {
+                        timeout: 2000,
+                        position: 'top-right',
+                        showClose: true, // 允许手动关闭错误提示
+                        zIndex: 10000
+                    });
+                } else {
+                    copyBtn.textContent = '复制失败'; // 降级处理
+                }
+            } finally {
+                // 仅在降级模式下恢复按钮文本
+                if (typeof Qmsg === 'undefined') {
+                    setTimeout(() => copyBtn.textContent = '复制', 1500);
+                }
+            }
+        });
+
+        // 按钮hover样式优化
+        copyBtn.addEventListener('mouseenter', () => {
+            copyBtn.style.background = 'rgba(0,0,0,0.7)';
+        });
+        copyBtn.addEventListener('mouseleave', () => {
+            copyBtn.style.background = 'rgba(0,0,0,0.5)';
+        });
+    });
+}
+
 // 初始化tabs标签页
 function initTabs() {
     $$('.shortcode-tabs').forEach(tabs => {
@@ -224,7 +309,7 @@ function initDetailsPanels() {
     });
 }
 
-// 导航菜单（动态创建遮罩层，优化移动端体验）
+// 初始化导航菜单
 function initNavigationMenu() {
     const menuToggle = $('.menu-toggle');
     const mainMenu = $('.main-menu');
@@ -475,47 +560,6 @@ function initBackToTopButton() {
             e.preventDefault();
             backToTopButton.click();
         }
-    });
-}
-
-// 初始化代码块复制按钮
-function initCodeCopyButtons() {
-    $$('pre').forEach(codeBlock => {
-        // 避免重复添加按钮
-        if ($('.copy-btn', codeBlock)) return;
-
-        // 设置代码块定位
-        codeBlock.style.position = 'relative';
-        
-        // 创建复制按钮
-        const copyBtn = document.createElement('button');
-        copyBtn.className = 'copy-btn';
-        copyBtn.textContent = '复制';
-        copyBtn.style.cssText = `
-            position: absolute; right: 8px; top: 8px;
-            cursor: pointer; z-index: 9999;
-            background: rgba(0,0,0,0.5); color: white;
-            border: none; border-radius: 4px; padding: 4px 8px;
-            font-size: 12px; transition: background 0.2s;
-        `;
-        codeBlock.appendChild(copyBtn);
-
-        // 复制逻辑
-        copyBtn.addEventListener('click', async () => {
-            try {
-                const codeElement = $('.code', codeBlock) || codeBlock.firstElementChild;
-                const textToCopy = codeElement?.textContent || '';
-                if (!textToCopy) throw new Error('无代码内容');
-
-                await navigator.clipboard.writeText(textToCopy);
-                copyBtn.textContent = '复制成功';
-            } catch (err) {
-                console.error('复制失败:', err);
-                copyBtn.textContent = '复制失败';
-            } finally {
-                setTimeout(() => copyBtn.textContent = '复制', 1500);
-            }
-        });
     });
 }
 
@@ -773,7 +817,7 @@ class OwO {
 
         let html = `
             <div class="OwO-logo">${logo}</div>
-            <div class="OwO-body" style="width: ${width}">
+            <div class="OwO-body OwO-wrapper" style="width: ${width}">
         `;
 
         // 渲染表情分类内容
